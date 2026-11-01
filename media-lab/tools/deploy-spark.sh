@@ -51,6 +51,9 @@ say()  { printf '\033[1m==> %s\033[0m\n' "$*"; }
 die()  { echo "deploy-spark: $*" >&2; exit 1; }
 rssh() { ssh -o BatchMode=yes -o ConnectTimeout=10 "$SPARK" "$@"; }
 REMOTE_ABS_HOME="$(rssh 'printf %s "$HOME"')"
+# A receipt with private/scoped code is not a pristine whole-tree preimage.
+# Refuse before staging, even for dry-run; use an explicit hash-bound plan.
+rssh "python3 -c 'import json,sys; from pathlib import Path; d=json.loads(Path(sys.argv[1]).read_text()); sys.exit(1 if d.get(\"private_overlays\") or d.get(\"scoped_releases\") else 0)' '$REMOTE_HOME/deployed-source.json'" || die "whole-tree deployment refused: missing receipt or private/scoped integrations; use --scoped-plan"
 # The public web origin stays CPU-only while the paired GPU reservation exists.
 if [[ "$SERVICE" == "media-lab-simple.service" ]] && rssh 'test -f "$HOME/.local/state/spark-pair-control/reservation.json"'; then
   rssh 'test -f "$HOME/.config/systemd/user/media-lab-web.service"' || die "pair reserved but web-only service missing; refusing legacy restart"

@@ -67,6 +67,8 @@ SPARK=user@spark media-lab/tools/deploy-spark.sh v1.4.0             # ship it
 
 ## Selective releases for hosts with private code integrations
 
+The whole-tree entrypoint refuses a missing/malformed receipt or any recorded
+`private_overlays` / `scoped_releases`, including during dry-run, before staging.
 Do **not** use the whole-tree path on a host whose actual code differs from its
 base receipt. The additive scoped path preserves all unselected files, model
 runtimes, private integrations and the existing base/overlay receipt:

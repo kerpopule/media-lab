@@ -244,6 +244,48 @@ def test_unknown_shell_option_refuses_before_ssh(tmp_path):
     assert "unknown deployment option" in result.stderr
 
 
+@pytest.mark.parametrize(
+    "receipt",
+    [
+        {"private_overlays": [{"id": "foreign"}]},
+        {"scoped_releases": [{"commit": "foreign"}]},
+        "malformed",
+        None,
+    ],
+)
+def test_actual_whole_tree_entrypoint_refuses_private_receipts(tmp_path, receipt):
+    import os
+
+    root = tmp_path / "host"
+    root.mkdir()
+    if receipt is not None:
+        (root / "deployed-source.json").write_text(json.dumps(receipt))
+    bindir = tmp_path / "bin"
+    bindir.mkdir()
+    ssh = bindir / "ssh"
+    ssh.write_text(
+        '#!/usr/bin/env python3\nimport subprocess,sys\nraise SystemExit(subprocess.run(["bash","-c",sys.argv[-1]]).returncode)\n'
+    )
+    ssh.chmod(0o755)
+    env = dict(
+        os.environ,
+        PATH=str(bindir) + os.pathsep + os.environ["PATH"],
+        SPARK="fixture@spark",
+        REMOTE_HOME=str(root),
+    )
+    script = Path(__file__).parents[1] / "tools/deploy-spark.sh"
+    result = subprocess.run(
+        ["bash", str(script), "fixture-v1", "--dry-run"],
+        cwd=script.parents[2],
+        env=env,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode != 0
+    assert "whole-tree deployment refused" in result.stderr
+    assert not (root / ".backups").exists()
+
+
 def test_build_binds_tag_and_composition(tmp_path):
     repo = tmp_path / "repo"
     repo.mkdir()
