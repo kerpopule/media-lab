@@ -19,7 +19,16 @@
 # untouched; an error after it prints the rollback command.
 set -Eeuo pipefail
 
-TAG="${1:?usage: deploy-spark.sh <tag> [--dry-run]}"
+TAG="${1:?usage: deploy-spark.sh <tag> [--dry-run | --scoped-plan PLAN [--dry-run]]}"
+if [[ "${2:-}" == "--scoped-plan" ]]; then
+  [[ -n "${3:-}" && ( $# -eq 3 || ( $# -eq 4 && "$4" == "--dry-run" ) ) ]] || { printf '%s\n' 'invalid scoped release arguments' >&2; exit 2; }
+  [[ "$TAG" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]] || exit 2
+  SCOPED_TOOL="$(mktemp)"; trap 'rm -f "$SCOPED_TOOL"' EXIT
+  git show "refs/tags/$TAG:media-lab/tools/scoped_release.py" > "$SCOPED_TOOL"
+  python3 "$SCOPED_TOOL" "$@"
+  exit $?
+fi
+[[ $# -eq 1 || ( $# -eq 2 && "$2" == "--dry-run" ) ]] || { printf '%s\n' 'unknown deployment option' >&2; exit 2; }
 DRY=0; [[ "${2:-}" == "--dry-run" ]] && DRY=1
 SPARK="${SPARK:-${MEDIA_LAB_SSH:-}}"
 REMOTE_HOME="${REMOTE_HOME:-media-lab-simple}"          # relative to the remote $HOME
