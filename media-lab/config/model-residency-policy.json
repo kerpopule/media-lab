@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "default_profile": "qwen-ltx-default",
+  "operational_floor_gb": 2,
+  "models": {
+    "qwen": {
+      "slot": "text_primary",
+      "display_name": "Qwen (remote via bridge)",
+      "phases_gb": {
+        "cold_load": 1,
+        "warm_idle": 1,
+        "sampler": 1,
+        "restoration": 1
+      }
+    },
+    "ltx": {
+      "slot": "video",
+      "display_name": "LTX-2.5",
+      "phases_gb": {
+        "cold_load": 40,
+        "warm_idle": 35,
+        "sampler": 43,
+        "decode": 46,
+        "mux": 4,
+        "handoff_overlap": 40
+      }
+    },
+    "h3": {
+      "slot": "video",
+      "display_name": "Sol-H3-Spark",
+      "phases_gb": {
+        "cold_load": 112,
+        "warm_idle": 110,
+        "sampler": 113,
+        "decode": 115,
+        "mux": 1,
+        "handoff_overlap": 110
+      }
+    }
+  },
+  "profiles": {
+    "qwen-ltx-default": {
+      "text_primary": "qwen",
+      "video_primary": "ltx",
+      "video_secondary": null,
+      "constraints": [
+        "retain-qwen",
+        "self-heal-video-primary"
+      ]
+    },
+    "qwen-h3": {
+      "text_primary": "qwen",
+      "video_primary": "h3",
+      "video_secondary": null,
+      "constraints": [
+        "retain-qwen"
+      ]
+    },
+    "dual-video-ltx-h3": {
+      "text_primary": null,
+      "video_primary": "ltx",
+      "video_secondary": "h3",
+      "constraints": [
+        "explicit-qwen-eviction",
+        "serialize-inference"
+      ]
+    },
+    "qwen-only": {
+      "text_primary": "qwen",
+      "video_primary": null,
+      "video_secondary": null,
+      "constraints": [
+        "explicit-empty-video-slot"
+      ]
+    },
+    "custom": {
+      "text_primary": null,
+      "video_primary": null,
+      "video_secondary": null,
+      "constraints": [
+        "requires-explicit-slots"
+      ]
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "host": "the media Spark (NVIDIA GB10)",
+  "kind": "per-phase measurement, then the first end-to-end job through the studio API",
+  "why": "The 2026-09-21 measured-once qualification began while a previous pass still held about 41 GiB, so its 30.4 GiB MemAvailable floor and its 74-90 GiB active envelope describe a contaminated host. This run measured the pack from a clean host and then proved the whole client path against it.",
+  "model": {
+    "id": "Qwen/Qwen-Image-2.1",
+    "revision": "b3179ad355be050328e483a9dfdd9e60cd62adfa",
+    "dtype": "bfloat16"
+  },
+  "stack": {
+    "runtime": "~/runtime/qwen-image-21/venv",
+    "packages": "torch 2.14.0+cu130, torchvision 0.29.0+cu130, diffusers 0.41.0.dev0 @ 80c7ed262aeffbeb43ef13ae04baeb9b84515a69, transformers 5.17.0",
+    "runtime_lock": "media_lab_core/data/qwen-image-21-runtime.requirements.lock",
+    "checkpoints": "~/runtime/qwen-image-21/models/Qwen-Image-2.1",
+    "weights_verified": "7 files re-hashed against config/qwen-image-21-weights.json before the engine is advertised (verify_pack, 14.0 s with warm page cache)"
+  },
+  "settings": {
+    "size": "1024*1024",
+    "steps": 40,
+    "true_cfg_scale": 1.0,
+    "use_kv_cache": true,
+    "seed": 7
+  },
+  "method": {
+    "host_state": "nvidia-smi reported no compute process and MemAvailable was 117.10 GiB before the run",
+    "sampling": "0.25 s, both psutil.virtual_memory().available and the per-process nvidia-smi allocation of the renderer",
+    "page_cache": "image_render drops the checkpoint page cache before loading (posix_fadvise DONTNEED)",
+    "path": "the job was submitted to the real studio API with a paired render ticket, not to the renderer directly"
+  },
+  "phases_gib": {
+    "device_allocation_per_process": 38.4,
+    "cold_load_peak_system": 48.0,
+    "warm_idle_system": 40.7,
+    "active_inference_peak_system": 48.0
+  },
+  "mem_available_gib": {
+    "baseline": 117.10,
+    "floor_during_job": 69.06,
+    "warm_steady": 76.44,
+    "after_reap": 117.01
+  },
+  "timing": {
+    "cold_job_wall_seconds": 256.4,
+    "warm_render_seconds_40_steps": 52.9,
+    "pack_reverify_seconds": 14.0
+  },
+  "end_to_end": {
+    "route": "POST /api/gate -> GET /api/studio/engines -> POST /api/studio/jobs -> GET /api/studio/jobs/{id} -> GET /api/studio/jobs/{id}/content -> POST /api/studio/jobs/{id}/library",
+    "manifest_image_flag": true,
+    "engine_after_gate": "qwen-image-21-gpu text-to-image gpu 1024*1024, 1280*768, 768*1280",
+    "job_id": "83d474ad316b4e96991ab6d4144e5348",
+    "final_status": "succeeded",
+    "content": "200 image/png, 1811916 bytes, sha256 b93af43b27cb430856dec5359c56f207ba437a44da3a37f5121a983fa10bba28",
+    "library_row": "engine 'Image (Qwen-Image-2.1)', url /media/Images/Generated/, status done",
+    "release": "device allocation returned to 0 MiB and MemAvailable to 117.01 GiB once the resident was reaped"
+  },
+  "supersedes": {
+    "receipt": "docs/receipts/qwen-image-21-qualification-20260921.json",
+    "envelope": "cold_load 62-78 / warm_idle 34-46 / active_inference 74-90 GiB, which this run does not support"
+  },
+  "kept_fail_closed": "warm_idle carries the pack's worst observed consumption (48.0 GiB) rather than the 40.7 GiB warm-steady figure, because the pair with the protected language primary would then land within about 1 GiB of the pool; co-residency stays refused until a visible-queue canary satisfies the companion qualification rule.",
+  "open_items": [
+    "co-residency with the protected primary is still unqualified (needs the visible-queue canary)",
+    "config/gpu-capacity-receipts.json still carries the retired ComfyUI 'image' budget (peak_gib 15.0); which engine that entry should now describe is a call for the owner",
+    "the image host pins the interpreter file's sha256, not the installed package set, so the hash-locked requirements file is the only thing keeping the environment reproducible"
+  ]
+}

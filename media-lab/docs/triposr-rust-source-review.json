@@ -1,0 +1,63 @@
+{
+  "status": "source-review-only",
+  "installed_wheel_provenance_verified": false,
+  "sources": [
+    {
+      "name": "safetensors",
+      "version": "0.8.0",
+      "metadata_url": "https://pypi.org/pypi/safetensors/0.8.0/json",
+      "source_url": "https://files.pythonhosted.org/packages/45/06/f955dbbb1859e3bd23c8ac6141af5106e7ad5fedec4a3a6e3d60f94b7001/safetensors-0.8.0.tar.gz",
+      "bytes": 325846,
+      "sha256": "fabaf3e0f18a6618d9b36560682562157f77c2b71fcffc7b432be2baed9d753d",
+      "lockfiles": [
+        {
+          "path": "safetensors-0.8.0/bindings/python/Cargo.lock",
+          "bytes": 16068,
+          "sha256": "f7d484a57bc394042b3424d57dab0a17d6a343f5e57e30870b9dd72dfb90f6b7",
+          "package_count": 69,
+          "registry_count": 67
+        }
+      ]
+    },
+    {
+      "name": "tokenizers",
+      "version": "0.22.2",
+      "metadata_url": "https://pypi.org/pypi/tokenizers/0.22.2/json",
+      "source_url": "https://files.pythonhosted.org/packages/73/6f/f80cfef4a312e1fb34baf7d85c72d4411afde10978d4657f8cdd811d3ccc/tokenizers-0.22.2.tar.gz",
+      "bytes": 372115,
+      "sha256": "473b83b915e547aa366d1eee11806deaf419e17be16310ac0a14077f1e28f917",
+      "lockfiles": [
+        {
+          "path": "tokenizers-0.22.2/bindings/python/Cargo.lock",
+          "bytes": 35133,
+          "sha256": "a3ff2022b3790e2f5863fe59732ab76da81dd75bc3a94905127206e87125170d",
+          "package_count": 149,
+          "registry_count": 147
+        }
+      ]
+    },
+    {
+      "name": "hf-xet",
+      "version": "1.6.0",
+      "metadata_url": "https://pypi.org/pypi/hf-xet/1.6.0/json",
+      "source_url": "https://files.pythonhosted.org/packages/1b/ab/522a2ab67f27971a9d48ca666d4fca85ef7d5282d142e31fd087e27b1bbe/hf_xet-1.6.0.tar.gz",
+      "bytes": 920527,
+      "sha256": "2e58454a340b3556dfa4972d5451aff4fba8dd42a236600ba1a1d2b1514f0fef",
+      "lockfiles": [
+        {
+          "path": "hf_xet-1.6.0/hf_xet/Cargo.lock",
+          "bytes": 104634,
+          "sha256": "042146dd9c975cf623bd50a5cdb319d132ec715f6dd770342942992895d59f6f",
+          "package_count": 422,
+          "registry_count": 416
+        }
+      ]
+    }
+  ],
+  "remaining": [
+    "Resolve target and feature-specific build graph; lockfiles include optional and development dependencies",
+    "Collect hash-matching registry crate notices and source records",
+    "Establish correspondence to installed wheel builds or qualify a separate pinned rebuild",
+    "Complete Torch, NumPy and Pillow bundled component review"
+  ]
+}

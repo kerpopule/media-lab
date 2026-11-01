@@ -1,0 +1,75 @@
+{
+  "host": "the media Spark (NVIDIA GB10, 121 GiB unified per free -g)",
+  "kind": "per-phase measurement of the Ming-Image-0.1-Design research candidate (model-research-intake t_e3595a34)",
+  "why": "The capacity planner will need measured phase ranges for a future Ming image-engine manifest entry (the entry is deferred: the image slot currently allows exactly one model per tests/test_qwen_image_21_single_model.py and config/capacity-policy.json, and widening that policy is an operator-level decision; an entry draft is kept ready in the research workspace). This bench measured cold load, warm idle and active inference from one clean chained run. Research candidate only: the engine ships configured OFF with no installer, no queue activation and no render path (the selection-surface PR is separate and fail-closed).",
+  "model": {
+    "id": "inclusionAI/Ming-Image-0.1-Design",
+    "revision": "1cd7fac3b0dcb54196fe2cd12b80da09edf8fcf4",
+    "dtype": "bfloat16",
+    "pack_digest": "81e73467125f7fd05821e21faf3688c4fecc926ececcabb24296f375f9dbf131",
+    "files": 17,
+    "bytes": 52879846053
+  },
+  "stack": {
+    "runtime": "~/runtime/ming-image-01-iso/venv (isolated python 3.12 venv)",
+    "packages": "torch 2.14.0+cu130 (DEVIATION from the upstream torch==2.6.0 pin, which cannot target GB10/SM121), transformers 4.57.1 (>=4.50,<5 per upstream), diffusers 0.36.0 (>=0.34.0 per upstream), vendored inclusionAI/Ming modules with 18 marked MING-RECON patches",
+    "bench": "~/runtime/ming-image-bench (bench_ming.py, make_sheet.py, run_chain2.sh; stage2-*.log; metrics in out/metrics.jsonl and out-canary/metrics.jsonl)"
+  },
+  "settings": {
+    "sizes": ["1024*1024", "2048*2048"],
+    "steps": 12,
+    "cfg_scale": 1.0,
+    "seeds": "1000+index over the fixed 10-prompt set (bench/prompts.json)",
+    "attention": "eager (P9: sdpa raised NotImplementedError in mllm.attn_implementation)",
+    "modes": {
+      "off": "no directvlm tokens; standard cap_feats text conditioning (the canary-selected report headline)",
+      "concat": "H1 reconstruction: proj_directvlm(hidden5||12||20) -> 256 layout tokens appended to the DiT context (recorded variant; the private directVLM entry point is undisclosed)"
+    }
+  },
+  "method": {
+    "host_state": "H3 inactive, no recovery hold; media-lab-inference.lock held per chain stage only; spark-gpu.lock untouched (media-lab-pool reconciliation path unchanged)",
+    "sampling": "MemAvailable sampled at 10 s cadence for the whole chain (270 samples inside the Ming window); per-generation torch.cuda.max_memory_allocated and ru_maxrss recorded per row in metrics.jsonl",
+    "chain": "run_chain2.sh: canary (mode gate) -> run -> qwen comparison, each stage under media-lab-inference.lock; pass-1 run rows (11 images) merged into the metrics log by finish_sheet.sh"
+  },
+  "phases_gib": {
+    "system_worst_observed": 74.0,
+    "system_after_reap": 5.0,
+    "cold_load_steady": 54.7,
+    "warm_idle_steady": 54.7,
+    "device_after_load": 46.6,
+    "device_peak_1024": 50.79,
+    "device_peak_2048": 63.18,
+    "process_rss": 8.08
+  },
+  "mem_available_gib": {
+    "clean_host_baseline_cited": 117.1,
+    "clean_host_baseline_citation": "docs/receipts/qwen-image-21-qualification-20260921-per-phase.json (2026-09-21, same host)",
+    "mid_load_sample_1751": 81.0,
+    "load_end_sample_1752": 67.0,
+    "floor_ming_window": 47.0,
+    "floor_ming_window_at": "2026-09-22T18:17:24-05:00 (during off/2048 generation)",
+    "after_ming_reap": 116.0
+  },
+  "timing_seconds": {
+    "cold_load_range": [336.9, 344.0],
+    "run_off_1024_mean_of_10": 19.5,
+    "run_concat_1024_mean_of_10": 20.7,
+    "run_off_2048_mean_of_10": 113.0,
+    "run_concat_2048_mean_of_10": 115.6,
+    "fitcheck_2048_first_gen": 117.4
+  },
+  "canary": {
+    "verdict": "both modes generate at ~equal cost; 'off' selected as the report headline per the p01/p04 gate (cleaner glyph consistency and layout at 1024); the full head-to-head has concat winning ZERO rows against 'off' (it only looked marginally sharper on some non-text 2048 rows in the pre-score), so the H1 concat hypothesis shows no benefit under this reconstruction",
+    "p18": "first canary (16:12) crashed the concat path on 'mat1 and mat2 must have the same dtype, but got BFloat16 and Float' at proj_directvlm (P5a materialized it in fp32 and load_state_dict widened the released weights); casting the module to bf16 fixed it losslessly and the 17:41 canary passed both modes",
+    "text_rendering_finding": "all four text prompts failed to render the requested words in BOTH modes at BOTH sizes (SAIL AWAY, ship it Friday, READ MORE, 好吃面馆 all rendered as garbled or wrong glyphs). The advertised text-rich design strength therefore lives (if anywhere) in the undisclosed private directVLM entry point and is UNVERIFIED under the public-code reconstructions."
+  },
+  "open_items": [
+    "torch pin deviation (2.14.0+cu130 vs upstream 2.6.0) is forced by GB10/SM121 support",
+    "the private directVLM entry point is not reproduced from the public pipeline; both modes here are reconstructions",
+    "text-rich rendering did not reproduce in either mode (see canary.text_rendering_finding)",
+    "P10 deferred: released vision tower is Qwen2.5-ViT but public qwen3_moe_vit.py expects Qwen3; i2i/vae.encode latent layout ships deferred with it",
+    "RGBA output is PNG-3-channel (alpha_composite onto white); true RGBA blocked pending operator's production policy",
+    "co-residency with the protected language primary is unqualified; this entry is planning-only and trusted=false",
+    "a future ming-image manifest entry needs the image slot policy widened first (currently exactly one model; tests/test_qwen_image_21_single_model.py); entry draft and measured envelope are ready"
+  ]
+}

@@ -1,0 +1,124 @@
+{
+  "_comment": "Public setup catalog. Legacy Maestro-backed video recipes are blocked pending independently implemented, pinned and qualified replacements. A blocked entry must never be made ready by a health probe or a previous install record.",
+  "ltx": {
+    "title": "LTX \u2014 fast video drafts",
+    "blurb": "Independent video engine setup is in development.",
+    "size_label": "Download size not yet verified",
+    "est_minutes": null,
+    "default": false,
+    "requires_gpu": true,
+    "requires_manual": true,
+    "kind": "docker",
+    "port": 8290,
+    "health": "/health",
+    "boot_wait": 420,
+    "manual_note": "This video setup depends on a private Maestro runtime. An independent, verified installer is not available yet.",
+    "steps": [],
+    "blocked": true,
+    "blocked_reason": "This video setup depends on a private Maestro runtime. An independent, verified installer is not available yet."
+  },
+  "h3": {
+    "title": "MiniMax H3 \u2014 cinematic video + talking characters",
+    "blurb": "Independent video engine setup is in development.",
+    "size_label": "Download size not yet verified",
+    "est_minutes": null,
+    "default": false,
+    "requires_gpu": true,
+    "requires_manual": true,
+    "kind": "docker",
+    "port": 8291,
+    "health": "/health",
+    "boot_wait": 600,
+    "terms_acceptance_required": true,
+    "license_name": "MiniMax H3 model license",
+    "license_note": "You accept the MiniMax H3 model terms yourself \u2014 the license is yours, not ours.",
+    "manual_note": "This video setup depends on a private Maestro runtime. An independent, verified installer is not available yet.",
+    "steps": [],
+    "blocked": true,
+    "blocked_reason": "This video setup depends on a private Maestro runtime. An independent, verified installer is not available yet."
+  },
+  "music": {
+    "title": "Music \u2014 full songs & music videos",
+    "blurb": "MiniMax Music 3 pipeline through ComfyUI.",
+    "size_label": "large \u2014 ComfyUI runtime + music weights (already staged)",
+    "est_minutes": 6,
+    "default": false,
+    "requires_gpu": true,
+    "requires_manual": false,
+    "kind": "unit",
+    "unit": "media-lab-comfy-music.service",
+    "port": 8196,
+    "health": "/system_stats",
+    "boot_wait": 150,
+    "ready_push": "Your music studio is ready \ud83c\udfb5",
+    "manual_note": "The Music 3 ComfyUI runtime and its weights must already exist at ~/runtime/music3-iso/ComfyUI; the repo ships no automated download for them.",
+    "steps": [
+      {
+        "label": "Check the Music ComfyUI runtime",
+        "run": "test -x \"$HOME/runtime/music3-iso/ComfyUI/.venv/bin/python\""
+      },
+      {
+        "label": "Start the music engine",
+        "run": "systemctl --user reset-failed media-lab-comfy-music.service 2>/dev/null; systemd-run --user --unit=media-lab-comfy-music.service bash -lc 'cd \"$HOME/runtime/music3-iso/ComfyUI\" && exec .venv/bin/python main.py --disable-api-nodes --listen 127.0.0.1 --port 8196 --disable-auto-launch --extra-model-paths-config extra_model_paths.yaml'"
+      }
+    ]
+  },
+  "image": {
+    "title": "Image studio \u2014 Qwen-Image-2.1 generation & editing",
+    "blurb": "Qwen-Image-2.1 is the studio's only image model (generation, editing, transparency).",
+    "size_label": "large \u2014 30.84 GiB of BF16 weights plus a pinned image runtime",
+    "est_minutes": 5,
+    "default": false,
+    "requires_gpu": true,
+    "requires_manual": false,
+    "kind": "unit",
+    "unit": "media-lab-qwen-image.service",
+    "port": 7864,
+    "health": "/manifest.json",
+    "boot_wait": 600,
+    "ready_push": "Your image studio is ready \ud83d\uddbc",
+    "manual_note": "Weights and the runtime are not part of the repo. Stage Qwen-Image-2.1 (revision b3179ad355be050328e483a9dfdd9e60cd62adfa) against config/qwen-image-21-weights.json, install diffusers at 80c7ed262aeffbeb43ef13ae04baeb9b84515a69 (the first main commit with QwenImage21Pipeline; PyPI 0.40.0 predates it) plus transformers>=5.17, then point the image host at the pack with --image-config. The ComfyUI route needs a build with the Qwen-Image-2.1 nodes; the accelerated NVFP4 pack is pinned in config/model-manifests.json.",
+    "steps": [
+      {
+        "label": "Check the pinned image runtime",
+        "run": "test -x \"$HOME/runtime/qwen-image-21/venv/bin/python\" && \"$HOME/runtime/qwen-image-21/venv/bin/python\" -c 'from diffusers import QwenImage21Pipeline'"
+      },
+      {
+        "label": "Check the pinned weights are staged",
+        "run": "test -f \"$HOME/runtime/qwen-image-21/models/Qwen-Image-2.1/transformer/diffusion_pytorch_model-00001-of-00002.safetensors\""
+      },
+      {
+        "label": "Start the image host",
+        "run": "systemd-run --user --unit=media-lab-qwen-image.service bash -lc 'exec \"$HOME/runtime/qwen-image-21/venv/bin/python\" -m media_lab_core.cli studio serve main --port 7864 --image-config \"$HOME/lab/image-config.json\"'"
+      }
+    ]
+  },
+  "ming-image": {
+    "title": "Ming-Image-0.1-Design \u2014 research image engine (configured off)",
+    "blurb": "Ant Group MIT-licensed unified understanding-and-generation model. Selection-surface option only in this build.",
+    "size_label": "large \u2014 about 50 GiB of BF16 weights plus an isolated runtime (research staging only)",
+    "est_minutes": null,
+    "default": false,
+    "requires_gpu": true,
+    "requires_manual": true,
+    "blocked": true,
+    "blocked_reason": "Research candidate from the model-research-intake t_e3595a34 benchmark; not operator-approved and not production-qualified. This build ships no installer, no download automation, no warm-host default, no queue activation and no render path for it \u2014 enablement is a separate gated step.",
+    "steps": []
+  },
+  "voicebox": {
+    "title": "Voicebox \u2014 clone yours, give characters theirs",
+    "blurb": "Voice cloning and character voices (Qwen TTS, Kokoro\u2026).",
+    "size_label": "medium \u2014 separate Voicebox service",
+    "est_minutes": 20,
+    "default": false,
+    "requires_gpu": false,
+    "requires_manual": true,
+    "kind": "service",
+    "port": 17493,
+    "health": "/health",
+    "boot_wait": 120,
+    "ready_push": "Your voice studio is ready \ud83c\udf99",
+    "manual_note": "Voicebox is a separate TTS service this repo does not ship an installer for. If it is already running on port 17493 it shows as ready; otherwise install and start it by hand (see AGENTS.md), then reopen this screen.",
+    "steps": []
+  }
+}

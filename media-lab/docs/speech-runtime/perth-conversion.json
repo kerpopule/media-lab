@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "source_sha256": "a15bce457ebc53ce5e6c9c3f11df78cf7ee2bf9cdab0a798902135b4c4027670",
+  "output_sha256": "9ef795010cfbec43e9eff58c84a2733f25de41f6e824d050f6865b2713465233",
+  "output_bytes": 37413196,
+  "tensor_bytes": 37407260,
+  "torch": "2.11.0+cpu",
+  "restricted_load": true,
+  "tensor_roundtrip_verified": true,
+  "model_qualified": false,
+  "tensor_count": 59,
+  "source_revision": "ff1c8ac55a976971245cdd53c18d6131ca00d993",
+  "converter_sha256": "7d22013d90e476b89a378517c556952ee7972bc1c511bdf6370b2d29414926b6",
+  "existing_output_preserved": true,
+  "invalid_source_rejected": true
+}

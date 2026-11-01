@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "status": "portable-lock-only-not-qualified",
+  "runtime_profile": "rebuilt-rust-v1",
+  "verification": {
+    "recipes": {
+      "verified_recipes": [
+        "tools/build-triposr-mcubes.py",
+        "tools/build-triposr-antlr.py",
+        "tools/convert-triposr-checkpoint.py",
+        "tools/prepare-triposr-source.py",
+        "docs/triposr-source-review.json",
+        "media_lab_core/data/triposr-runtime-without-vision.json",
+        "docs/triposr-safetensors-rebuild-review.json",
+        "docs/triposr-tokenizers-rebuild-review.json",
+        "docs/triposr-hf-xet-rebuild-review.json",
+        "media_lab_core/data/triposr-cpu-linux-arm64-rebuilt-rust.lock.in"
+      ],
+      "install_qualified": false
+    },
+    "lock": {
+      "lock_sha256": "e3e459312aca8601b6c7f818c51fcfb3ea30eb3a4461d95e8cdab36c04ebf625",
+      "template_sha256": "8ff5ba80947ab7addfcc7b48984c9187a378fceb751e344a5f36ddb1ba92893d",
+      "verified_wheels": {
+        "antlr4_python3_runtime-4.9.3-py3-none-any.whl": "2a87ebcac22b720a265c06148b104f28eca7bf1203201eb971f37184bcef5569",
+        "torchmcubes-0.1.0-cp312-cp312-linux_aarch64.whl": "72c5acf87e5d90ed8522034506afbb755404c15fa46f04376a5095df9ac918c5",
+        "safetensors-0.8.0-cp310-abi3-linux_aarch64.whl": "d76b9d898895b6caa98ff231a15138e294f3e7b268fe3d968682f37183c77e51",
+        "tokenizers-0.22.2-cp39-abi3-linux_aarch64.whl": "8ba313f1cb09983ce3adb60c84511ccec21b1f1316c33de4aaec601eccd863f6",
+        "hf_xet-1.6.0-cp38-abi3-linux_aarch64.whl": "0d975d386160ae8a5d98037a5afbacaea81866c2c9ec1eb169af9339a981c322"
+      },
+      "runtime_profile": "rebuilt-rust-v1",
+      "install_qualified": false
+    },
+    "matches_tested_requirements_and_hashes": true
+  },
+  "scope": "All five wheel hashes and ten recipe files verified on Spark. Normalized requirement and hash lines match the fresh runtime tested in stage 16bk; only wheel directory URLs and comments differ.",
+  "remaining": [
+    "Worker rebuilt profile and installed file integrity enforcement",
+    "Complete dependency notice review",
+    "Installation, activation and removal lifecycle",
+    "Creative quality and cross-platform acceptance"
+  ]
+}

@@ -1,0 +1,11 @@
+[
+  {"id": "fal-ai/flux/dev", "name": "FLUX.1 dev", "blurb": "High-quality general images — the studio default.", "kind": "image", "recommended": true},
+  {"id": "minimax/h3-max/image-to-video", "name": "MiniMax H3 Max", "blurb": "Highest-quality Media Lab video with start-frame continuation support.", "kind": "video", "recommended": true},
+  {"id": "fal-ai/veo3/fast", "name": "Veo 3 Fast", "blurb": "Fast cinematic cloud video with generated sound.", "kind": "video", "recommended": false},
+  {"id": "fal-ai/flux/schnell", "name": "FLUX.1 schnell", "blurb": "Fastest and cheapest image drafts.", "kind": "image", "recommended": false},
+  {"id": "fal-ai/flux-pro/v1.1", "name": "FLUX 1.1 pro", "blurb": "Top image quality for finals.", "kind": "image", "recommended": false},
+  {"id": "fal-ai/recraft-v3", "name": "Recraft V3", "blurb": "Strong with text, logos and graphic design.", "kind": "image", "recommended": false},
+  {"id": "fal-ai/veo3", "name": "Veo 3", "blurb": "Best cinematic quality with sound — slower and pricier.", "kind": "video", "recommended": false},
+  {"id": "fal-ai/kling-video/v2.1/standard/text-to-video", "name": "Kling 2.1", "blurb": "Smooth motion, good value per clip.", "kind": "video", "recommended": false},
+  {"id": "fal-ai/minimax/video-01", "name": "MiniMax Video 01", "blurb": "Expressive characters and camera moves.", "kind": "video", "recommended": false}
+]

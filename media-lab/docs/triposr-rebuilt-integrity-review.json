@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "status": "runtime-check-tested-worker-tracer-pending",
+  "profile": "rebuilt-rust-v1",
+  "manifest_sha256": "41df95697eaec7fb8cdd2e76d23deac62e76a1baa012255b9db55d3ae78ea3ca",
+  "verified_files": 49,
+  "actual_runtime": "Spark Linux ARM64 Python 3.12.3 isolated rebuilt runtime from stage 16bk",
+  "tests": {
+    "passed": 34,
+    "subtests": 16
+  },
+  "scope": "Checks pinned entries from three rebuilt wheels before model imports, excluding installer-rewritten RECORD. Does not cover unlisted files, other packages, or adversarial concurrent filesystem modification. Explicit receipt identity differs from without-vision-v1. No generation, activation or production changes in this stage.",
+  "remaining": [
+    "Full worker generation/recovery with new profile",
+    "Other runtime package file integrity",
+    "Full installation and dependency redistribution qualification"
+  ]
+}

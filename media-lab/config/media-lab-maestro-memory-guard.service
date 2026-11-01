@@ -1,0 +1,8 @@
+[Unit]
+Description=Enforce DGX Spark memory ceiling on the Maestro H3 container
+After=docker.service
+
+[Service]
+Type=oneshot
+EnvironmentFile=-%h/media-lab-simple/config/local.env
+ExecStart=%h/media-lab-simple/runner/maestro_memory_guard.sh

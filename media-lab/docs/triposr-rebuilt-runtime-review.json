@@ -1,0 +1,91 @@
+{
+  "status": "fresh-install-and-worker-tested-not-qualified",
+  "lock_sha256": "dba2964fad6958bb4a2a5b864e47c601bfca031b70baabfceb405879e7a53462",
+  "package_count": 32,
+  "package_versions": {
+    "requests": "2.34.2",
+    "tqdm": "4.70.0",
+    "pillow": "12.3.0",
+    "hf-xet": "1.6.0",
+    "packaging": "26.3",
+    "numpy": "2.5.2",
+    "fsspec": "2026.7.0",
+    "networkx": "3.6.1",
+    "certifi": "2026.7.22",
+    "tokenizers": "0.22.2",
+    "pyyaml": "6.0.3",
+    "imageio": "2.37.4",
+    "einops": "0.8.2",
+    "mpmath": "1.3.0",
+    "huggingface-hub": "0.36.2",
+    "trimesh": "5.1.0",
+    "charset-normalizer": "3.5.1",
+    "transformers": "4.57.6",
+    "jinja2": "3.1.6",
+    "markupsafe": "3.0.3",
+    "omegaconf": "2.3.1",
+    "idna": "3.19",
+    "filelock": "3.32.5",
+    "torch": "2.11.0+cpu",
+    "urllib3": "2.7.0",
+    "regex": "2026.9.3",
+    "torchmcubes": "0.1.0",
+    "safetensors": "0.8.0",
+    "antlr4-python3-runtime": "4.9.3",
+    "setuptools": "81.0.0",
+    "sympy": "1.14.0",
+    "typing-extensions": "4.16.0"
+  },
+  "replacements": [
+    {
+      "name": "safetensors",
+      "path": "~/runtime/vibex-rust-wheel-build-16bh/wheels/safetensors-0.8.0-cp310-abi3-linux_aarch64.whl",
+      "sha256": "d76b9d898895b6caa98ff231a15138e294f3e7b268fe3d968682f37183c77e51",
+      "bytes": 505682
+    },
+    {
+      "name": "tokenizers",
+      "path": "~/runtime/vibex-tokenizers-build-16bi/wheels/tokenizers-0.22.2-cp39-abi3-linux_aarch64.whl",
+      "sha256": "8ba313f1cb09983ce3adb60c84511ccec21b1f1316c33de4aaec601eccd863f6",
+      "bytes": 3326770
+    },
+    {
+      "name": "hf-xet",
+      "path": "~/runtime/vibex-hf-xet-build-16bj/wheels/hf_xet-1.6.0-cp38-abi3-linux_aarch64.whl",
+      "sha256": "0d975d386160ae8a5d98037a5afbacaea81866c2c9ec1eb169af9339a981c322",
+      "bytes": 4461263
+    }
+  ],
+  "file_integrity": {
+    "scope": "Every non-directory entry of the three rebuilt wheels except installer-rewritten RECORD; not the other runtime packages or unlisted files",
+    "files": 49,
+    "manifest_sha256": "41df95697eaec7fb8cdd2e76d23deac62e76a1baa012255b9db55d3ae78ea3ca"
+  },
+  "worker": {
+    "first": {
+      "path": "dddddddddddddddddddddddddddddddd/output.glb",
+      "bytes": 410488,
+      "sha256": "a7380f83524d536e2d4d8b7c154bcb3b8b73e3f43ec00970a7823623491984a3",
+      "recovered": false
+    },
+    "recovery": {
+      "path": "dddddddddddddddddddddddddddddddd/output.glb",
+      "bytes": 410488,
+      "sha256": "a7380f83524d536e2d4d8b7c154bcb3b8b73e3f43ec00970a7823623491984a3",
+      "recovered": true
+    },
+    "wrong_profile_rejected": true,
+    "runtime": {
+      "profile": "without-vision-v1",
+      "system": "Linux",
+      "machine": "aarch64",
+      "python": [
+        3,
+        12,
+        3
+      ],
+      "package_versions_sha256": "2c197bf6f3ff15de89a6759ba8f5de9fabad195ee47c851a2be4cdf2cce37008"
+    },
+    "install_qualified": false
+  }
+}

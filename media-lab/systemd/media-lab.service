@@ -1,0 +1,20 @@
+# @@MARKER@@ — re-rendered on every ./install.sh run; edit install.sh flags, not this file.
+[Unit]
+Description=Media Lab — private AI media studio (uvicorn app:app)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=@@REPO@@
+Environment=PYTHONUNBUFFERED=1
+Environment=MEDIA_LAB_HOME=@@ROOT@@
+Environment=PATH=@@PATH@@
+ExecStart=@@VENV@@/bin/python -m uvicorn app:app --host @@BIND@@ --port @@PORT@@
+Restart=always
+RestartSec=5
+# Engines can take minutes to drain; give a stop the same patience.
+TimeoutStopSec=120
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,29 @@
+[Unit]
+Description=Media Lab web-only UI while the Spark pair serves GLM
+After=network-online.target
+Wants=network-online.target
+Conflicts=media-lab-simple.service
+Before=media-lab-simple.service
+ConditionPathExists=%h/.local/state/spark-pair-control/reservation.json
+
+[Service]
+Type=simple
+WorkingDirectory=%h/media-lab-simple
+Environment=MEDIA_LAB_WEB_ONLY=1
+Environment=MEDIA_LAB_DISABLE_BACKGROUND_WORKERS=1
+Environment=MEDIA_LAB_VOICE_PREWARM=0
+Environment=CUDA_VISIBLE_DEVICES=-1
+Environment=MEDIA_LAB_BIND_HOST=127.0.0.1
+ExecStart=%h/media-lab-simple/.venv/bin/uvicorn app:app --host ${MEDIA_LAB_BIND_HOST} --port 7863 --workers 1
+Restart=on-failure
+RestartSec=10
+TimeoutStopSec=30
+KillMode=control-group
+NoNewPrivileges=yes
+MemoryHigh=1G
+MemoryMax=1536M
+TasksMax=128
+CPUQuota=100%
+
+[Install]
+WantedBy=default.target

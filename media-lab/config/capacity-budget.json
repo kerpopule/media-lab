@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "board_name": "DGX Spark (GB10) headless",
+  "nominal_gb": 128,
+  "physical_total_gb": 121.7,
+  "reserves_gb": {
+    "os_kernel": 12.0,
+    "media_lab_controller": 3.0,
+    "runtime_container_overhead": 4.0,
+    "kv_cache_transients": 9.0,
+    "safety_floor": 24.0
+  },
+  "display_service_gb": 0.0,
+  "notes": [
+    "physical_total_gb is the honest MemTotal on this box (see research/headless-probe-2026-08-19.md); nominal 128 is NOT advertised as allocatable.",
+    "os_kernel/runtime/controller reserves are measured floors at idle; MEM_FLOOR_GB=24 in app.py is the same 24.0 safety floor.",
+    "display_service_gb=0.0 because the Spark is headless (graphical-session.target dead, no Xorg/Wayland). If a desktop were enabled this rises ~5-8 GiB and must be added to reserves before any plan.",
+    "allocatable_pool_gb = physical_total_gb - sum(reserves) = 121.7 - 52.0 = 69.7 GiB on this headless config."
+  ],
+  "kv_cache_transients_note": "KV/context growth is charged per-active-LLM from its manifest's kv_phase; the fixed 9.0 GiB here reserves steady-state cache/transients not attributable to a specific model."
+}

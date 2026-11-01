@@ -1,0 +1,46 @@
+{
+  "first": {
+    "path": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee/output.glb",
+    "bytes": 410488,
+    "sha256": "a7380f83524d536e2d4d8b7c154bcb3b8b73e3f43ec00970a7823623491984a3",
+    "recovered": false
+  },
+  "recovery": {
+    "path": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee/output.glb",
+    "bytes": 410488,
+    "sha256": "a7380f83524d536e2d4d8b7c154bcb3b8b73e3f43ec00970a7823623491984a3",
+    "recovered": true
+  },
+  "wrong_profile_rejected": true,
+  "runtime": {
+    "rebuilt_files_manifest_sha256": "41df95697eaec7fb8cdd2e76d23deac62e76a1baa012255b9db55d3ae78ea3ca",
+    "profile": "rebuilt-rust-v1",
+    "system": "Linux",
+    "machine": "aarch64",
+    "python": [
+      3,
+      12,
+      3
+    ],
+    "package_versions_sha256": "2c197bf6f3ff15de89a6759ba8f5de9fabad195ee47c851a2be4cdf2cce37008"
+  },
+  "install_qualified": false,
+  "schema": 1,
+  "status": "worker-tracer-tested-not-install-qualified",
+  "limits": {
+    "memory_max_gib": 14,
+    "swap_max_bytes": 0,
+    "cpu_quota_percent": 400,
+    "child_timeout_seconds": 90,
+    "outer_timeout_seconds": 150,
+    "network": "AF_UNIX only",
+    "lease": "canonical inference lock"
+  },
+  "observed": {
+    "elapsed_seconds_approx": 31,
+    "systemd_memory_peak": "2.4G",
+    "swap_peak_bytes": 0,
+    "production_services_active": 4
+  },
+  "scope": "Fresh generation, verified recovery with nonexistent Python path, and reduced-profile rejection. Existing chair tracer remains visually unapproved. No activation or production change. First controller launch used model-only venv and failed before inference for missing psutil; corrected to system controller Python without modifying the pinned inference runtime."
+}

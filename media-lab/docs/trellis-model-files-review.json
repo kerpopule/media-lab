@@ -1,0 +1,172 @@
+{
+  "schema": 1,
+  "status": "metadata-only-not-installable",
+  "pipeline": {
+    "url": "https://huggingface.co/microsoft/TRELLIS.2-4B/resolve/af44b45f2e35a493886929c6d786e563ec68364d/pipeline.json",
+    "bytes": 4186,
+    "sha256": "222c359ab1ed9bc6735a640a34f95d47f8681b9bc4aaa101bfb80274676253c6"
+  },
+  "components": [
+    {
+      "role": "sparse_structure_decoder",
+      "repository": "microsoft/TRELLIS-image-large",
+      "revision": "25e0d31ffbebe4b5a97464dd851910efc3002d96",
+      "model_class": "SparseStructureDecoder",
+      "config": {
+        "path": "ckpts/ss_dec_conv3d_16l8_fp16.json",
+        "url": "https://huggingface.co/microsoft/TRELLIS-image-large/resolve/25e0d31ffbebe4b5a97464dd851910efc3002d96/ckpts/ss_dec_conv3d_16l8_fp16.json",
+        "bytes": 245,
+        "sha256": "646781293f1cda74720de85d1cef50a957fb4aebd9a4bd014e454e32f2330ac5"
+      },
+      "weights": {
+        "path": "ckpts/ss_dec_conv3d_16l8_fp16.safetensors",
+        "url": "https://huggingface.co/microsoft/TRELLIS-image-large/resolve/25e0d31ffbebe4b5a97464dd851910efc3002d96/ckpts/ss_dec_conv3d_16l8_fp16.safetensors",
+        "bytes": 147591972,
+        "sha256": "1c76d4a40519aa2d711cc263a8404105231ac26db31d946bed48b84fee79009a"
+      },
+      "weights_verified": false
+    },
+    {
+      "role": "sparse_structure_flow_model",
+      "repository": "microsoft/TRELLIS.2-4B",
+      "revision": "af44b45f2e35a493886929c6d786e563ec68364d",
+      "model_class": "SparseStructureFlowModel",
+      "config": {
+        "path": "ckpts/ss_flow_img_dit_1_3B_64_bf16.json",
+        "url": "https://huggingface.co/microsoft/TRELLIS.2-4B/resolve/af44b45f2e35a493886929c6d786e563ec68364d/ckpts/ss_flow_img_dit_1_3B_64_bf16.json",
+        "bytes": 467,
+        "sha256": "6cdfb636854f60ffcadd8c49244169cd449f34c5ccdb55b5ff7c04678f9c399e"
+      },
+      "weights": {
+        "path": "ckpts/ss_flow_img_dit_1_3B_64_bf16.safetensors",
+        "url": "https://huggingface.co/microsoft/TRELLIS.2-4B/resolve/af44b45f2e35a493886929c6d786e563ec68364d/ckpts/ss_flow_img_dit_1_3B_64_bf16.safetensors",
+        "bytes": 2584426920,
+        "sha256": "ca01377c485bec418076d38ee80166d32dc776d744f2553b835cba1e97a7abf6"
+      },
+      "weights_verified": false
+    },
+    {
+      "role": "shape_slat_decoder",
+      "repository": "microsoft/TRELLIS.2-4B",
+      "revision": "af44b45f2e35a493886929c6d786e563ec68364d",
+      "model_class": "FlexiDualGridVaeDecoder",
+      "config": {
+        "path": "ckpts/shape_dec_next_dc_f16c32_fp16.json",
+        "url": "https://huggingface.co/microsoft/TRELLIS.2-4B/resolve/af44b45f2e35a493886929c6d786e563ec68364d/ckpts/shape_dec_next_dc_f16c32_fp16.json",
+        "bytes": 678,
+        "sha256": "5f1b856dffce79466fb18f5f0eefc08f08c673b24b3c05b20359c0b6d318a209"
+      },
+      "weights": {
+        "path": "ckpts/shape_dec_next_dc_f16c32_fp16.safetensors",
+        "url": "https://huggingface.co/microsoft/TRELLIS.2-4B/resolve/af44b45f2e35a493886929c6d786e563ec68364d/ckpts/shape_dec_next_dc_f16c32_fp16.safetensors",
+        "bytes": 948490494,
+        "sha256": "e3b718d3e43e4f8780e9a24ac6fff231811a67e3b058e336e10fe654c911d581"
+      },
+      "weights_verified": false
+    },
+    {
+      "role": "shape_slat_flow_model_512",
+      "repository": "microsoft/TRELLIS.2-4B",
+      "revision": "af44b45f2e35a493886929c6d786e563ec68364d",
+      "model_class": "SLatFlowModel",
+      "config": {
+        "path": "ckpts/slat_flow_img2shape_dit_1_3B_512_bf16.json",
+        "url": "https://huggingface.co/microsoft/TRELLIS.2-4B/resolve/af44b45f2e35a493886929c6d786e563ec68364d/ckpts/slat_flow_img2shape_dit_1_3B_512_bf16.json",
+        "bytes": 458,
+        "sha256": "ddbd7a1d34ce9a8e7af2f6ef9ae686d9ab49f69e62dacb98d8409b511cdbd5e2"
+      },
+      "weights": {
+        "path": "ckpts/slat_flow_img2shape_dit_1_3B_512_bf16.safetensors",
+        "url": "https://huggingface.co/microsoft/TRELLIS.2-4B/resolve/af44b45f2e35a493886929c6d786e563ec68364d/ckpts/slat_flow_img2shape_dit_1_3B_512_bf16.safetensors",
+        "bytes": 2584574424,
+        "sha256": "ec5e0917ef9b7e25ad51dffc7d19687a42019871f94239f2fa7f86264c55b70f"
+      },
+      "weights_verified": false
+    },
+    {
+      "role": "shape_slat_flow_model_1024",
+      "repository": "microsoft/TRELLIS.2-4B",
+      "revision": "af44b45f2e35a493886929c6d786e563ec68364d",
+      "model_class": "SLatFlowModel",
+      "config": {
+        "path": "ckpts/slat_flow_img2shape_dit_1_3B_1024_bf16.json",
+        "url": "https://huggingface.co/microsoft/TRELLIS.2-4B/resolve/af44b45f2e35a493886929c6d786e563ec68364d/ckpts/slat_flow_img2shape_dit_1_3B_1024_bf16.json",
+        "bytes": 458,
+        "sha256": "7ebd6d367393f52fee9e92c2b3d727a9026a338549c6a6fa84c7ea122140ffdd"
+      },
+      "weights": {
+        "path": "ckpts/slat_flow_img2shape_dit_1_3B_1024_bf16.safetensors",
+        "url": "https://huggingface.co/microsoft/TRELLIS.2-4B/resolve/af44b45f2e35a493886929c6d786e563ec68364d/ckpts/slat_flow_img2shape_dit_1_3B_1024_bf16.safetensors",
+        "bytes": 2584574424,
+        "sha256": "07cd0596f634c5adc1890023d16023afc5eed02fb84b22bb23aff5bf0030fbbd"
+      },
+      "weights_verified": false
+    },
+    {
+      "role": "tex_slat_decoder",
+      "repository": "microsoft/TRELLIS.2-4B",
+      "revision": "af44b45f2e35a493886929c6d786e563ec68364d",
+      "model_class": "SparseUnetVaeDecoder",
+      "config": {
+        "path": "ckpts/tex_dec_next_dc_f16c32_fp16.json",
+        "url": "https://huggingface.co/microsoft/TRELLIS.2-4B/resolve/af44b45f2e35a493886929c6d786e563ec68364d/ckpts/tex_dec_next_dc_f16c32_fp16.json",
+        "bytes": 705,
+        "sha256": "22074e4ab5b28e2b72d33a3fe61bf416134b89e12d0fc5c729f37da75da0c4d1"
+      },
+      "weights": {
+        "path": "ckpts/tex_dec_next_dc_f16c32_fp16.safetensors",
+        "url": "https://huggingface.co/microsoft/TRELLIS.2-4B/resolve/af44b45f2e35a493886929c6d786e563ec68364d/ckpts/tex_dec_next_dc_f16c32_fp16.safetensors",
+        "bytes": 948458812,
+        "sha256": "97ea69addea2ecd9312910f5f548234665eef51c088386180b7cd5b258645e3c"
+      },
+      "weights_verified": false
+    },
+    {
+      "role": "tex_slat_flow_model_512",
+      "repository": "microsoft/TRELLIS.2-4B",
+      "revision": "af44b45f2e35a493886929c6d786e563ec68364d",
+      "model_class": "SLatFlowModel",
+      "config": {
+        "path": "ckpts/slat_flow_imgshape2tex_dit_1_3B_512_bf16.json",
+        "url": "https://huggingface.co/microsoft/TRELLIS.2-4B/resolve/af44b45f2e35a493886929c6d786e563ec68364d/ckpts/slat_flow_imgshape2tex_dit_1_3B_512_bf16.json",
+        "bytes": 458,
+        "sha256": "3093796257a62f838d2e5578ac4580ca3b7d88d10b87d348065d3fdfcc4c2077"
+      },
+      "weights": {
+        "path": "ckpts/slat_flow_imgshape2tex_dit_1_3B_512_bf16.safetensors",
+        "url": "https://huggingface.co/microsoft/TRELLIS.2-4B/resolve/af44b45f2e35a493886929c6d786e563ec68364d/ckpts/slat_flow_imgshape2tex_dit_1_3B_512_bf16.safetensors",
+        "bytes": 2584672728,
+        "sha256": "8371aa1c5d13be79dcd5ddfd2cf3835e902e204dc34427169a1c702828e1a94d"
+      },
+      "weights_verified": false
+    },
+    {
+      "role": "tex_slat_flow_model_1024",
+      "repository": "microsoft/TRELLIS.2-4B",
+      "revision": "af44b45f2e35a493886929c6d786e563ec68364d",
+      "model_class": "SLatFlowModel",
+      "config": {
+        "path": "ckpts/slat_flow_imgshape2tex_dit_1_3B_1024_bf16.json",
+        "url": "https://huggingface.co/microsoft/TRELLIS.2-4B/resolve/af44b45f2e35a493886929c6d786e563ec68364d/ckpts/slat_flow_imgshape2tex_dit_1_3B_1024_bf16.json",
+        "bytes": 458,
+        "sha256": "31f4fdad9974930e5e9324ac9dfb6ef7de6b30cea51854ba515ef827a8d353b2"
+      },
+      "weights": {
+        "path": "ckpts/slat_flow_imgshape2tex_dit_1_3B_1024_bf16.safetensors",
+        "url": "https://huggingface.co/microsoft/TRELLIS.2-4B/resolve/af44b45f2e35a493886929c6d786e563ec68364d/ckpts/slat_flow_imgshape2tex_dit_1_3B_1024_bf16.safetensors",
+        "bytes": 2584672728,
+        "sha256": "580401269059a339b8318ab9ced459a13ba63391721c83a6c383198c29e77686"
+      },
+      "weights_verified": false
+    }
+  ],
+  "checkpoint_bytes": 14967462502,
+  "remaining": [
+    "Required DINOv3 component terms and pinned descriptor",
+    "Explicit cutout-only pipeline construction",
+    "Source/native runtime qualification",
+    "Downloaded weight hash verification",
+    "Strict state loading and creative tracer acceptance"
+  ],
+  "scope": "Configuration bytes fetched and hashed; weight bytes/hash are upstream LFS metadata only. No weights downloaded or loaded."
+}

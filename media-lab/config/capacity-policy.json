@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "version": "2026-09-20",
+  "slots": {
+    "language": {
+      "allowed": [
+        "qwen",
+        "deepseek-full"
+      ],
+      "primary": "qwen",
+      "note": "deepseek-full is mutually-exclusive and drains media; refused here when measured floors fail."
+    },
+    "video": {
+      "allowed": [
+        "ltx",
+        "h3"
+      ],
+      "primary": "ltx",
+      "note": "h3 is the alternate video; co-resident dual-video (ltx+h3) is refused on GB10 when warm phases exceed the pool."
+    },
+    "image": {
+      "allowed": [
+        "qwen-image-21"
+      ],
+      "primary": "qwen-image-21",
+      "note": "Qwen-Image-2.1 is the only image model. License is research/evaluation only; commercial output needs a separate Qwen license (see CREDITS.md)."
+    },
+    "speech": {
+      "allowed": [
+        "voicebox"
+      ],
+      "primary": "voicebox"
+    },
+    "segmentation": {
+      "allowed": [
+        "sam3"
+      ],
+      "primary": "sam3"
+    }
+  },
+  "constraints": [
+    "no-remote-code-execution",
+    "residency-and-concurrency-are-separate",
+    "busy-services-drain-not-kill",
+    "explicit-pinned-priority-overrides-defaults",
+    "grey-headroom-is-uncommitted-not-optimistic"
+  ]
+}

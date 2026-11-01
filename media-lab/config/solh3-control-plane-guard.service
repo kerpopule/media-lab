@@ -1,0 +1,33 @@
+# Independent H3 pressure observer. Candidate only: installation/enablement is an
+# explicit operator action; source deployment alone does not activate it.
+[Unit]
+Description=Sol-H3 control-plane pressure guard (fail-closed, no reboot)
+After=default.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+WorkingDirectory=%h/media-lab-simple
+EnvironmentFile=-%h/media-lab-simple/config/local.env
+Environment=PYTHONUNBUFFERED=1
+ExecStart=%h/media-lab-simple/.venv/bin/python -m media_lab_core.solh3_control_guard
+# Loss of the independent observer revokes admission. This targets one exact
+# unit and never restarts or reboots the host.
+ExecStopPost=-/usr/bin/systemctl --user --no-block stop media-lab-sol-h3.service
+Restart=always
+RestartSec=1
+OOMPolicy=stop
+Slice=media-lab-control-plane.slice
+CPUWeight=10000
+IOWeight=10000
+MemoryLow=64M
+MemoryMin=64M
+MemoryMax=128M
+TasksMax=32
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectHome=read-only
+ReadWritePaths=%h/.local/share/sol-h3-spark %t
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,13 @@
+# The base is an immutable local image ID, not a mutable tag or registry lookup.
+# Docker BuildKit resolves bare IDs as registry names, so this file intentionally
+# uses the legacy local builder: DOCKER_BUILDKIT=0 docker build --network none …
+FROM sha256:05bd1dc42dd2e0316a0291352f49966232f2d016c62ff9852a918eddaa690e16
+COPY wheels/hva/ /opt/hva-wheelhouse/
+COPY requirements-hunyuan-avatar.lock /opt/requirements-hunyuan-avatar.lock
+RUN python3 -m pip install --no-cache-dir --no-index --no-deps --require-hashes \
+      --find-links=/opt/hva-wheelhouse -r /opt/requirements-hunyuan-avatar.lock \
+ && python3 -c "import rembg, decord, ffmpeg, loguru, onnxruntime; from importlib.metadata import version; expected={'decord2':'3.4.0','ffmpeg-python':'0.2.0','loguru':'0.7.3','onnxruntime':'1.22.1','rembg':'2.0.65'}; assert all(version(k)==v for k,v in expected.items()); print('HVA_IMPORTS_OK')"
+LABEL org.opencontainers.image.title="Media Lab HunyuanVideo-Avatar isolated runtime" \
+      org.opencontainers.image.version="v1.9.0-r3" \
+      org.opencontainers.image.base.id="sha256:05bd1dc42dd2e0316a0291352f49966232f2d016c62ff9852a918eddaa690e16" \
+      org.opencontainers.image.base.name="maestro-v1.9.0-h3:t_v19a"

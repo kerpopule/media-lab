@@ -1,0 +1,26 @@
+# Dormant-loaded Sol-H3 contract. Never enable this unit: Media Lab starts it
+# only after an exact durable GPU lease and a fresh same-boot guard heartbeat.
+[Unit]
+Description=Media Lab Sol-H3 whole-box engine
+After=solh3-control-plane-guard.service
+Requires=solh3-control-plane-guard.service
+ConditionPathExists=%t/media-lab-sol-h3.env
+
+[Service]
+Type=simple
+WorkingDirectory=%h/media-lab-simple
+Slice=media-lab-h3.slice
+EnvironmentFile=%t/media-lab-sol-h3.env
+ExecStartPre=%h/media-lab-simple/.venv/bin/python -m media_lab_core.solh3_control_guard --check-heartbeat
+ExecStart=%h/media-lab-simple/runner/start_sol_h3_engine.sh
+KillMode=control-group
+TimeoutStopSec=10s
+SendSIGKILL=yes
+OOMPolicy=stop
+Restart=no
+MemoryAccounting=yes
+MemorySwapMax=2G
+NoNewPrivileges=yes
+PrivateTmp=yes
+
+# Intentionally no [Install]: loaded + inactive is the safe post-reboot state.

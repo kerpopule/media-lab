@@ -1,0 +1,15 @@
+{
+  "schema_version": "media_lab.duet_recipe.v1",
+  "template_id": "mv-audio-driven-duet",
+  "status": "planning_only",
+  "automatic_execution": false,
+  "cloud_fallback": false,
+  "audio": {"preserve_original": true, "voice_cloning": false, "source_timing": "uninterrupted_original", "stems": "optional_real_isolated_vocals; never assert invented singer labels"},
+  "casting": {"lead_count": 2, "single_view_identity_inputs": true, "expression": "relaxed resting face; occasional brief smiles", "consent_and_model_terms": "operator-owned responsibility"},
+  "coverage": ["shared anchor room", "motivated solo in secondary space", "non-singing scenery or community insert", "return to shared anchor"],
+  "camera": ["locked alternate angle", "slow dolly in", "slow dolly out", "occasional faster move; no repeated lateral oscillation"],
+  "qualification": {"required_cases": ["solo", "shared_handoff", "overlap"], "same_recipe_and_runtime": true, "owner_playback_required": true, "checks": ["identity stability", "voice-to-mouth assignment", "natural expression", "temporal continuity", "source audio timing", "full decode", "no frame-rate conversion unless backend requires it"]},
+  "repair_order": ["picture-only retiming for a constant observed delay", "replace only failed excerpt", "non-singing coverage when binding remains uncertain"],
+  "enhancer": {"qualified": false, "automatic": false, "model": "CQdesign/LTX-2.5-CQ-Video-and-Image-Enhancer-LoRAs", "revision": "8b284cb76b77bd2ad788e233be35da8ed7fe1598", "file": "ltx2.5-CQ-enhancer-lora-V2.safetensors", "sha256": "bc0924477007509db63a5a1a6c51c83194e724e8db6f04bc1fc3ba8225a5b730", "bytes": 1340583888, "workflow": "Video-and-Image-Enhancer-V2.json", "terms": "No license declared in the model card at inspection; redistribution permission unresolved; weights not shipped", "test_protocol": "short A/B copy first; convolutional VAE, 30fps sampling, restore input fps; preserve original audio, compare faces and lip timing before any full-video application"},
+  "public_preview": "authored schematic, not generated performance or offline proof"
+}

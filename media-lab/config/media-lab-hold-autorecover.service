@@ -1,0 +1,19 @@
+# Clears only the harmless startup kind of GPU recovery hold (owner-exited /
+# controller-restarted, same boot, idle) and a guard trip during an H3 cold load
+# once memory has recovered (at most once a day), through
+# tools/reconcile-gpu-recovery.py.
+# Off unless MEDIA_LAB_HOLD_AUTORECOVER=1 in config/local.env. See
+# runner/hold_autorecover.py for every condition and limit.
+#
+#   cp config/media-lab-hold-autorecover.{service,timer} ~/.config/systemd/user/
+#   systemctl --user daemon-reload && systemctl --user enable --now media-lab-hold-autorecover.timer
+[Unit]
+Description=Media Lab: clear a harmless restart hold (sanctioned reconcile only)
+
+[Service]
+Type=oneshot
+EnvironmentFile=-%h/media-lab-simple/config/local.env
+ExecStart=/usr/bin/python3 %h/media-lab-simple/runner/hold_autorecover.py
+# The reconcile tool stops and restarts the studio and may wait on its proofs.
+TimeoutStartSec=1500
+Nice=5

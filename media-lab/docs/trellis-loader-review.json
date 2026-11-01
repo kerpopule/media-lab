@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "status": "source-review-only-not-qualified",
+  "revision": "75fbf0183001ed9876c8dbb35de6b68552ee08bd",
+  "files": [
+    {
+      "path": "trellis2/pipelines/trellis2_image_to_3d.py",
+      "url": "https://raw.githubusercontent.com/microsoft/TRELLIS.2/75fbf0183001ed9876c8dbb35de6b68552ee08bd/trellis2/pipelines/trellis2_image_to_3d.py",
+      "bytes": 24143,
+      "sha256": "e2addfca672354284b23d1541a8f49228d5a727d49220fcb8512cca2cdd38ce9"
+    },
+    {
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/microsoft/TRELLIS.2/75fbf0183001ed9876c8dbb35de6b68552ee08bd/README.md",
+      "bytes": 16212,
+      "sha256": "adc985d5a71fda0a5cb7287f58b6baa7de8db1568c4483ac210f3447b786552b"
+    },
+    {
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/microsoft/TRELLIS.2/75fbf0183001ed9876c8dbb35de6b68552ee08bd/LICENSE",
+      "bytes": 1140,
+      "sha256": "d9a1b1e30d633d5732ea18e3cba9538d293ebc53e1a9e4e96ab739e0c5c4f1cb"
+    }
+  ],
+  "findings": [
+    "from_pretrained constructs image_cond_model and rembg_model unconditionally",
+    "preprocess_image skips background-removal execution for RGBA with nonopaque alpha, but this does not prevent construction/download",
+    "Official pipeline.json references DINOv3 and BRIA RMBG-2.0",
+    "Official hardware validation is Linux NVIDIA A100/H100; Spark ARM64 is not established by that statement"
+  ],
+  "next_steps": [
+    "Inspect component constructors and pinned terms before loading any weights",
+    "Design explicit cutout-only loader that never constructs unused remover, preserving required DINOv3 licensing",
+    "Qualify ARM64 native dependencies and image-to-PBR quality before availability"
+  ],
+  "sources": [
+    "https://huggingface.co/microsoft/TRELLIS.2-4B/raw/main/pipeline.json",
+    "https://github.com/Tencent-Hunyuan/Hunyuan3D-2.1/blob/main/LICENSE"
+  ]
+}

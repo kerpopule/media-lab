@@ -1,0 +1,17 @@
+[Unit]
+Description=Media Lab Advanced mode (Maestro GUI proxy :7864->:7862)
+After=network-online.target media-lab-simple.service
+Wants=media-lab-simple.service
+
+[Service]
+Type=simple
+# Per-host values (bind address) come from config/local.env; %h is $HOME.
+EnvironmentFile=-%h/media-lab-simple/config/local.env
+EnvironmentFile=-%h/media-lab-simple/proxy7864.env
+WorkingDirectory=%h/media-lab-simple
+ExecStart=/bin/bash -lc 'exec %h/media-lab-simple/.venv/bin/uvicorn proxy7864:app --host "$${MEDIA_LAB_BIND_HOST:-127.0.0.1}" --port 7864'
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target

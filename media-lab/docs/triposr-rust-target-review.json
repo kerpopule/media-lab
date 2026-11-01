@@ -1,0 +1,50 @@
+{
+  "status": "candidate-source-graph-not-wheel-attestation",
+  "cargo_version": "1.98.0 (797e8a9bc 2026-08-05) Homebrew",
+  "method": "cargo metadata --locked --filter-platform aarch64-unknown-linux-gnu --features pyo3/extension-module; default features; follow normal/build dependency edges from Python binding root",
+  "graph_review_sha256": "51d487af5c6af017fc450f26500d6fcfcec28671995fa0bffa4f3620617c4570",
+  "source_locks_unchanged": true,
+  "graphs": [
+    {
+      "name": "safetensors",
+      "metadata_sha256": "6b682f0b8720801b556d5f26320a8544d64aa9db9e0910e343d2311f9889db8c",
+      "target": "aarch64-unknown-linux-gnu",
+      "features": [
+        "pyo3/extension-module"
+      ],
+      "default_features": true,
+      "reachable_normal_and_build_count": 35,
+      "registry_count": 33,
+      "missing_notice_files": []
+    },
+    {
+      "name": "tokenizers",
+      "metadata_sha256": "57e986ed600726fe0f7896f67946f3c8df76db12a2552fb9b3fe82f5ab71bef2",
+      "target": "aarch64-unknown-linux-gnu",
+      "features": [
+        "pyo3/extension-module"
+      ],
+      "default_features": true,
+      "reachable_normal_and_build_count": 125,
+      "registry_count": 123,
+      "missing_notice_files": []
+    },
+    {
+      "name": "hf-xet",
+      "metadata_sha256": "920b1aa8abb8af039baa910cbcae3cc22b1d231d82d53e54674fe6ebaa039c1b",
+      "target": "aarch64-unknown-linux-gnu",
+      "features": [
+        "pyo3/extension-module"
+      ],
+      "default_features": true,
+      "reachable_normal_and_build_count": 229,
+      "registry_count": 223,
+      "missing_notice_files": []
+    }
+  ],
+  "declared_MPL_2_0_in_hf_xet": [
+    "colored@3.1.1",
+    "option-ext@0.2.0"
+  ],
+  "wheel_provenance_verified": false
+}

@@ -1,0 +1,23 @@
+test_already_hlg_no_second_grade (__main__.HDRDeliveryTests.test_already_hlg_no_second_grade) ... ok
+test_cancel_before_encoding (__main__.HDRDeliveryTests.test_cancel_before_encoding) ... ok
+test_foreign_gamut_even_with_assumption_refused (__main__.HDRDeliveryTests.test_foreign_gamut_even_with_assumption_refused) ... ok
+test_hook_default_and_failure_no_copy_fallback (__main__.HDRDeliveryTests.test_hook_default_and_failure_no_copy_fallback) ... ok
+test_library_gate_old_stitch_and_enhancement (__main__.HDRDeliveryTests.test_library_gate_old_stitch_and_enhancement) ... ok
+test_library_gate_preserves_valid_hlg_bytes (__main__.HDRDeliveryTests.test_library_gate_preserves_valid_hlg_bytes) ... ok
+test_library_gate_rejects_lost_hdr_tags (__main__.HDRDeliveryTests.test_library_gate_rejects_lost_hdr_tags) ... ok
+test_no_sdr_fallback_on_encoder_failure (__main__.HDRDeliveryTests.test_no_sdr_fallback_on_encoder_failure) ... ok
+test_pq_refused (__main__.HDRDeliveryTests.test_pq_refused) ... ok
+test_real_av_and_original_preserved (__main__.HDRDeliveryTests.test_real_av_and_original_preserved) ... ok
+test_real_finalizer_hook (__main__.HDRDeliveryTests.test_real_finalizer_hook) ... ok
+test_refuse_existing_output (__main__.HDRDeliveryTests.test_refuse_existing_output) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 6.323s
+
+OK
+{"output": "<PRIVATE_HOME>/.hermes/cache/scratch/hdr-fixture-_z7dd76q/first.mp4", "sha256": "81e95acaef08e1173709b3ec34ab01735edd91a55937a1255c6bfefc1679df3b", "codec_vui": {"colour_primaries": [9], "transfer_characteristics": [18], "matrix_coefficients": [9]}, "container": [{"type": "nclx", "values": [9, 18, 9], "offset": 601}], "full_decode_exit": 0}
+{"output": "<PRIVATE_HOME>/.hermes/cache/scratch/hdr-fixture-h70w52en/jobs/source ' safe; SDR/library-hdr/library-hdr-pkg43sk7/hlg.mp4", "sha256": "81e95acaef08e1173709b3ec34ab01735edd91a55937a1255c6bfefc1679df3b", "codec_vui": {"colour_primaries": [9], "transfer_characteristics": [18], "matrix_coefficients": [9]}, "container": [{"type": "nclx", "values": [9, 18, 9], "offset": 601}], "full_decode_exit": 0}
+{"output": "<PRIVATE_HOME>/.hermes/cache/scratch/hdr-fixture-svii53os/already.mp4", "sha256": "81e95acaef08e1173709b3ec34ab01735edd91a55937a1255c6bfefc1679df3b", "codec_vui": {"colour_primaries": [9], "transfer_characteristics": [18], "matrix_coefficients": [9]}, "container": [{"type": "nclx", "values": [9, 18, 9], "offset": 601}], "full_decode_exit": 0}
+{"output": "<PRIVATE_HOME>/.hermes/cache/scratch/hdr-fixture-8zu9th3u/hdr-original.mp4", "sha256": "81e95acaef08e1173709b3ec34ab01735edd91a55937a1255c6bfefc1679df3b", "codec_vui": {"colour_primaries": [9], "transfer_characteristics": [18], "matrix_coefficients": [9]}, "container": [{"type": "nclx", "values": [9, 18, 9], "offset": 601}], "full_decode_exit": 0}
+{"output": "<PRIVATE_HOME>/.hermes/cache/scratch/hdr-fixture-6a6pjm_z/out.mp4", "sha256": "81e95acaef08e1173709b3ec34ab01735edd91a55937a1255c6bfefc1679df3b", "codec_vui": {"colour_primaries": [9], "transfer_characteristics": [18], "matrix_coefficients": [9]}, "container": [{"type": "nclx", "values": [9, 18, 9], "offset": 601}], "full_decode_exit": 0}
+{"output": "<PRIVATE_HOME>/.hermes/cache/scratch/hdr-fixture-215d55c4/fixture.publishing.mp4", "sha256": "81e95acaef08e1173709b3ec34ab01735edd91a55937a1255c6bfefc1679df3b", "codec_vui": {"colour_primaries": [9], "transfer_characteristics": [18], "matrix_coefficients": [9]}, "container": [{"type": "nclx", "values": [9, 18, 9], "offset": 601}], "full_decode_exit": 0}

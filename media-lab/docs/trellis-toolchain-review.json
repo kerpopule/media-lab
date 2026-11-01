@@ -1,0 +1,117 @@
+{
+  "schema": 1,
+  "status": "source-and-toolchain-reviewed-not-qualified",
+  "host": {
+    "system": "Linux",
+    "machine": "aarch64",
+    "gpu": {
+      "exit": 0,
+      "stdout": "NVIDIA GB10, 580.173.02, 12.1\n",
+      "stderr": ""
+    },
+    "cuda": {
+      "exit": 0,
+      "stdout": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Wed_Aug_20_01:57:39_PM_PDT_2025\nCuda compilation tools, release 13.0, V13.0.88\nBuild cuda_13.0.r13.0/compiler.36424714_0\n",
+      "stderr": ""
+    },
+    "compiler": {
+      "exit": 0,
+      "stdout": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+      "stderr": ""
+    },
+    "cmake": {
+      "exit": 0,
+      "stdout": "cmake version 3.28.3\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
+      "stderr": ""
+    },
+    "ninja": {
+      "error": "FileNotFoundError"
+    }
+  },
+  "sources": [
+    {
+      "repo": "JeffreyXiang/CuMesh",
+      "revision": "12289e1062f0603f2f0d0771b02e1395d247f26f",
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/JeffreyXiang/CuMesh/12289e1062f0603f2f0d0771b02e1395d247f26f/README.md",
+      "bytes": 3711,
+      "sha256": "e7ea55534dc8a70ee4f2ca735ab36e243963815a7f708b1241d9007206a9847b"
+    },
+    {
+      "repo": "JeffreyXiang/CuMesh",
+      "revision": "12289e1062f0603f2f0d0771b02e1395d247f26f",
+      "path": "setup.py",
+      "url": "https://raw.githubusercontent.com/JeffreyXiang/CuMesh/12289e1062f0603f2f0d0771b02e1395d247f26f/setup.py",
+      "bytes": 4058,
+      "sha256": "55d493b339f0a8b497ea069f8569bb09c817205d9319dbd24d073b538c35fa9e"
+    },
+    {
+      "repo": "JeffreyXiang/CuMesh",
+      "revision": "12289e1062f0603f2f0d0771b02e1395d247f26f",
+      "path": ".gitmodules",
+      "url": "https://raw.githubusercontent.com/JeffreyXiang/CuMesh/12289e1062f0603f2f0d0771b02e1395d247f26f/.gitmodules",
+      "bytes": 127,
+      "sha256": "a82975e17f9d80c954b9b94152787c866259c0b51f557be49a600076d105541f"
+    },
+    {
+      "repo": "JeffreyXiang/FlexGEMM",
+      "revision": "6dd94a859c26ee8246888502eada3dd8ad85532e",
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/JeffreyXiang/FlexGEMM/6dd94a859c26ee8246888502eada3dd8ad85532e/README.md",
+      "bytes": 4448,
+      "sha256": "c735b7422e841e24bf2cf11e6d08ef718b0e2104d5648325684bafba2c24b19c"
+    },
+    {
+      "repo": "JeffreyXiang/FlexGEMM",
+      "revision": "6dd94a859c26ee8246888502eada3dd8ad85532e",
+      "path": "setup.py",
+      "url": "https://raw.githubusercontent.com/JeffreyXiang/FlexGEMM/6dd94a859c26ee8246888502eada3dd8ad85532e/setup.py",
+      "bytes": 3712,
+      "sha256": "9411c37c682d32417d5963b9dec3511ede1c89ef5c6014d54b1d73ea90028b6c"
+    },
+    {
+      "repo": "Dao-AILab/flash-attention",
+      "revision": "89c5a7dd4e6a8644575bd0c04a286f48c42763ec",
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/Dao-AILab/flash-attention/89c5a7dd4e6a8644575bd0c04a286f48c42763ec/README.md",
+      "bytes": 21906,
+      "sha256": "5ee68181595fb173df1eacd8d20f6d804deb2c7ed1e27522bac7d2077d23d4cd"
+    },
+    {
+      "repo": "Dao-AILab/flash-attention",
+      "revision": "89c5a7dd4e6a8644575bd0c04a286f48c42763ec",
+      "path": "setup.py",
+      "url": "https://raw.githubusercontent.com/Dao-AILab/flash-attention/89c5a7dd4e6a8644575bd0c04a286f48c42763ec/setup.py",
+      "bytes": 25196,
+      "sha256": "c669810a27c4fa17fac3493b240c448fbe612f2c666a8babf6dbb5b014b62c89"
+    },
+    {
+      "repo": "Dao-AILab/flash-attention",
+      "revision": "89c5a7dd4e6a8644575bd0c04a286f48c42763ec",
+      "path": ".gitmodules",
+      "url": "https://raw.githubusercontent.com/Dao-AILab/flash-attention/89c5a7dd4e6a8644575bd0c04a286f48c42763ec/.gitmodules",
+      "bytes": 214,
+      "sha256": "11bb3a4b6b1ddee5f4a1bcc25c5da1110490d68acadd5c536f25bd875ff3510d"
+    }
+  ],
+  "findings": [
+    "Spark reports Linux aarch64, GB10 compute capability 12.1, driver 580.173.02 and nvcc 13.0.88. These facts do not establish model or extension compatibility.",
+    "Ninja is absent from the inspected system command PATH; this does not establish absence from isolated build environments.",
+    "TRELLIS setup defaults to Torch 2.6.0 CUDA 12.4. A separate pinned Spark-compatible Torch/CUDA/ABI environment and native kernel smoke are required; do not replace existing production environments.",
+    "FlashAttention tag v2.7.3 resolves to the recorded revision and has compile branches for SM100/120 with CUDA >=12.8. This is not proof of GB10 execution, nor verification of the PyPI 2.7.3 source distribution selected by TRELLIS.",
+    "FlashAttention setup attempts a guessed release-wheel download unless force-build is enabled. A verified installer must control and hash every artifact instead.",
+    "CuMesh and FlexGEMM use Torch CUDAExtension/BuildExtension; their CUDA architecture selection depends on the chosen Torch build environment. Full source/submodule closure and bounded kernel tests remain required.",
+    "FlexGEMM setup derives CXX11 ABI from Torch, enables unsupported-compiler override, and writes/merges ~/.flex_gemm/autotune_cache.json during setup. Use isolated build HOME and explicit runtime cache ownership; no upstream setup was executed.",
+    "FlexGEMM README specifies Triton >=3.2.0, but setup only declares torch. Triton must be explicitly pinned and verified for ARM64 rather than relying on transitive resolution."
+  ],
+  "remaining": [
+    "Verify PyPI FlashAttention sdist against reviewed source",
+    "Pin remaining native extension source and submodule closure",
+    "Build in isolated versioned runtime with bounded resources",
+    "Run lease-protected synthetic native kernel checks before model downloads",
+    "Complete component terms and real model/quality qualification"
+  ],
+  "weights_downloaded": false,
+  "builds_executed": false,
+  "production_modified": false
+}

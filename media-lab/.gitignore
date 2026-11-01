@@ -1,0 +1,21 @@
+# Local credentials and generated private material
+# Per-host settings: copy config/local.env.example, never commit the real one.
+config/local.env
+# The studio's own overlay (themes, templates, character catalog, assistant
+# notes): never committed. docs/LOCAL-OVERLAY.md; only the README is tracked.
+config/local/*
+!config/local/README.md
+.env
+.env.*
+!.env.example
+providers.json
+vapid_private.pem
+
+# Python caches and local package metadata
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Local virtualenv created by ./install.sh
+.venv/
+.worktrees/

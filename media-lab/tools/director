@@ -1,0 +1,10 @@
+#!/bin/sh
+# Media Lab director-school CLI — same as `python -m media_lab_core.director_cli`.
+# exam / plan / prompts / cut / stitch / critic / produce (docs/DIRECTOR-SCHOOL.md).
+# Uses the studio's own interpreter when the repo venv exists; paths are
+# read relative to the caller's directory.
+HERE="$(cd "$(dirname "$0")/.." && pwd)"
+PY="${MEDIA_LAB_PYTHON:-}"
+[ -z "$PY" ] && [ -x "$HERE/.venv/bin/python" ] && PY="$HERE/.venv/bin/python"
+[ -z "$PY" ] && PY="python3"
+PYTHONPATH="$HERE${PYTHONPATH:+:$PYTHONPATH}" exec "$PY" -m media_lab_core.director_cli "$@"

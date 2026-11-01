@@ -1,0 +1,14 @@
+# Contributor/test environment: server requirements plus the tooling the
+# repo's own checks need. install.sh intentionally installs only
+# requirements.txt (runtime) — this file is for tests and lint.
+-r requirements.txt
+
+pytest>=8,<10
+ruff>=0.8,<1
+# starlette.testclient (fastapi.testclient) imports httpx; without it 31 test
+# modules abort at collection instead of running.
+httpx>=0.27,<1
+# tests/test_mesh_order.py imports numpy at module level, and mesh_order /
+# speech_render / triposr_cpu import it too. pyproject declares it under the
+# optional `image` extra; the checks need it present.
+numpy>=2,<3

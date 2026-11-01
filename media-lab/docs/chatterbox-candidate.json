@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "status": "candidate-not-installable",
+  "variant": "chatterbox-english-original-safetensors-review",
+  "source": {
+    "repository": "https://github.com/resemble-ai/chatterbox",
+    "revision": "5de7a54aa4e5e2baadb0182dde554908b48b85c2",
+    "declared_license": "MIT",
+    "reviewed_files": {
+      "src/chatterbox/tts.py": {
+        "sha256": "7896787bc17e20eafcd1dce7b8a4a6ea3a6478baab771c60d63e9e81f5564195"
+      },
+      "src/chatterbox/mtl_tts.py": {
+        "sha256": "936759044e54cffe8c68b91b32e01da0bc032a1e084f769f0403080d86ad153c"
+      },
+      "pyproject.toml": {
+        "sha256": "e1aab210e1eb6023a694a05e92ae4cbb08efa9510d295401303e90eec41d594f"
+      },
+      "LICENSE": {
+        "sha256": "4248e910a928849fe5815a0f9236e17fa07768d95b9193212752c464b93d6caa"
+      },
+      "src/chatterbox/models/s3tokenizer/s3tokenizer.py": {
+        "sha256": "76eae9f95b14608c4847c9d7acfcf08138c365640b0d4589de01e742b0e5eb43"
+      },
+      "src/chatterbox/models/s3gen/s3gen.py": {
+        "sha256": "b3ea20b6f3f98dacfa3c2c99502bbf3dfbe7a77362f2ce0d16783d4324e6fc96"
+      }
+    }
+  },
+  "model": {
+    "repository": "ResembleAI/chatterbox",
+    "revision": "5bb1f6ee58e50c3b8d408bc82a6d3740c2db6e18",
+    "declared_license": "MIT",
+    "files": [
+      {
+        "path": "s3gen.safetensors",
+        "bytes": 1056484620,
+        "sha256": "2b78103c654207393955e4900aac14a12de8ef25f4b09424f1ef91941f161d4e",
+        "hash_evidence": "downloaded-and-hashed-on-isolated-spark"
+      },
+      {
+        "path": "t3_cfg.safetensors",
+        "bytes": 2129653744,
+        "sha256": "914cb1696f47527fe8852ca8f1fe1fa63cb34f76f9c715e84e067b744dd0da81",
+        "hash_evidence": "downloaded-and-hashed-on-isolated-spark"
+      },
+      {
+        "path": "tokenizer.json",
+        "bytes": 25470,
+        "sha256": "d71e3a44eabb1784df9a68e9f95b251ecbf1a7af6a9f50835856b2ca9d8c14a5",
+        "hash_evidence": "downloaded-and-hashed-on-isolated-spark"
+      },
+      {
+        "path": "ve.safetensors",
+        "bytes": 5695784,
+        "sha256": "f0921cab452fa278bc25cd23ffd59d36f816d7dc5181dd1bef9751a7fb61f63c",
+        "hash_evidence": "downloaded-and-hashed-on-isolated-spark"
+      }
+    ],
+    "payload_bytes": 3191859618
+  },
+  "excluded_files": [
+    "conds.pt"
+  ],
+  "qualified_platforms": [],
+  "remaining": [
+    "Exact weights now load on isolated Spark CPU with strict keys and finite tensors; speech generation and complete runtime qualification remain.",
+    "Resolve immutable runtime lock, including moving Perth master dependency and all model transitive downloads.",
+    "Review complete source and dependency notices, including speech tokenizer and watermark runtime.",
+    "Prepare explicit offline loader that refuses unreviewed pickle presets and device fallback.",
+    "Establish an authorized reference voice or reviewed portable preset; no voice selected by this record.",
+    "Verify model bytes, architecture state keys, load and bounded deterministic audio tracer in an isolated environment.",
+    "Qualify CPU/GPU memory, canonical lease, cancellation, restart and host installation lifecycle.",
+    "Integrate owned speech jobs and Library output; current Audio UI does not generate speech."
+  ]
+}

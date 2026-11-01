@@ -1,0 +1,32 @@
+test_already_hlg_no_second_grade (__main__.HDRDeliveryTests) ... ok
+test_cancel_before_encoding (__main__.HDRDeliveryTests) ... ok
+test_foreign_gamut_even_with_assumption_refused (__main__.HDRDeliveryTests) ... ok
+test_hook_default_and_failure_no_copy_fallback (__main__.HDRDeliveryTests) ... ok
+test_library_gate_old_stitch_and_enhancement (__main__.HDRDeliveryTests) ... ok
+test_library_gate_preserves_valid_hlg_bytes (__main__.HDRDeliveryTests) ... ok
+test_library_gate_rejects_lost_hdr_tags (__main__.HDRDeliveryTests) ... ok
+test_no_sdr_fallback_on_encoder_failure (__main__.HDRDeliveryTests) ... ok
+test_pq_refused (__main__.HDRDeliveryTests) ... ok
+test_real_av_and_original_preserved (__main__.HDRDeliveryTests) ... ok
+test_real_finalizer_hook (__main__.HDRDeliveryTests) ... [mjpeg @ 0x7990c4d180] Non full-range YUV is non-standard, set strict_std_compliance to at most unofficial to use it.
+[vost#0:0/mjpeg @ 0x7990c78000] [enc:mjpeg @ 0x7990c14540] Error while opening encoder - maybe incorrect parameters such as bit_rate, rate, width or height.
+[vf#0:0 @ 0x7990cd0000] Error sending frames to consumers: Invalid argument
+[vf#0:0 @ 0x7990cd0000] Task finished with error code: -22 (Invalid argument)
+[vf#0:0 @ 0x7990cd0000] Terminating thread with return code -22 (Invalid argument)
+[vost#0:0/mjpeg @ 0x7990c78000] [enc:mjpeg @ 0x7990c14540] Could not open encoder before EOF
+[vost#0:0/mjpeg @ 0x7990c78000] Task finished with error code: -22 (Invalid argument)
+[vost#0:0/mjpeg @ 0x7990c78000] Terminating thread with return code -22 (Invalid argument)
+[out#0/image2 @ 0x7990c203c0] Nothing was written into output file, because at least one of its streams received no packets.
+ok
+test_refuse_existing_output (__main__.HDRDeliveryTests) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 6.454s
+
+OK
+{"output": "<PRIVATE_HOME>/.hermes/cache/scratch/hdr-fixture-9jxdwx85/first.mp4", "sha256": "d937d95f7146dfd6652ca758ff27b621e531bd2c9099a0d5eb636abf2a67b03f", "codec_vui": {"colour_primaries": [9], "transfer_characteristics": [18], "matrix_coefficients": [9]}, "container": [{"type": "nclx", "values": [9, 18, 9], "offset": 601}], "full_decode_exit": 0}
+{"output": "<PRIVATE_HOME>/.hermes/cache/scratch/hdr-fixture-wy4qlojy/jobs/source ' safe; SDR/library-hdr/library-hdr-ksbus9ds/hlg.mp4", "sha256": "d937d95f7146dfd6652ca758ff27b621e531bd2c9099a0d5eb636abf2a67b03f", "codec_vui": {"colour_primaries": [9], "transfer_characteristics": [18], "matrix_coefficients": [9]}, "container": [{"type": "nclx", "values": [9, 18, 9], "offset": 601}], "full_decode_exit": 0}
+{"output": "<PRIVATE_HOME>/.hermes/cache/scratch/hdr-fixture-q7s968ne/already.mp4", "sha256": "d937d95f7146dfd6652ca758ff27b621e531bd2c9099a0d5eb636abf2a67b03f", "codec_vui": {"colour_primaries": [9], "transfer_characteristics": [18], "matrix_coefficients": [9]}, "container": [{"type": "nclx", "values": [9, 18, 9], "offset": 601}], "full_decode_exit": 0}
+{"output": "<PRIVATE_HOME>/.hermes/cache/scratch/hdr-fixture-e5utno5m/hdr-original.mp4", "sha256": "d937d95f7146dfd6652ca758ff27b621e531bd2c9099a0d5eb636abf2a67b03f", "codec_vui": {"colour_primaries": [9], "transfer_characteristics": [18], "matrix_coefficients": [9]}, "container": [{"type": "nclx", "values": [9, 18, 9], "offset": 601}], "full_decode_exit": 0}
+{"output": "<PRIVATE_HOME>/.hermes/cache/scratch/hdr-fixture-47s4nie_/out.mp4", "sha256": "d937d95f7146dfd6652ca758ff27b621e531bd2c9099a0d5eb636abf2a67b03f", "codec_vui": {"colour_primaries": [9], "transfer_characteristics": [18], "matrix_coefficients": [9]}, "container": [{"type": "nclx", "values": [9, 18, 9], "offset": 601}], "full_decode_exit": 0}
+{"output": "<PRIVATE_HOME>/.hermes/cache/scratch/hdr-fixture-xs39_49z/fixture.publishing.mp4", "sha256": "d937d95f7146dfd6652ca758ff27b621e531bd2c9099a0d5eb636abf2a67b03f", "codec_vui": {"colour_primaries": [9], "transfer_characteristics": [18], "matrix_coefficients": [9]}, "container": [{"type": "nclx", "values": [9, 18, 9], "offset": 601}], "full_decode_exit": 0}

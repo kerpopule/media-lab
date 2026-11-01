@@ -1,0 +1,42 @@
+{
+  "host": "the media Spark (NVIDIA GB10)",
+  "when": "2026-09-21T01:08:56-0500",
+  "model": {
+    "id": "Qwen/Qwen-Image-2.1",
+    "revision": "b3179ad355be050328e483a9dfdd9e60cd62adfa",
+    "dtype": "bfloat16",
+    "runtime": "~/runtime/qwen-image-21/venv",
+    "checkpoints": "~/runtime/qwen-image-21/models/Qwen-Image-2.1"
+  },
+  "settings": {
+    "size": "1024*1024",
+    "steps": 40,
+    "true_cfg_scale": 1.0,
+    "use_kv_cache": true
+  },
+  "cold_wall_seconds": 307.5,
+  "cold_rc": 0,
+  "cold_errors": [
+    " 98%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u258a| 39/40 [00:56<00:01,  1.48s/it]",
+    "100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 40/40 [00:58<00:00,  1.49s/it]",
+    "100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 40/40 [00:58<00:00,  1.46s/it]"
+  ],
+  "warm_wall_seconds": 304.9,
+  "warm_rc": 0,
+  "warm_errors": [
+    " 98%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u258a| 39/40 [00:48<00:01,  1.27s/it]",
+    "100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 40/40 [00:49<00:00,  1.27s/it]",
+    "100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 40/40 [00:49<00:00,  1.24s/it]"
+  ],
+  "load_seconds_approx": 2.6,
+  "mem_available_gib_before": 76.4,
+  "mem_available_gib_floor": 30.4,
+  "mem_available_gib_after": 117.8,
+  "image": {
+    "bytes": 1803504,
+    "height": 1024,
+    "mimeType": "image/png",
+    "sha256": "5cc4e324133a373241d1c63dd5bd8d4d23791afb850893ef772ce03788df5222",
+    "width": 1024
+  }
+}

@@ -1,0 +1,32 @@
+name: identity-guard
+
+# No private machine identity (usernames, tailnet addresses, hostnames) may be
+# committed. Per-host values live in media-lab/config/local.env (gitignored);
+# see media-lab/config/local.env.example. This replaces the old publish-time
+# rewrite step with a plain check on every pull request and push.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  identity-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Scan tracked files for private identity strings
+        run: python3 media-lab/tools/identity_guard.py
+      - name: The example config must not be a real config
+        run: |
+          test -f media-lab/config/local.env.example
+          if git ls-files --error-unmatch media-lab/config/local.env >/dev/null 2>&1; then
+            echo "media-lab/config/local.env is tracked; it must stay gitignored" >&2
+            exit 1
+          fi

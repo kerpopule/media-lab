@@ -1,0 +1,59 @@
+{
+  "status": "review-only",
+  "build_provenance_verified": false,
+  "wheels": [
+    {
+      "name": "hf-xet",
+      "version": "1.6.0",
+      "wheel": "hf_xet-1.6.0-cp38-abi3-manylinux_2_28_aarch64.whl",
+      "wheel_sha256": "0e6e21fa3cdfcdcd76748564bf593870a5e013f47d97cf10aed63aa222cff5b7",
+      "url": "https://pypi.org/integrity/hf-xet/1.6.0/hf_xet-1.6.0-cp38-abi3-manylinux_2_28_aarch64.whl/provenance",
+      "cryptographically_verified": false,
+      "provenance_sha256": "adf374aca1bc42b2ba1ef06099213530fed56a2e50f532e836baeab380a6eb40",
+      "bundles": [
+        {
+          "publisher": {
+            "environment": "release",
+            "kind": "GitHub",
+            "repository": "huggingface/xet-core",
+            "workflow": "release.yml"
+          },
+          "statements": [
+            {
+              "_type": "https://in-toto.io/Statement/v1",
+              "subject": [
+                {
+                  "name": "hf_xet-1.6.0-cp38-abi3-manylinux_2_28_aarch64.whl",
+                  "digest": {
+                    "sha256": "0e6e21fa3cdfcdcd76748564bf593870a5e013f47d97cf10aed63aa222cff5b7"
+                  }
+                }
+              ],
+              "predicateType": "https://docs.pypi.org/attestations/publish/v1",
+              "predicate": null
+            }
+          ]
+        }
+      ],
+      "status": "available-not-yet-verified"
+    },
+    {
+      "name": "safetensors",
+      "version": "0.8.0",
+      "wheel": "safetensors-0.8.0-cp310-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+      "wheel_sha256": "7a46e5ff292c356d6991e60942ba7f79817682d3a2cef0702136448cb9c4d235",
+      "url": "https://pypi.org/integrity/safetensors/0.8.0/safetensors-0.8.0-cp310-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl/provenance",
+      "cryptographically_verified": false,
+      "status": "http-404"
+    },
+    {
+      "name": "tokenizers",
+      "version": "0.22.2",
+      "wheel": "tokenizers-0.22.2-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+      "wheel_sha256": "2249487018adec45d6e3554c71d46eb39fa8ea67156c640f7513eb26f318cec7",
+      "url": "https://pypi.org/integrity/tokenizers/0.22.2/tokenizers-0.22.2-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl/provenance",
+      "cryptographically_verified": false,
+      "status": "http-404"
+    }
+  ]
+}

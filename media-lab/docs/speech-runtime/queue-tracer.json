@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "status": "succeeded",
+  "elapsed": 83.86658540810458,
+  "artifact": {
+    "bytes": 74924,
+    "channels": 1,
+    "durationSeconds": 1.56,
+    "frames": 37440,
+    "mimeType": "audio/wav",
+    "path": "315b287562a34aeaac998c5ef0cbbd98/output.wav",
+    "peak": 23336,
+    "recovered": false,
+    "rms": 3677.5726675240385,
+    "sampleRate": 24000,
+    "sha256": "06160c4795219e8995aa1c7e3e2cfba77fc66cc096e6aff8a53df259dee8ef8a"
+  },
+  "database_reopen_verified": true,
+  "production_enabled": false,
+  "network": "Denied by outer transient unit",
+  "scope": "Real development queue/executor/decoder publication, not public API or quality qualification"
+}

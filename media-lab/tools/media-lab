@@ -1,0 +1,20 @@
+#!/bin/sh
+# media-lab — thin wrapper: runs media_lab_core.cli with the repo's venv.
+# Symlink it somewhere on PATH (install.sh offers ~/.local/bin/media-lab).
+set -eu
+SELF="$0"
+# resolve symlinks so the wrapper works from ~/.local/bin
+while [ -L "$SELF" ]; do
+  DIR="$(cd -- "$(dirname -- "$SELF")" && pwd)"
+  SELF="$(readlink "$SELF")"
+  case "$SELF" in /*) ;; *) SELF="$DIR/$SELF" ;; esac
+done
+REPO="$(cd -- "$(dirname -- "$SELF")/.." && pwd)"
+if [ -x "$REPO/.venv/bin/python" ]; then
+  PY="$REPO/.venv/bin/python"
+else
+  PY="$(command -v python3 || true)"
+  [ -n "$PY" ] || { echo "media-lab: no python3 and no .venv — run ./install.sh" >&2; exit 2; }
+fi
+cd "$REPO"
+exec "$PY" -m media_lab_core.cli "$@"

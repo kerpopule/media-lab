@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "measured_on": "128 GB GB10 studio host, 2026-09-25/26",
+  "note": "Seconds of wall time for one take, measured from real runs. render_points map clip seconds to the render time with the engine already loaded; spinup_s is what a take pays when the engine is not resident (evicting the resident engine, the settle gate and the cold load). Completed jobs refresh both through pool/render-timings.json (media_lab_core/render_eta.py). Rows marked estimate are not yet measured and are the first to be corrected by real jobs.",
+  "engines": {
+    "ltx25": {
+      "label": "Fast draft (LTX 2.5)",
+      "fixed_seconds": null,
+      "max_seconds": 20,
+      "render_points": [[4.0, 110], [5.04, 170], [8.04, 250], [12.04, 300], [14.7, 320], [20.0, 400]],
+      "spinup_s": 170,
+      "sources": [
+        "eta-stats.json medians on the studio host: 113 frames 90 s, 121 frames 194 s, 185 frames 156 s, 193 frames 266 s, 281 frames 256 s, 353 frames 320 s (warm); 20 s point is an estimate",
+        "spin-up: 113-frame cold median 259.5 s minus warm median 90 s"
+      ]
+    },
+    "h3": {
+      "label": "Cinematic (MiniMax H3, Sol)",
+      "fixed_seconds": 5.04,
+      "max_seconds": 5.04,
+      "render_points": [[5.04, 70]],
+      "spinup_s": 380,
+      "sources": [
+        "warm Sol-H3 t2va: 68 s median of the last eight 124-frame warm jobs; 69.3/81.7/72 s in the 2026-09-25 eval and rollout",
+        "spin-up: the last five cold 124-frame jobs (390-517 s) minus the warm median; the load alone is 312-322 s (pool/h3-load-pressure.jsonl)",
+        "Sol-H3-Spark always renders 1344x768, 121 frames (5.04 s), whatever length is asked"
+      ]
+    },
+    "h3-real": {
+      "label": "Real / Long (H3 Singularity)",
+      "fixed_seconds": null,
+      "max_seconds": 15.08,
+      "render_points": [[5.17, 285], [10.12, 638], [15.08, 1070]],
+      "spinup_s": 430,
+      "per_image_ref_s": {"max": 100, "match": 40},
+      "per_video_ref_fraction": 0.6,
+      "per_audio_ref_s": 10,
+      "sources": [
+        "warm 5.17 s text-only: 283/286 s (2026-09-25 eval, lean weight set)",
+        "15.08 s with one max-detail reference: 1170 s; about 100 s of that is the reference, so text-only 15 s is taken as 1070 s; 10 s is on the fitted curve (estimate)",
+        "two max-detail references at 5.17 s: 488 s (+~100 s each); match-detail, video and audio reference costs are estimates",
+        "spin-up: text encoder ~208 s + video model ~200 s + renderer start and warm-up; the first cold clip in the eval took 747 s end to end"
+      ]
+    },
+    "h3-ltx25": {
+      "label": "H3 -> LTX (draft + refine)",
+      "fixed_seconds": 5.04,
+      "max_seconds": 5.04,
+      "render_points": [[5.04, 860]],
+      "spinup_s": 380,
+      "sources": ["eta-stats.json: 850 s warm, 869 s cold (one job each); spin-up as for Sol"]
+    },
+    "image": {
+      "label": "Picture (Qwen-Image)",
+      "fixed_seconds": null,
+      "max_seconds": null,
+      "render_points": [[0, 45]],
+      "spinup_s": 0,
+      "sources": ["rollout test image 44 s; eta-stats image/cold median 49 s (the load is inside these numbers)"]
+    }
+  }
+}

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- @@MARKER@@ : re-rendered on every ./install.sh --service run; edit install.sh flags, not this file. -->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>@@LABEL@@</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>@@VENV@@/bin/python</string>
+    <string>-m</string><string>uvicorn</string>
+    <string>app:app</string>
+    <string>--host</string><string>@@BIND@@</string>
+    <string>--port</string><string>@@PORT@@</string>
+  </array>
+  <key>WorkingDirectory</key><string>@@REPO@@</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PYTHONUNBUFFERED</key><string>1</string>
+    <key>MEDIA_LAB_HOME</key><string>@@ROOT@@</string>
+    <key>HOME</key><string>@@HOME@@</string>
+    <key>PATH</key><string>@@PATH@@</string>
+  </dict>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>ThrottleInterval</key><integer>5</integer>
+  <key>StandardOutPath</key><string>@@LOG@@</string>
+  <key>StandardErrorPath</key><string>@@LOG@@</string>
+</dict>
+</plist>

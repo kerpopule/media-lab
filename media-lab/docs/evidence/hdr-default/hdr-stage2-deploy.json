@@ -1,0 +1,17 @@
+{
+  "time": 1793486085.0786188,
+  "before": {
+    "app.py": "7d44589df30aa5fbcc3cb4e8eb0fe7fbc9b5f17eedfddb514124f5a4c3c89b74",
+    "media_lab_core/hdr_color.py": "fa2f05d247eca04585652914fbac0bdba2acf8bcef21732835020816a82e67b6",
+    "media_lab_core/hdr_finish.py": "d255b90b399945ff150af13b0068211d23a4d9133f54c0bb210a073bdb36fe0c",
+    "media_lab_core/hdr_delivery.py": "5929ca1c677c02ef29c16e35a6c7b9a0c18ff3d04b387567ace054b57a0ae3eb"
+  },
+  "files": {
+    "app.py": "b47f94bd96612ae85c7ab6fd4c52294fa826b7e72e241f0d6dd8fdef79191b39",
+    "media_lab_core/hdr_color.py": "fa2f05d247eca04585652914fbac0bdba2acf8bcef21732835020816a82e67b6",
+    "media_lab_core/hdr_finish.py": "d255b90b399945ff150af13b0068211d23a4d9133f54c0bb210a073bdb36fe0c",
+    "media_lab_core/hdr_delivery.py": "34e325d1062ea854d2772e6ef8a2a6369a33d8fce1392f2546b95cd532b12951"
+  },
+  "policy": "hlg2020-avc-high8-v1",
+  "scope": "Native finalizer plus produced-Library MP4 gate, tone-mapped posters; raw imports unchanged"
+}

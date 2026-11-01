@@ -1,0 +1,22 @@
+# YuE2 music engine for Media Lab (runner/yue2_engine_server.py on 127.0.0.1:8197).
+# Unit FILE only - app.py normally spawns the engine by this unit name through
+# systemd-run (ENGINES["yue2"]), exactly like media-lab-sol-h3.service. Install
+# it under ~/.config/systemd/user/ only if you want `systemctl --user start`.
+# Per-host paths come from ~/media-lab-simple/config/local.env (YUE2_KIT,
+# YUE2_MODELS_ROOT, YUE2_PORT); %h is the user's home.
+[Unit]
+Description=Media Lab YuE2 music engine (127.0.0.1:8197)
+After=default.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/media-lab-simple
+EnvironmentFile=-%h/media-lab-simple/config/local.env
+ExecStart=%h/media-lab-simple/runner/start_yue2_engine.sh
+KillMode=mixed
+TimeoutStopSec=30
+Restart=no
+Environment=YUE2_BUDGET_GIB=40
+
+[Install]
+WantedBy=default.target

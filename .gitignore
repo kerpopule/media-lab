@@ -1,0 +1,16 @@
+# Repo-root scratch that must never be committed, and that
+# media-lab/tools/identity_guard.py (run from the repo top level, scanning
+# tracked files plus untracked files git would not ignore) must not scan.
+# Patterns here are repo-wide; media-lab/.gitignore only covers media-lab/.
+
+# Per-task run scratch written by agents/operators at the repo root.
+.artifacts/
+
+# Local git worktrees created at the repo root (git worktree add .worktrees/<id>).
+.worktrees/
+
+# Python bytecode caches anywhere in the repo, not just under media-lab/.
+# Compiled .pyc can embed absolute local paths, and identity_guard.py skips
+# .pyc via BINARY_EXT, so this ignore rule is the only defense.
+__pycache__/
+*.py[cod]

@@ -1,0 +1,126 @@
+{
+  "version": 1,
+  "status": "unqualified-review-only",
+  "capability": "image-to-3d",
+  "source": {
+    "repository": "VAST-AI-Research/TripoSR",
+    "revision": "107cefdc244c39106fa830359024f6a2f1c78871",
+    "files": [
+      {
+        "path": "LICENSE",
+        "url": "https://raw.githubusercontent.com/VAST-AI-Research/TripoSR/107cefdc244c39106fa830359024f6a2f1c78871/LICENSE",
+        "bytes": 1080,
+        "sha256": "ade0a66629bdd7e01e46b3296b3851cff0fd27989bca53da470ad6e96ed620fb"
+      },
+      {
+        "path": "README.md",
+        "url": "https://raw.githubusercontent.com/VAST-AI-Research/TripoSR/107cefdc244c39106fa830359024f6a2f1c78871/README.md",
+        "bytes": 5419,
+        "sha256": "ed40f078c5e451c58eae716187e0128f0ce8575e467aab2440b4ed9c75e490b9"
+      },
+      {
+        "path": "requirements.txt",
+        "url": "https://raw.githubusercontent.com/VAST-AI-Research/TripoSR/107cefdc244c39106fa830359024f6a2f1c78871/requirements.txt",
+        "bytes": 203,
+        "sha256": "741408247598c63e9f08cdb5f6fc753d78ac9185bb961cbe7ba8c5c0132aae48"
+      },
+      {
+        "path": "tsr/bake_texture.py",
+        "url": "https://raw.githubusercontent.com/VAST-AI-Research/TripoSR/107cefdc244c39106fa830359024f6a2f1c78871/tsr/bake_texture.py",
+        "bytes": 5374,
+        "sha256": "931d066c25d5943dc7b71469b63c308df3f37b8e7f6df558ee5e348d7936d5b7"
+      },
+      {
+        "path": "tsr/models/isosurface.py",
+        "url": "https://raw.githubusercontent.com/VAST-AI-Research/TripoSR/107cefdc244c39106fa830359024f6a2f1c78871/tsr/models/isosurface.py",
+        "bytes": 1926,
+        "sha256": "94c9a2ec27f8fe3c2fb57558ef28be253eb77074d2c171d49a41cf73d95d6f5e"
+      },
+      {
+        "path": "tsr/models/nerf_renderer.py",
+        "url": "https://raw.githubusercontent.com/VAST-AI-Research/TripoSR/107cefdc244c39106fa830359024f6a2f1c78871/tsr/models/nerf_renderer.py",
+        "bytes": 5673,
+        "sha256": "afe8c12c964078b2c6bb3922d2e30969aa59f7edbacb8cb73d2c3df839dc785f"
+      },
+      {
+        "path": "tsr/models/network_utils.py",
+        "url": "https://raw.githubusercontent.com/VAST-AI-Research/TripoSR/107cefdc244c39106fa830359024f6a2f1c78871/tsr/models/network_utils.py",
+        "bytes": 3473,
+        "sha256": "b3d48e86be9ca3f3abc1bfd774f640fd350e4365843d804e2a3145e7692e1419"
+      },
+      {
+        "path": "tsr/models/tokenizers/image.py",
+        "url": "https://raw.githubusercontent.com/VAST-AI-Research/TripoSR/107cefdc244c39106fa830359024f6a2f1c78871/tsr/models/tokenizers/image.py",
+        "bytes": 2116,
+        "sha256": "f6da23124dfabe6a1f8d0d27693d0cece6574de68be15487a77781b6a9d73195"
+      },
+      {
+        "path": "tsr/models/tokenizers/triplane.py",
+        "url": "https://raw.githubusercontent.com/VAST-AI-Research/TripoSR/107cefdc244c39106fa830359024f6a2f1c78871/tsr/models/tokenizers/triplane.py",
+        "bytes": 1237,
+        "sha256": "44811fbd53013d6f49e229ecfd0717f89dd8ebeb71608aeb1f8e5ed1d5e8e378"
+      },
+      {
+        "path": "tsr/models/transformer/attention.py",
+        "url": "https://raw.githubusercontent.com/VAST-AI-Research/TripoSR/107cefdc244c39106fa830359024f6a2f1c78871/tsr/models/transformer/attention.py",
+        "bytes": 26341,
+        "sha256": "347c1a707257cb4eb664ebe9ecd16db7b6006131e74925c049245d2c0101ba7e"
+      },
+      {
+        "path": "tsr/models/transformer/basic_transformer_block.py",
+        "url": "https://raw.githubusercontent.com/VAST-AI-Research/TripoSR/107cefdc244c39106fa830359024f6a2f1c78871/tsr/models/transformer/basic_transformer_block.py",
+        "bytes": 13202,
+        "sha256": "ced8ce4c5c5bbc13368130bc15dee1717cc6bc7f35699f64d03aeec185b1198e"
+      },
+      {
+        "path": "tsr/models/transformer/transformer_1d.py",
+        "url": "https://raw.githubusercontent.com/VAST-AI-Research/TripoSR/107cefdc244c39106fa830359024f6a2f1c78871/tsr/models/transformer/transformer_1d.py",
+        "bytes": 9325,
+        "sha256": "fd83a71d59d04ef0a45dbadcc63f9d56d354ebc011a40f5589eb1786a1dd15f4"
+      },
+      {
+        "path": "tsr/system.py",
+        "url": "https://raw.githubusercontent.com/VAST-AI-Research/TripoSR/107cefdc244c39106fa830359024f6a2f1c78871/tsr/system.py",
+        "bytes": 6608,
+        "sha256": "7aec93e421394ad7c746b6d63a0189532b57b26af9a199fc75ac3bb7c993c94f"
+      },
+      {
+        "path": "tsr/utils.py",
+        "url": "https://raw.githubusercontent.com/VAST-AI-Research/TripoSR/107cefdc244c39106fa830359024f6a2f1c78871/tsr/utils.py",
+        "bytes": 15172,
+        "sha256": "d9d1a645fef7ea489615bff3471fd01a4941a2c0e138c5dff5daae619563279b"
+      }
+    ]
+  },
+  "model": {
+    "repository": "stabilityai/TripoSR",
+    "revision": "5b521936b01fbe1890f6f9baed0254ab6351c04a",
+    "checkpoint": {
+      "path": "model.ckpt",
+      "bytes": 1677246742,
+      "sha256": "429e2c6b22a0923967459de24d67f05962b235f79cde6b032aa7ed2ffcd970ee",
+      "verification": "upstream-lfs-metadata-only",
+      "loadable": false
+    }
+  },
+  "image_encoder_config": {
+    "repository": "facebook/dino-vitb16",
+    "revision": "f205d5d8e640a89a2b8ef0369670dfc37cc07fc2",
+    "path": "config.json",
+    "bytes": 454,
+    "sha256": "b87c0270b97db085fd82cf114a761fd0f62ae7914fbd407c752a2260646b689c",
+    "additional_weights_downloaded": false
+  },
+  "native_dependency_candidate": {
+    "repository": "tatsy/torchmcubes",
+    "revision": "3381600ddc3d2e4d74222f8495866be5fafbace4",
+    "qualified": false
+  },
+  "remaining": [
+    "restricted checkpoint conversion review",
+    "complete dependency hash lock and notice review",
+    "offline local-config adapter",
+    "bounded deterministic mesh tracers",
+    "GLB decode and project preview"
+  ]
+}

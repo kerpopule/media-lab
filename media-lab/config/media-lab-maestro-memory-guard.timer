@@ -1,0 +1,12 @@
+[Unit]
+Description=Continuously verify the Maestro H3 container memory ceiling
+
+[Timer]
+OnBootSec=20
+OnUnitActiveSec=60
+AccuracySec=10
+Persistent=true
+Unit=media-lab-maestro-memory-guard.service
+
+[Install]
+WantedBy=timers.target

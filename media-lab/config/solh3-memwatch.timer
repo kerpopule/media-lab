@@ -1,0 +1,10 @@
+[Unit]
+Description=Sample MemAvailable every 5 s for the Sol-H3 guard
+
+[Timer]
+OnBootSec=60s
+OnUnitActiveSec=5s
+AccuracySec=1s
+
+[Install]
+WantedBy=timers.target

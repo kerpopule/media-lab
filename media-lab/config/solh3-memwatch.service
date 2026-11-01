@@ -1,0 +1,17 @@
+# MemAvailable guard for the Sol-H3-Spark engine (GB10 silent-wedge defence).
+# Stops media-lab-sol-h3.service when host MemAvailable stays below FLOOR_GIB
+# for CONSECUTIVE samples. Driven by solh3-memwatch.timer every 5 s.
+#
+#   cp config/solh3-memwatch.{service,timer} ~/.config/systemd/user/
+#   systemctl --user daemon-reload && systemctl --user enable --now solh3-memwatch.timer
+[Unit]
+Description=MemAvailable guard: stop media-lab-sol-h3 below 8 GiB for 3 samples (GB10 silent-wedge defence)
+
+[Service]
+Type=oneshot
+EnvironmentFile=-%h/media-lab-simple/config/local.env
+Environment=FLOOR_GIB=8
+Environment=CONSECUTIVE=3
+Environment=CONTAINER=none
+Environment=UNIT=media-lab-sol-h3.service
+ExecStart=%h/media-lab-simple/runner/memavail-watchdog.sh

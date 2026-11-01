@@ -1,0 +1,10 @@
+[Unit]
+Description=Every 5 minutes: clear a harmless restart hold if every condition holds
+
+[Timer]
+OnBootSec=10min
+OnUnitActiveSec=5min
+AccuracySec=30s
+
+[Install]
+WantedBy=timers.target

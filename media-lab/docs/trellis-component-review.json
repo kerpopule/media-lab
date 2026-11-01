@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "revision": "75fbf0183001ed9876c8dbb35de6b68552ee08bd",
+  "status": "source-reviewed-not-installable",
+  "files": [
+    {
+      "path": "trellis2/modules/image_feature_extractor.py",
+      "url": "https://raw.githubusercontent.com/microsoft/TRELLIS.2/75fbf0183001ed9876c8dbb35de6b68552ee08bd/trellis2/modules/image_feature_extractor.py",
+      "bytes": 4460,
+      "sha256": "12530b23e8b6a2cc6b87d8cd01922c7b0085199a365b731f19dd0e7ef4919150"
+    },
+    {
+      "path": "trellis2/pipelines/rembg/BiRefNet.py",
+      "url": "https://raw.githubusercontent.com/microsoft/TRELLIS.2/75fbf0183001ed9876c8dbb35de6b68552ee08bd/trellis2/pipelines/rembg/BiRefNet.py",
+      "bytes": 1270,
+      "sha256": "f0d1148ad4f8ac8dcfeea5f5eb296913d009a5230feb6708a28a50f070a22487"
+    },
+    {
+      "path": "trellis2/pipelines/rembg/__init__.py",
+      "url": "https://raw.githubusercontent.com/microsoft/TRELLIS.2/75fbf0183001ed9876c8dbb35de6b68552ee08bd/trellis2/pipelines/rembg/__init__.py",
+      "bytes": 24,
+      "sha256": "74d8c098e1843e96e39275a206068b4079638ee8d3157c871229da478b6f1200"
+    },
+    {
+      "path": "trellis2/pipelines/base.py",
+      "url": "https://raw.githubusercontent.com/microsoft/TRELLIS.2/75fbf0183001ed9876c8dbb35de6b68552ee08bd/trellis2/pipelines/base.py",
+      "bytes": 2068,
+      "sha256": "0ac016d7a4a0e57a8359eac848829b920b2ba98d7bb75a0dc3621a9b816b6e22"
+    },
+    {
+      "path": "setup.sh",
+      "url": "https://raw.githubusercontent.com/microsoft/TRELLIS.2/75fbf0183001ed9876c8dbb35de6b68552ee08bd/setup.sh",
+      "bytes": 4506,
+      "sha256": "76ae48346aa8596be366baf8f3e801ed90bbe352404052f912ce6dd4d9ec5ef6"
+    }
+  ],
+  "findings": [
+    "DINOv3 constructor calls Transformers from_pretrained without an immutable revision or local-only flag",
+    "Remover constructor enables trust_remote_code with no pinned revision",
+    "Base loader catches any primary model load exception and attempts another location",
+    "setup.sh has unpinned packages and branch/head extension clones; cannot serve as verified install lock"
+  ],
+  "license_source": "https://github.com/facebookresearch/dinov3/blob/main/LICENSE.md",
+  "decision": "Keep TRELLIS.2 outside default permissive capability selection. Any optional pack requires explicit component terms plus pinned local loaders and independent ARM64 qualification. Do not replace DINOv3 with DINOv2 and claim equivalent model behavior.",
+  "next_steps": [
+    "Define pinned local component descriptors and hashes",
+    "Review model deserializer before allowing any weights to load",
+    "Inspect ARM64 CUDA extension build requirements without running upstream setup"
+  ],
+  "weights_loaded": false,
+  "terms_accepted": false
+}

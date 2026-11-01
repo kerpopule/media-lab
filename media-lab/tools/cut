@@ -1,0 +1,8 @@
+#!/bin/sh
+# Media Lab Cut CLI wrapper — same as `python -m media_lab_core.cut_cli`.
+# Uses the studio's own interpreter when the repo venv exists.
+HERE="$(cd "$(dirname "$0")/.." && pwd)"
+PY="${MEDIA_LAB_PYTHON:-}"
+[ -z "$PY" ] && [ -x "$HERE/.venv/bin/python" ] && PY="$HERE/.venv/bin/python"
+[ -z "$PY" ] && PY="python3"
+cd "$HERE" && exec "$PY" -m media_lab_core.cut_cli "$@"

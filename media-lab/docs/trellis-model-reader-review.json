@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "status": "reader-reviewed-local-loader-not-integrated",
+  "source_url": "https://raw.githubusercontent.com/microsoft/TRELLIS.2/75fbf0183001ed9876c8dbb35de6b68552ee08bd/trellis2/models/__init__.py",
+  "bytes": 2836,
+  "sha256": "f1d5473a485aad90085a45063daadb01e046017034a9cc95a8636924504126c1",
+  "findings": [
+    "SafeTensors reader used",
+    "Missing local files fall back to unpinned Hub downloads",
+    "State dict loads strict=False"
+  ],
+  "implementation": "Independent local_model_loader verifies descriptor files before constructing a caller-reviewed class and requires strict state dict loading. No remote fallback or dynamic class import.",
+  "limits": "Seven fake-constructor tests, no real TRELLIS weights or integration; strict compatibility must be established per checkpoint, never silently relaxed."
+}

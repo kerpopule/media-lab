@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "notices": [
+    {
+      "package": "tokenizers",
+      "version": "0.22.2",
+      "license": "Apache-2.0",
+      "file": "tokenizers-0.22.2-LICENSE.txt",
+      "source": "https://raw.githubusercontent.com/huggingface/tokenizers/f383101a26663708484cac0727792aad74f78234/LICENSE",
+      "revision": "f383101a26663708484cac0727792aad74f78234",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "package": "antlr4-python3-runtime",
+      "version": "4.9.3",
+      "license": "BSD-3-Clause",
+      "file": "antlr4-python3-runtime-4.9.3-LICENSE.txt",
+      "source": "https://raw.githubusercontent.com/antlr/antlr4/e4c1a74c66bd5290364ea2b36c97cd724b247357/LICENSE.txt",
+      "revision": "e4c1a74c66bd5290364ea2b36c97cd724b247357",
+      "sha256": "b1b379fcaf3219593a4c433feb1b35c780bed23fafaae440b1ae2771a9521e3a"
+    }
+  ]
+}

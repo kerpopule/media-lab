@@ -1,0 +1,14 @@
+[Unit]
+Description=Prevent duplicate Perplexity local engines; retain canonical PPLX :8004
+After=docker.service qwen38-vllm-guard.service
+Wants=qwen38-vllm-guard.service
+
+[Service]
+Type=simple
+EnvironmentFile=-%h/media-lab-simple/config/local.env
+ExecStart=/bin/bash %h/media-lab-simple/runner/pplx_shared_runtime_guard.sh
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=default.target

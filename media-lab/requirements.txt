@@ -1,0 +1,17 @@
+# Media Lab server — installed into .venv by ./install.sh
+# Sane minimums, not exact pins: the app uses stable, long-standing APIs of
+# each of these. Engines (LTX, H3, ComfyUI…) have their own runtimes and are
+# NOT Python dependencies of this server.
+fastapi>=0.110
+uvicorn[standard]>=0.29
+pydantic>=2.6
+python-multipart>=0.0.9
+qrcode>=7.4
+# Cut's default caption burn-in creates caption cards with Pillow.
+Pillow>=10.0
+# Monitor only the isolated CPU worker and its descendants.
+psutil>=7.2,<8
+# Web push (the 🔔 queue notifications): VAPID keys + encrypted payloads.
+cryptography>=43
+py-vapid>=1.9
+pywebpush>=2

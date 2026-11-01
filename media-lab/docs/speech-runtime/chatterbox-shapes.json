@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "status": "metadata-shape-comparison-not-weight-load",
+  "source": {
+    "revision": "5de7a54aa4e5e2baadb0182dde554908b48b85c2",
+    "bytes": 1432683,
+    "sha256": "003f8c85dcfeb2d91b3a6f97f43b74703d15131e987dfabb7f3d9aee7c0da2cf"
+  },
+  "wheel": {
+    "filename": "chatterbox_tts-0.1.7-py3-none-any.whl",
+    "bytes": 107196,
+    "sha256": "8c085f5d3a1e81708dd7f3a65a76e66ca7ad1b2d6f72942628b927e8e2484b60",
+    "source_patch": "Pin Perth.git@master to ff1c8ac55a976971245cdd53c18d6131ca00d993"
+  },
+  "state_comparison": {
+    "t3_cfg.safetensors": {
+      "expected": 292,
+      "actual": 292,
+      "missing": [],
+      "unexpected": [],
+      "shape_mismatches": []
+    },
+    "s3gen.safetensors": {
+      "expected": 2490,
+      "actual": 2489,
+      "missing": [
+        "tokenizer.window"
+      ],
+      "unexpected": [],
+      "shape_mismatches": []
+    },
+    "ve.safetensors": {
+      "expected": 16,
+      "actual": 16,
+      "missing": [],
+      "unexpected": [],
+      "shape_mismatches": []
+    }
+  },
+  "expected_generated_buffer": {
+    "key": "tokenizer.window",
+    "source": "S3Tokenizer.__init__ torch.hann_window(n_fft=400)"
+  },
+  "runtime": "Python3.12.3 Linuxaarch64 Torch2.6.0+cpu",
+  "weights_loaded": false
+}

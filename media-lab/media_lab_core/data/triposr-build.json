@@ -1,0 +1,51 @@
+{
+  "schema": 1,
+  "status": "candidate-not-installable",
+  "variant": "triposr-cpu-f32-seed7-res128-vertex-color-v1",
+  "recipe_files": {
+    "tools/build-triposr-mcubes.py": {
+      "bytes": 3690,
+      "sha256": "458f0801e50a725da1f3c91e7eaac36660497a9bd0d588996dc12fbed28f1d0c"
+    },
+    "tools/build-triposr-antlr.py": {
+      "bytes": 2879,
+      "sha256": "1e9457df79f333a597022a84402e78ebb35b5f585968e90d70b34712f940a2b3"
+    },
+    "tools/convert-triposr-checkpoint.py": {
+      "bytes": 3806,
+      "sha256": "03069f70f399aa6dcbb221e556f1edb2f30e5eb170067cf14b881cf143f06d04"
+    },
+    "tools/prepare-triposr-source.py": {
+      "bytes": 3996,
+      "sha256": "f256e66bcf764854daad5ca52eaf4bb1fb4c17da544f8a071ce93ab36248cb97"
+    },
+    "docs/triposr-source-review.json": {
+      "bytes": 5680,
+      "sha256": "5d9d672ca542bd4fbd3a4ac653f2bdd0e7a86c5127894e1f3c69f24a75589158"
+    },
+    "media_lab_core/data/triposr-runtime.json": {
+      "bytes": 1049,
+      "sha256": "78df0a41782dc4ad7fe7159bce3cd3661a6c216eea1775451c989103c381d1ed"
+    },
+    "media_lab_core/data/triposr-cpu-linux-arm64.lock.in": {
+      "bytes": 62278,
+      "sha256": "dbb16944992a100d05b11fc9794693f3fdf64de6870f18f0331a56f50ee50d7e"
+    }
+  },
+  "wheels": {
+    "antlr4_python3_runtime-4.9.3-py3-none-any.whl": {
+      "bytes": 144590,
+      "sha256": "2a87ebcac22b720a265c06148b104f28eca7bf1203201eb971f37184bcef5569"
+    },
+    "torchmcubes-0.1.0-cp312-cp312-linux_aarch64.whl": {
+      "bytes": 91115,
+      "sha256": "72c5acf87e5d90ed8522034506afbb755404c15fa46f04376a5095df9ac918c5"
+    }
+  },
+  "remaining": [
+    "Complete native and vendored redistribution review",
+    "Assemble isolated download/build/conversion lifecycle",
+    "Qualify host activation and removal",
+    "Validate other platforms and broader creative inputs"
+  ]
+}

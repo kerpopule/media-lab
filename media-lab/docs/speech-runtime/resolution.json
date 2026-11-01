@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "status": "dependencies-installed-isolated-watermark-smoke-tested",
+  "python": "3.12",
+  "platform": "aarch64-unknown-linux-gnu",
+  "resolver": "uv pip compile --python-version 3.12 --python-platform aarch64-unknown-linux-gnu --only-binary :all: --generate-hashes",
+  "packages": 108,
+  "application_sources_included": false,
+  "perth_source_revision": "ff1c8ac55a976971245cdd53c18d6131ca00d993",
+  "artifacts": {
+    "requirements.in": {
+      "bytes": 625,
+      "sha256": "7bcaa436fddb3e90392af9070e059e80c433fe96a75a040fdd02d64bc2f05eb9"
+    },
+    "linux-arm64.lock": {
+      "bytes": 159383,
+      "sha256": "efe17b9397aa9fbf50b257a0fd587e4ee9e8616f1138c714ec7fdde93e1b93df"
+    }
+  },
+  "perth_checkpoint": {
+    "path": "src/perth/perth_net/pretrained/implicit/perth_net_250000.pth.tar",
+    "bytes_from_git_tree": 37429684,
+    "git_blob": "22fbc47e03a4df700425819e9b5a1f81304f3a60",
+    "downloaded": true,
+    "sha256_verified": true,
+    "format_review_required": true,
+    "sha256": "a15bce457ebc53ce5e6c9c3f11df78cf7ee2bf9cdab0a798902135b4c4027670",
+    "restricted_conversion": "perth-conversion.json"
+  },
+  "remaining": [
+    "Build and pin Chatterbox and Perth source artifacts; not included in this dependency-only lock.",
+    "Review/convert Perth packaged checkpoint without disabling watermark behavior.",
+    "Complete dependency notices and model qualification.",
+    "Complete speech imports/model architecture and audio tracer; watermark smoke is not full speech runtime qualification."
+  ],
+  "additional_wheel": {
+    "filename": "antlr4_python3_runtime-4.9.3-py3-none-any.whl",
+    "sha256": "2a87ebcac22b720a265c06148b104f28eca7bf1203201eb971f37184bcef5569",
+    "recipe": "../../tools/build-triposr-antlr.py",
+    "required_find_links": "Directory containing the verified built ANTLR wheel"
+  }
+}

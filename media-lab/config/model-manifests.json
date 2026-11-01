@@ -1,0 +1,429 @@
+{
+  "schema_version": 1,
+  "manifests": {
+    "qwen": {
+      "name": "Qwen 3.8 27B NVFP4",
+      "modality": "language",
+      "slot": "language",
+      "runtime": "vllm",
+      "color_hint": "blue",
+      "behavior": [
+        "primary",
+        "always_resident"
+      ],
+      "phases": {
+        "cold_load": {
+          "lo_gb": 28.0,
+          "hi_gb": 32.0
+        },
+        "warm_idle": {
+          "lo_gb": 24.0,
+          "hi_gb": 28.0
+        },
+        "active_inference": {
+          "lo_gb": 30.0,
+          "hi_gb": 32.0
+        },
+        "decode_vae_mux": {
+          "lo_gb": 0.5,
+          "hi_gb": 1.0
+        },
+        "kv_growth": {
+          "lo_gb": 4.0,
+          "hi_gb": 8.0
+        },
+        "swap_overlap": {
+          "lo_gb": 24.0,
+          "hi_gb": 28.0
+        }
+      },
+      "license_name": "Apache-2.0",
+      "license_url": "https://huggingface.co/Qwen/Qwen38-27B",
+      "terms_acceptance_required": false,
+      "source_url": "https://huggingface.co/Qwen/Qwen38-27B",
+      "immutable_revision": "main",
+      "sha256": "c3e9d4a0f1b2a3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8",
+      "exclusive_group": "",
+      "disk_gb": 30.0,
+      "estimated_load_seconds": 22,
+      "trusted": true
+    },
+    "ltx": {
+      "name": "LTX-2.5",
+      "modality": "video",
+      "slot": "video",
+      "runtime": "docker-ltx",
+      "color_hint": "teal",
+      "behavior": [
+        "primary",
+        "always_resident"
+      ],
+      "phases": {
+        "cold_load": {
+          "lo_gb": 36.0,
+          "hi_gb": 40.0
+        },
+        "warm_idle": {
+          "lo_gb": 32.0,
+          "hi_gb": 35.0
+        },
+        "active_inference": {
+          "lo_gb": 40.0,
+          "hi_gb": 43.0
+        },
+        "decode_vae_mux": {
+          "lo_gb": 20.0,
+          "hi_gb": 46.0
+        },
+        "kv_growth": {
+          "lo_gb": 1.0,
+          "hi_gb": 2.0
+        },
+        "swap_overlap": {
+          "lo_gb": 36.0,
+          "hi_gb": 40.0
+        }
+      },
+      "license_name": "LTX-2.5 (open source)",
+      "license_url": "https://huggingface.co/Lightricks/LTX-2.5",
+      "terms_acceptance_required": false,
+      "source_url": "https://huggingface.co/Lightricks/LTX-2.5",
+      "immutable_revision": "main",
+      "sha256": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2",
+      "exclusive_group": "video-engine",
+      "disk_gb": 40.0,
+      "estimated_load_seconds": 45,
+      "trusted": true
+    },
+    "h3": {
+      "name": "MiniMax H3 (fl2va)",
+      "modality": "video",
+      "slot": "video",
+      "runtime": "docker-h3",
+      "color_hint": "amber",
+      "behavior": [
+        "alternate",
+        "on_demand",
+        "drainable"
+      ],
+      "phases": {
+        "cold_load": {
+          "lo_gb": 36.0,
+          "hi_gb": 40.0
+        },
+        "warm_idle": {
+          "lo_gb": 32.0,
+          "hi_gb": 35.0
+        },
+        "active_inference": {
+          "lo_gb": 42.0,
+          "hi_gb": 48.0
+        },
+        "decode_vae_mux": {
+          "lo_gb": 22.0,
+          "hi_gb": 48.0
+        },
+        "kv_growth": {
+          "lo_gb": 1.0,
+          "hi_gb": 2.0
+        },
+        "swap_overlap": {
+          "lo_gb": 36.0,
+          "hi_gb": 40.0
+        }
+      },
+      "license_name": "MiniMax H3 (internal, FL2VA)",
+      "license_url": "https://minimax.io/research/h3",
+      "terms_acceptance_required": true,
+      "source_url": "https://github.com/MiniMax-AI/H3",
+      "immutable_revision": "main",
+      "sha256": "9cb1c67d0a9e404d7322a6c76bbf108c11bcf75a5512084c1456b1e3251e0ba4",
+      "exclusive_group": "video-engine",
+      "disk_gb": 42.0,
+      "estimated_load_seconds": 50,
+      "trusted": true
+    },
+    "deepseek-full": {
+      "name": "DeepSeek-class full-memory LLM",
+      "modality": "language",
+      "slot": "language",
+      "runtime": "vllm",
+      "color_hint": "violet",
+      "behavior": [
+        "mutually_exclusive",
+        "on_demand",
+        "drainable"
+      ],
+      "phases": {
+        "cold_load": {
+          "lo_gb": 60.0,
+          "hi_gb": 66.0
+        },
+        "warm_idle": {
+          "lo_gb": 58.0,
+          "hi_gb": 64.0
+        },
+        "active_inference": {
+          "lo_gb": 62.0,
+          "hi_gb": 70.0
+        },
+        "decode_vae_mux": {
+          "lo_gb": 1.0,
+          "hi_gb": 2.0
+        },
+        "kv_growth": {
+          "lo_gb": 12.0,
+          "hi_gb": 40.0
+        },
+        "swap_overlap": {
+          "lo_gb": 58.0,
+          "hi_gb": 64.0
+        }
+      },
+      "license_name": "DeepSeek License",
+      "license_url": "https://github.com/deepseek-ai/DeepSeek",
+      "terms_acceptance_required": true,
+      "source_url": "https://github.com/deepseek-ai/DeepSeek",
+      "immutable_revision": "main",
+      "sha256": "f1cf091c90792a4110c328fe3c2f1c42773a11a6c1567167f1222502238af689",
+      "exclusive_group": "full-memory-llm",
+      "disk_gb": 70.0,
+      "estimated_load_seconds": 120,
+      "trusted": true
+    },
+    "voicebox": {
+      "name": "Voicebox (local TTS)",
+      "modality": "speech",
+      "slot": "speech",
+      "runtime": "docker-cpu",
+      "color_hint": "green",
+      "behavior": [
+        "on_demand"
+      ],
+      "phases": {
+        "cold_load": {
+          "lo_gb": 9.0,
+          "hi_gb": 11.0
+        },
+        "warm_idle": {
+          "lo_gb": 9.0,
+          "hi_gb": 11.0
+        },
+        "active_inference": {
+          "lo_gb": 10.0,
+          "hi_gb": 12.0
+        },
+        "decode_vae_mux": {
+          "lo_gb": 1.0,
+          "hi_gb": 2.0
+        },
+        "kv_growth": {
+          "lo_gb": 0.0,
+          "hi_gb": 0.0
+        },
+        "swap_overlap": {
+          "lo_gb": 9.0,
+          "hi_gb": 11.0
+        }
+      },
+      "license_name": "Meta Voicebox (research)",
+      "license_url": "https://github.com/facebookresearch/voicebox-development",
+      "terms_acceptance_required": true,
+      "source_url": "https://github.com/facebookresearch/voicebox-development",
+      "immutable_revision": "main",
+      "sha256": "2f84ebdf8b0a6585cf50f1bde742c9a64c06e40bc1175ef7788fb2df85798362",
+      "exclusive_group": "",
+      "disk_gb": 11.0,
+      "estimated_load_seconds": 20,
+      "trusted": true
+    },
+    "sam3": {
+      "name": "SAM 3 segmentation",
+      "modality": "segmentation",
+      "slot": "segmentation",
+      "runtime": "comfyui",
+      "color_hint": "slate",
+      "behavior": [
+        "on_demand"
+      ],
+      "phases": {
+        "cold_load": {
+          "lo_gb": 3.0,
+          "hi_gb": 3.5
+        },
+        "warm_idle": {
+          "lo_gb": 3.0,
+          "hi_gb": 3.2
+        },
+        "active_inference": {
+          "lo_gb": 4.5,
+          "hi_gb": 5.5
+        },
+        "decode_vae_mux": {
+          "lo_gb": 1.0,
+          "hi_gb": 2.0
+        },
+        "kv_growth": {
+          "lo_gb": 0.0,
+          "hi_gb": 0.0
+        },
+        "swap_overlap": {
+          "lo_gb": 3.0,
+          "hi_gb": 3.2
+        }
+      },
+      "license_name": "SAM 3 (Apache-2.0)",
+      "license_url": "https://huggingface.co/facebook/sam3-tiny",
+      "terms_acceptance_required": false,
+      "source_url": "https://huggingface.co/facebook/sam3-tiny",
+      "immutable_revision": "main",
+      "sha256": "f086ef0918f7d31fca3c0c8e8cb3e1ba460e0b498d19202955bf5268f4714b34",
+      "exclusive_group": "",
+      "disk_gb": 3.0,
+      "estimated_load_seconds": 5,
+      "trusted": true
+    },
+    "qwen-image-21": {
+      "name": "Qwen-Image-2.1",
+      "modality": "image",
+      "slot": "image",
+      "runtime": "diffusers",
+      "color_hint": "purple",
+      "behavior": [
+        "primary"
+      ],
+      "phases": {
+        "cold_load": {
+          "lo_gb": 40.0,
+          "hi_gb": 48.0
+        },
+        "warm_idle": {
+          "lo_gb": 38.0,
+          "hi_gb": 48.0
+        },
+        "active_inference": {
+          "lo_gb": 44.0,
+          "hi_gb": 48.0
+        },
+        "decode_vae_mux": {
+          "lo_gb": 4.0,
+          "hi_gb": 6.0
+        },
+        "kv_growth": {
+          "lo_gb": 0.5,
+          "hi_gb": 1.0
+        },
+        "swap_overlap": {
+          "lo_gb": 38.0,
+          "hi_gb": 48.0
+        }
+      },
+      "license_name": "Qwen Research License",
+      "license_url": "https://huggingface.co/Qwen/Qwen-Image-2.1/blob/main/LICENSE",
+      "commercial_use_requires_separate_license": true,
+      "terms_acceptance_required": true,
+      "source_url": "https://huggingface.co/Qwen/Qwen-Image-2.1",
+      "immutable_revision": "b3179ad355be050328e483a9dfdd9e60cd62adfa",
+      "sha256": "2ef675bd78eeefbe746b0a38318eddd1ca923251916851930e271cc02b661292",
+      "exclusive_group": "image-engine",
+      "disk_gb": 30.84,
+      "estimated_load_seconds": 210,
+      "trusted": false,
+      "measured": true,
+      "basis": "phase lo/hi ranges are measured-derived, not declared: cold_load and active_inference bound the worst system-memory consumption seen in the clean per-phase run (48.0 GiB of 121 GiB unified, device allocation flat at 38.4 GiB), and warm_idle carries that same conservative end. Only cold_load, warm_idle and active_inference were measured; decode_vae_mux, kv_growth and swap_overlap remain declared sub-phase allowances inside that envelope. sha256 is the pack-identity digest over the per-file pins in config/qwen-image-21-weights.json",
+      "files": [
+        {
+          "path": "text_encoder/model-00001-of-00004.safetensors",
+          "bytes": 4998056552,
+          "sha256": "dde00291b5f7fb92013895310a3da0ddba78674df9f10d505d375243dc01fc6f"
+        },
+        {
+          "path": "text_encoder/model-00002-of-00004.safetensors",
+          "bytes": 4915962464,
+          "sha256": "9047faccc0a6d98496a52d55f27be1c94a9c259d1e283fbea0128d054a948d42"
+        },
+        {
+          "path": "text_encoder/model-00003-of-00004.safetensors",
+          "bytes": 4915962496,
+          "sha256": "8c54187654c0176b73ae73785bf791dc9a14c9df7fb4310083a09d42048cb57e"
+        },
+        {
+          "path": "text_encoder/model-00004-of-00004.safetensors",
+          "bytes": 2704357976,
+          "sha256": "5311532aaaeae3259eb6a7b2c600636be1159adf7ded35f53579f7d0e7d43cdd"
+        },
+        {
+          "path": "transformer/diffusion_pytorch_model-00001-of-00002.safetensors",
+          "bytes": 9968332504,
+          "sha256": "9e6bc2d641e67bf277895ea8777141044a38f3edb7101bc469b2961dd7c36b4b"
+        },
+        {
+          "path": "transformer/diffusion_pytorch_model-00002-of-00002.safetensors",
+          "bytes": 4261951904,
+          "sha256": "3aaf234dcbe128530479735854a346b5e3e66283b7c11db56f836bbd1c13ebaa"
+        },
+        {
+          "path": "vae/diffusion_pytorch_model.safetensors",
+          "bytes": 1350989512,
+          "sha256": "a07a1b7c4ee2966a1b3bdc37de9b4f983d56937e46619f709a80b6e490675417"
+        }
+      ],
+      "accelerated_route": {
+        "note": "NVFP4 pack for ComfyUI on Blackwell (GB10) \u2014 11.57 GiB total, not yet staged or qualified on this host; requires a ComfyUI build that provides the Qwen-Image-2.1 nodes.",
+        "source_url": "https://huggingface.co/BennyDaBall/Qwen-Image-2.1-NVFP4",
+        "immutable_revision": "1a38d44a3a2f35cb0b543a25b04da0a963e7b5e6",
+        "files": [
+          {
+            "path": "diffusion_models/qwen_image_2.1_nvfp4.safetensors",
+            "bytes": 4197574664,
+            "sha256": "4fdbaec94c19f7b8888f1e1ddbae05354c014492f9b2547b1cd8dca0ce923526"
+          },
+          {
+            "path": "text_encoders/qwen3vl_8b_nvfp4.safetensors",
+            "bytes": 7549882768,
+            "sha256": "cdd9b85bcb60d5cb358ddecfd45a48fa15cb728b70d88bd2028840eaef095d16"
+          },
+          {
+            "path": "vae/qwen_image_2.1_vae_bf16.safetensors",
+            "bytes": 675509688,
+            "sha256": "bb21f7473051e1ac368515dd3f2e15cd44d7a11748ee8823e1ddca3e4876b7c9"
+          }
+        ]
+      },
+      "measurement": {
+        "state": "measured-per-phase",
+        "host": "the media Spark (NVIDIA GB10, 121 GiB unified; nvidia-smi reported no compute process and 117.10 GiB was available before the run)",
+        "when": "2026-09-21T06:27Z",
+        "receipts": [
+          "docs/receipts/qwen-image-21-qualification-20260921-per-phase.json",
+          "~/runtime/qwen-image-21/receipts/qualification-measured-20260921-010856.json"
+        ],
+        "settings": "1024*1024, 40 steps, true_cfg_scale=1.0, use_kv_cache=True, bfloat16",
+        "stack": "torch 2.14.0+cu130, torchvision 0.29.0+cu130, diffusers @ 80c7ed26, transformers 5.17.0",
+        "weights_gib": 30.84,
+        "device_gib_per_process": 38.4,
+        "mem_available_gib_baseline": 117.1,
+        "mem_available_gib_floor": 69.06,
+        "mem_available_gib_warm_steady": 76.44,
+        "mem_available_gib_after_reap": 117.01,
+        "cold_job_wall_seconds": 256.4,
+        "warm_render_seconds_40_steps": 52.9,
+        "pack_reverify_seconds": 14.0,
+        "phases_measured": [
+          "cold_load",
+          "warm_idle",
+          "active_inference"
+        ],
+        "phases_declared": [
+          "decode_vae_mux",
+          "kv_growth",
+          "swap_overlap"
+        ],
+        "note": "The device allocation is flat at 38.4 GiB from load through render and warm idle, so the phases separate only in system memory: 40.7 GiB warm steady and 48.0 GiB at the worst point. This run started from a genuinely idle host and the renderer drops the checkpoint page cache before loading. The earlier measured-once pass began with about 41 GiB already held, so its 30.4 GiB floor and its 74-90 GiB active envelope are superseded. warm_idle keeps the worst observed 48.0 GiB rather than the 40.7 GiB warm-steady figure, because the pair with the protected language primary would otherwise land within about 1 GiB of the pool."
+      }
+    }
+  },
+  "notes": [
+    "sha256 values are deterministic placeholder digests pinning each manifest ENTRY (hash of canonical identity); real upstream artifact hashes are assigned by the intake gate when an immutable revision is staged. Placeholders are 64-hex and self-consistent, not fabricated upstream hashes."
+  ]
+}

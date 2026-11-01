@@ -1,0 +1,48 @@
+schema_version = 1
+
+# Public-safe defaults fail closed. Backends and model weights are installed
+# separately, then promoted only after an immutable qualification receipt exists.
+
+[engines.ltx]
+adapter = "external-http"
+status = "unconfigured"
+enabled = false
+distribution = "external"
+license_class = "review-required"
+immutable_revision = ""
+modes = ["text-to-video", "image-to-video", "audio-to-video"]
+required_kernels = []
+reason = "Install and qualify an LTX adapter; the controller does not bundle Maestro or weights."
+
+[engines.h3]
+adapter = "comfyui-r12"
+status = "unconfigured"
+enabled = false
+distribution = "external"
+license_class = "review-required"
+immutable_revision = ""
+modes = ["text-to-video", "first-frame-to-video", "reference-to-video", "joint-audio-video"]
+required_kernels = ["sm121-compatible-attention"]
+reason = "Install a source-pinned H3 backend and attach a qualification receipt."
+
+[engines.image]
+adapter = "comfyui"
+status = "unconfigured"
+enabled = false
+distribution = "external"
+license_class = "review-required"
+immutable_revision = ""
+modes = ["text-to-image", "image-edit", "inpaint"]
+required_kernels = []
+reason = "Configure an image backend explicitly."
+
+[engines.music]
+adapter = "comfyui"
+status = "unconfigured"
+enabled = false
+distribution = "external"
+license_class = "review-required"
+immutable_revision = ""
+modes = ["text-to-music"]
+required_kernels = []
+reason = "Configure a music backend explicitly."

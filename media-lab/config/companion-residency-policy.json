@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "policy_name": "pplx-27b-protected-primary-one-companion",
+  "protected_primary": {
+    "id": "pplx-computer-qwen-3-8-27b-dflash2-20260824",
+    "alias": "media-lab-text",
+    "endpoint": "http://127.0.0.1:8004",
+    "always_resident": true,
+    "evictable_by_media": false,
+    "gpu_memory_utilization": 0.28,
+    "max_model_len": 65536,
+    "max_num_seqs": 2
+  },
+  "companion_slot": {
+    "cardinality": "exactly_one_when_idle_or_rendering",
+    "default": "ltx",
+    "members": [
+      "ltx",
+      "h3",
+      "qwen-image-21",
+      "music3",
+      "yue2",
+      "voicebox-tts"
+    ],
+    "service_shells_do_not_count_when_models_are_unloaded": true,
+    "swap_rules": [
+      "acquire the media-lab inference transaction before model mutation",
+      "never interrupt a companion reporting busy",
+      "stand down every non-target companion before loading the target",
+      "verify PPLX :8004 health before and after each companion transaction",
+      "release outgoing ComfyUI or Voicebox weights before loading incoming weights",
+      "restore LTX only after the complete companion queue is idle"
+    ]
+  },
+  "measured_or_bounded_gib": {
+    "pplx-27b": {
+      "runtime_allocation_observed": 33.0,
+      "status": "live-observed-2026-08-26"
+    },
+    "ltx": {
+      "warm_idle": 35.0,
+      "active": 43.0,
+      "decode": 46.0,
+      "qualified_with_pplx": true,
+      "qualification_min_memavailable": 36.124
+    },
+    "h3": {
+      "warm_idle": 35.0,
+      "active_upper_bound": 48.0,
+      "qualified_with_pplx": false
+    },
+    "music3": {
+      "warm_idle": 15.0,
+      "active_upper_bound": null,
+      "qualified_with_pplx": false
+    },
+    "yue2": {
+      "warm_idle": 4.0,
+      "active_upper_bound": 18.0,
+      "measured_peak_observed": 17.0,
+      "license": "CC-BY-NC-4.0",
+      "status": "measured-2026-09-14: ~200 s per 60-90 s song, 16-17 GiB peak, ~4 s load",
+      "qualified_with_pplx": false
+    },
+    "voicebox-tts": {
+      "service_shell": "cpu",
+      "model_active_upper_bound": 12.0,
+      "installed_variants": [
+        "qwen-tts-1.7B",
+        "kokoro"
+      ],
+      "governed_audio_helpers": [
+        "faster-whisper",
+        "resemble-enhance"
+      ],
+      "unload_api": "/models/{model_name}/unload",
+      "qualified_with_pplx": false
+    },
+    "qwen-image-21": {
+      "weights_measured_gib": 30.84,
+      "device_allocation_observed_gib": 38.4,
+      "warm_idle_observed_gib": 40.7,
+      "active_upper_bound": 48.0,
+      "qualified_with_pplx": false,
+      "status": "per-phase measured 2026-09-21 on the media Spark with no other GPU process and the checkpoint page cache dropped: device allocation flat at 38.4 GiB from load through render and warm idle; MemAvailable 117.1 -> 69.06 floor -> 76.44 warm steady -> 117.01 after reaping. NOT qualified with the protected primary: at the observed warm-steady figure the pair lands within about 1 GiB of the pool, so co-residency still needs the visible-queue canary the qualification rule requires."
+    }
+  },
+  "operational_floor_gib": 24.0,
+  "qualification_rule": "A companion is promoted only after a short visible-queue canary proves artifact validity, continuous PPLX replies, no OOM evidence, and MemAvailable never below the operational floor."
+}

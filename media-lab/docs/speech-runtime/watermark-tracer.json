@@ -1,0 +1,23 @@
+{
+  "network_denied": true,
+  "torch": "2.6.0+cpu",
+  "sample_rate": 32000,
+  "samples": 96000,
+  "finite": true,
+  "before_mean": 0.299174040555954,
+  "after_mean": 0.6877575516700745,
+  "seconds": 2.512944784015417,
+  "speech_qualified": false,
+  "scope": "Synthetic waveform smoke test, not speech quality or watermark robustness",
+  "platform": "Linux aarch64",
+  "python": "3.12.3",
+  "source": {
+    "revision": "ff1c8ac55a976971245cdd53c18d6131ca00d993",
+    "archive_bytes": 34548910,
+    "archive_sha256": "00e89ff833f7efc1a0ae0ca3c5420ae108b9adbed9c0fb7b03750b854d30f149",
+    "excluded": "package pretrained directory; use separately verified converted artifact"
+  },
+  "loader_sha256": "b39bed45f9b23e18e2d2d3ddda64f12b0116b4df7b43ea32af3cae5dca2b7e2e",
+  "pip_check": "No broken requirements found",
+  "source_import": "Pinned source directory; source wheel not built"
+}

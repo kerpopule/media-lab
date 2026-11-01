@@ -1,0 +1,10 @@
+# Pinned runtime for the Qwen-Image-2.1 image pack on NVIDIA GB10 (linux aarch64).
+# diffusers must come from the commit below: PyPI 0.40.0 predates QwenImage21Pipeline.
+torch==2.14.0
+torchvision==0.29.0
+transformers>=5.17,<6
+accelerate>=1.15,<2
+safetensors>=0.8,<1
+Pillow>=12,<13
+numpy==2.5.3
+diffusers @ git+https://github.com/huggingface/diffusers@80c7ed262aeffbeb43ef13ae04baeb9b84515a69

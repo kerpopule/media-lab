@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<title>Cut · Media Lab</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0B0806">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Cut">
+<script>
+/* Same theme bootstrap as the studio: paint the saved theme BEFORE first render so
+   Cut opens in exactly the look the studio has chosen (localStorage 'lab-theme'). */
+(function(){try{
+  var t=localStorage.getItem('lab-theme');
+  if(t===null||t===undefined)t='coagent';
+  if(t)document.documentElement.dataset.theme=t;
+  var ink={'':'#0B0806','coagent':'#0B0806','ocean':'#071019','emerald':'#06120C','violet':'#0D0814',
+           'paper':'#F7F7F8'}[t];
+  /* a look from the studio's local overlay: the ground it last painted */
+  if(!ink){var li=localStorage.getItem('lab-theme-ink');ink=/^#[0-9A-Fa-f]{3,8}$/.test(li||'')?li:'#0B0806';}
+  document.documentElement.style.background=ink;
+  var m=document.querySelector('meta[name="theme-color"]');
+  if(m)m.setAttribute('content',ink);
+  var lk=document.querySelector('link[rel="manifest"]');
+  if(lk&&t)lk.href='/manifest.json?theme='+encodeURIComponent(t);
+}catch(e){}})();
+</script>
+<link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="/static/icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/cut.css?v=2">
+<!-- the studio's own looks (gitignored config/local/themes.json); empty when none -->
+<link rel="stylesheet" href="/local/themes.css">
+</head>
+<body>
+<div id="app" class="app" data-view="loading">
+
+  <!-- ===== project picker (no ?project=) ===== -->
+  <section id="picker" class="picker" hidden>
+    <div class="wrap">
+      <header class="top">
+        <a class="back" href="/">‹ Studio</a>
+        <div class="title"><div class="kicker">✂️ Cut</div><div class="h">Your edits</div></div>
+      </header>
+      <div class="card">
+        <div class="label" style="margin-top:0">Projects</div>
+        <div id="projlist" class="projlist"><div class="hint">Loading…</div></div>
+      </div>
+      <div class="card">
+        <div class="label" style="margin-top:0">Start a new cut — pick from the gallery</div>
+        <div class="hint" style="margin-bottom:10px">Tap items to pick them. Pictures stay on screen 4 seconds; songs go on the Music track.</div>
+        <div id="pickgrid" class="gal"></div>
+        <button class="go" id="pickgo" disabled>✂️ Cut these together</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== editor ===== -->
+  <section id="editor" class="editor" hidden>
+    <header class="top">
+      <a class="back" href="/" id="backlink">‹ Studio</a>
+      <div class="title">
+        <div class="kicker">✂️ Cut</div>
+        <div class="h" id="ptitle">…</div>
+      </div>
+      <div class="hist">
+        <button class="ib" id="undo" title="Undo">↶</button>
+        <button class="ib" id="redo" title="Redo">↷</button>
+        <span class="rev" id="rev">rev 0</span>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="bins card" id="bins">
+        <div class="label" style="margin-top:0">In this cut</div>
+        <div id="assetlist" class="assetlist"></div>
+        <div class="label">Add from the gallery</div>
+        <div id="galgrid" class="gal small"></div>
+        <a class="adv" href="/cut">All projects ›</a>
+      </aside>
+
+      <section class="center">
+        <div class="monitor card">
+          <div class="screen" id="screen">
+            <video id="vid" playsinline preload="auto"></video>
+            <img id="img" alt="">
+            <div class="capov" id="capov"></div>
+            <div class="nomedia" id="nomedia">Nothing here yet</div>
+          </div>
+          <div class="transport">
+            <button class="ib big" id="play" title="Play / pause">▶</button>
+            <div class="tc"><span id="tc">00:00.00</span><span class="dim"> / </span><span id="dur">00:00.00</span></div>
+            <div class="spacer"></div>
+            <button class="ib" id="zoomout" title="Zoom out">−</button>
+            <button class="ib" id="zoomfit" title="Fit">⤢</button>
+            <button class="ib" id="zoomin" title="Zoom in">+</button>
+          </div>
+        </div>
+
+        <div id="pending" class="pending"></div>
+
+        <div class="timeline card" id="timeline">
+          <div class="tlscroll" id="tlscroll">
+            <div class="tlinner" id="tlinner">
+              <div class="ruler" id="ruler"></div>
+              <div class="tracks" id="tracks"></div>
+              <div class="playhead" id="playhead"><div class="knob"></div></div>
+            </div>
+          </div>
+          <div class="tlhint" id="tlhint">Tap a clip to select it · drag its edges to trim · hold to move · pinch to zoom</div>
+        </div>
+      </section>
+
+      <aside class="tools card" id="tools">
+        <div class="grab"></div>
+        <div class="toolrow" id="toolrow">
+          <button class="tool" data-tool="add"><span class="ic">＋</span><span class="tx">Add</span></button>
+          <button class="tool" data-tool="trim"><span class="ic">⟷</span><span class="tx">Trim</span></button>
+          <button class="tool" data-tool="split"><span class="ic">✂️</span><span class="tx">Split</span></button>
+          <button class="tool" data-tool="move"><span class="ic">↔️</span><span class="tx">Move</span></button>
+          <button class="tool" data-tool="transition"><span class="ic">◐</span><span class="tx">Dissolve</span></button>
+          <button class="tool" data-tool="captions"><span class="ic">💬</span><span class="tx">Captions</span></button>
+          <button class="tool" data-tool="audio"><span class="ic">🔊</span><span class="tx">Audio</span></button>
+          <button class="tool" data-tool="color"><span class="ic">🎨</span><span class="tx">Color</span></button>
+          <button class="tool" data-tool="render"><span class="ic">🎬</span><span class="tx">Render</span></button>
+        </div>
+        <div class="panel" id="panel"></div>
+      </aside>
+    </div>
+  </section>
+
+  <div id="toast" class="toast"></div>
+</div>
+<script>
+/* Inside the VibeX Studio app, tell the app Cut is on screen: the editor needs
+   the whole window, so the app tucks its tab bar away while Cut is open. */
+(function(){try{
+  if(sessionStorage.getItem('mlab-embed')!=='1')return;
+  var msg={type:'vibex-lab:ready',page:'cut'};
+  if(window.ReactNativeWebView){window.ReactNativeWebView.postMessage(JSON.stringify(msg));return;}
+  if(window.self!==window.top)window.parent.postMessage(msg,sessionStorage.getItem('mlab-embed-parent')||'*');
+}catch(e){}})();
+</script>
+<script src="/static/cut.js?v=1"></script>
+</body>
+</html>

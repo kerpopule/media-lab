@@ -1,0 +1,14 @@
+{
+  "loaded": true,
+  "device": "cpu",
+  "sample_rate": 24000,
+  "voice_selected": false,
+  "network_denied": true,
+  "seconds": 13.136118172900751,
+  "speech_generated": false,
+  "schema": 1,
+  "loader_sha256": "0cc9b05f2df9216e662399fa60e6d419cde93840a2f183efef0245de02d5cc59",
+  "strict_state": true,
+  "finite_tensors": true,
+  "model_qualified": false
+}

@@ -1,0 +1,216 @@
+schema_version = 1
+catalog_status = "pre-qualification"
+
+# This public example intentionally contains no installable model. Entries become
+# selectable only after exact revisions, hashes, licenses, hardware floors, and
+# qualification receipts are completed.
+
+[[models]]
+id = "ltx25-video"
+name = "LTX-2.5 native audio/video"
+category = "video"
+status = "planned"
+recommended = true
+quality = "high; strong motion and cinematic continuity"
+speed = "moderate; two-stage supplied-audio mode is slower"
+summary = "Versatile text/image/audio-conditioned video. Supplied audio influences motion but does not guarantee phoneme-perfect lip sync."
+disk_gb = 0
+memory_floor_gb = 0
+license_name = "unresolved"
+license_url = ""
+terms_acceptance_required = true
+source_url = ""
+immutable_revision = ""
+sha256 = ""
+requires = []
+exclusive_group = "video-engine"
+hardware = ["nvidia-cuda"]
+
+[[models]]
+id = "h3-fl2va-video"
+name = "MiniMax H3 FL2VA"
+category = "video"
+status = "planned"
+recommended = true
+quality = "high; native synchronized audio and strong multimodal prompting"
+speed = "slow unless the hardware-specific optimized path is qualified"
+summary = "Best for text, first/last-frame, and audio-aware generation. Very memory-heavy; requires an architecture-qualified runtime."
+disk_gb = 0
+memory_floor_gb = 0
+license_name = "unresolved"
+license_url = ""
+terms_acceptance_required = true
+source_url = ""
+immutable_revision = ""
+sha256 = ""
+requires = []
+exclusive_group = "video-engine"
+hardware = ["nvidia-sm121", "nvidia-cuda13"]
+
+[[models]]
+id = "h3-ref2va-video"
+name = "MiniMax H3 Ref2VA"
+category = "video"
+status = "planned"
+recommended = false
+quality = "high; strongest H3 reference-driven identity/style/audio mode"
+speed = "slow and memory-heavy"
+summary = "Adds full reference-to-video weights for character, style, motion, camera, video, and audio references. Separate weights from FL2VA."
+disk_gb = 0
+memory_floor_gb = 0
+license_name = "unresolved"
+license_url = ""
+terms_acceptance_required = true
+source_url = ""
+immutable_revision = ""
+sha256 = ""
+requires = ["h3-fl2va-video"]
+exclusive_group = "video-engine"
+hardware = ["nvidia-sm121", "nvidia-cuda13"]
+
+[[models]]
+id = "h3-latent-upscaler"
+name = "H3 learned latent upscaler"
+category = "enhancement"
+status = "experimental"
+recommended = false
+quality = "experimental; may preserve more detail than naive latent interpolation"
+speed = "may reduce total high-resolution time; does not reduce refinement peak memory"
+summary = "Optional 24-channel H3 latent upscaler. SafeTensor-only adaptation required; useful only after base H3 is qualified."
+disk_gb = 0.691
+memory_floor_gb = 0
+license_name = "code-license-unresolved"
+license_url = "https://huggingface.co/LBH-123-AI/Minimax_h3_latent_Upscaler"
+terms_acceptance_required = false
+source_url = "https://huggingface.co/LBH-123-AI/Minimax_h3_latent_Upscaler"
+immutable_revision = "9ba7f254e2579e177981d870793a77c2c4017219"
+sha256 = "043e5a48e161610ef6c3ea974645220354d06fa618abca15f76d084812eb55c2"
+requires = ["h3-fl2va-video"]
+exclusive_group = ""
+hardware = ["nvidia-cuda"]
+
+[[models]]
+id = "qwen-image-21"
+name = "Qwen-Image-2.1"
+category = "image"
+status = "qualified"
+recommended = true
+quality = "high; unified text-to-image and editing, native transparency, strong typography"
+speed = "moderate; the published recipe runs 40 steps unless a qualifier proves fewer"
+summary = "The studio's only image model. Research-license weights: internal evaluation is permitted, commercial output needs a separate Qwen license."
+disk_gb = 30.84
+memory_floor_gb = 48
+license_name = "Qwen Research License"
+license_url = "https://huggingface.co/Qwen/Qwen-Image-2.1/blob/main/LICENSE"
+terms_acceptance_required = true
+source_url = "https://huggingface.co/Qwen/Qwen-Image-2.1"
+immutable_revision = "b3179ad355be050328e483a9dfdd9e60cd62adfa"
+sha256 = "2ef675bd78eeefbe746b0a38318eddd1ca923251916851930e271cc02b661292"
+requires = []
+exclusive_group = "image-engine"
+hardware = ["nvidia-cuda"]
+[[models]]
+id = "voicebox-tts"
+name = "Local Voicebox-compatible speech"
+category = "audio"
+status = "planned"
+recommended = true
+quality = "natural local speech; voice/likeness authorization still required"
+speed = "fast after model load"
+summary = "Adds local narration and dialogue generation. Does not authorize cloning or use of another person's voice."
+disk_gb = 0
+memory_floor_gb = 0
+license_name = "unresolved"
+license_url = ""
+terms_acceptance_required = true
+source_url = ""
+immutable_revision = ""
+sha256 = ""
+requires = []
+exclusive_group = "audio-engine"
+hardware = ["cpu", "nvidia-cuda"]
+
+[[models]]
+id = "qwen27b-nvfp4"
+name = "Qwen 27B NVFP4 setup assistant"
+category = "llm"
+status = "planned"
+recommended = true
+quality = "strong local setup help and prompt assistance"
+speed = "fastest currently promoted 27B profile on DGX Spark"
+summary = "Recommended local chat/setup model. Can finish preference onboarding after deterministic installation succeeds."
+disk_gb = 0
+memory_floor_gb = 0
+license_name = "unresolved"
+license_url = ""
+terms_acceptance_required = true
+source_url = ""
+immutable_revision = ""
+sha256 = ""
+requires = []
+exclusive_group = "llm-residency"
+hardware = ["nvidia-sm121"]
+
+[[models]]
+id = "qwen27b-nvfp4-obliterated"
+name = "Qwen 27B NVFP4 obliterated variant"
+category = "llm"
+status = "planned"
+recommended = false
+quality = "same family; altered refusal behavior requires separate evaluation"
+speed = "expected similar class; must be measured from an exact pinned build"
+summary = "Optional alternate local chat model. Install beside the standard variant and swap explicitly; never merge identities or assume equivalent safety."
+disk_gb = 0
+memory_floor_gb = 0
+license_name = "unresolved"
+license_url = ""
+terms_acceptance_required = true
+source_url = ""
+immutable_revision = ""
+sha256 = ""
+requires = []
+exclusive_group = "llm-residency"
+hardware = ["nvidia-sm121"]
+
+
+[[models]]
+id = "triposr-image-to-3d"
+name = "TripoSR image to 3D (development candidate)"
+category = "model"
+status = "experimental"
+recommended = false
+quality = "Technical tracer passed; tested chair was distorted and has not received creative approval"
+speed = "No qualified cross-platform performance estimate"
+summary = "Independent local image-to-GLB path has been exercised on Spark. Portable runtime closure, installer activation and output quality remain unfinished. See docs/triposr-rebuilt-worker-review.json."
+disk_gb = 0
+memory_floor_gb = 0
+license_name = "MIT model/source; runtime components require their own notices"
+license_url = "https://github.com/VAST-AI-Research/TripoSR/blob/main/LICENSE"
+terms_acceptance_required = false
+source_url = "https://github.com/VAST-AI-Research/TripoSR"
+immutable_revision = "107cefdc244c39106fa830359024f6a2f1c78871"
+sha256 = ""
+requires = []
+exclusive_group = "3d-engine"
+hardware = ["linux-aarch64-development-only"]
+
+[[models]]
+id = "trellis2-image-to-3d"
+name = "TRELLIS.2 image to 3D (under review)"
+category = "model"
+status = "planned"
+recommended = false
+quality = "Not yet generated or evaluated in this independent runtime"
+speed = "Not measured on Spark"
+summary = "Optional candidate with separate DINOv3 component terms. Native extension builds, local-only component loading, checkpoint verification and quality tests remain. See docs/trellis-component-review.json and docs/trellis-toolchain-review.json."
+disk_gb = 0
+memory_floor_gb = 0
+license_name = "Component-specific terms; not a default permissive pack"
+license_url = "https://github.com/facebookresearch/dinov3/blob/main/LICENSE.md"
+terms_acceptance_required = true
+source_url = "https://github.com/microsoft/TRELLIS.2"
+immutable_revision = "75fbf0183001ed9876c8dbb35de6b68552ee08bd"
+sha256 = ""
+requires = []
+exclusive_group = "3d-engine"
+hardware = ["linux-nvidia-unqualified"]

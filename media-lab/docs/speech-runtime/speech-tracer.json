@@ -1,0 +1,23 @@
+{
+  "sample_rate": 24000,
+  "samples": 37440,
+  "seconds": 85.37961134593934,
+  "peak": 0.712158203125,
+  "bytes": 74924,
+  "sha256": "06160c4795219e8995aa1c7e3e2cfba77fc66cc096e6aff8a53df259dee8ef8a",
+  "speech_qualified": false,
+  "schema": 1,
+  "prompt": "Welcome to your creative studio.",
+  "voice": "Explicit upstream English default preset",
+  "network_denied": true,
+  "spoken_content_verified": false,
+  "creative_approval": false,
+  "duration_seconds": 1.56,
+  "preset": {
+    "source_sha256": "6552d70568833628ba019c6b03459e77fe71ca197d5c560cef9411bee9d87f4e",
+    "converted_bytes": 105316,
+    "converted_sha256": "709e5a7fa80e010a011c8244f553853aed7a49c106fff54008fbd89a0f5a6148",
+    "roundtrip": true,
+    "tensor_count": 7
+  }
+}

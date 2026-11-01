@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "source_revision": "ff1c8ac55a976971245cdd53c18d6131ca00d993",
+  "wheel": {
+    "filename": "resemble_perth-1.1.0-py3-none-any.whl",
+    "bytes": 23285,
+    "sha256": "30d7c9a7b83181d18ad81bd8b8fe1749b559f686c82cd0cac04ae00fd4255e30",
+    "entries": 29,
+    "pretrained_files_included": false
+  },
+  "build_tool": {
+    "name": "uv_build",
+    "version": "0.12.7",
+    "sha256": "130b8c8c87fa37068af29ea0cbc5821d068cc59044d5c35be0f8fe2069d4d98d",
+    "platform": "manylinux_2_28_aarch64"
+  },
+  "pip_check": "No broken requirements found",
+  "installed_package_tracer": {
+    "network_denied": true,
+    "torch": "2.6.0+cpu",
+    "sample_rate": 32000,
+    "samples": 96000,
+    "finite": true,
+    "before_mean": 0.299174040555954,
+    "after_mean": 0.6877575516700745,
+    "seconds": 1.0946448629256338,
+    "speech_qualified": false
+  },
+  "remaining": [
+    "Complete source/dependency redistribution notices.",
+    "Resolve deprecated OmegaConf metadata for a current installer.",
+    "Reproducible source-wheel recipe and verified installation lifecycle.",
+    "Speech quality/performance and owned job integration."
+  ]
+}

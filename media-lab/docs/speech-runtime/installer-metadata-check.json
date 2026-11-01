@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "pip": "26.2.1",
+  "omegaconf": "2.3.1",
+  "antlr4-python3-runtime": "4.9.3",
+  "dependency_changes_only": [
+    "omegaconf 2.0.6 -> 2.3.1",
+    "add antlr4-python3-runtime 4.9.3"
+  ],
+  "pip_check": "No broken requirements found",
+  "lock_dry_run": "Passed on installed isolated environment; not a fresh-install proof",
+  "offline_load": {
+    "loaded": true,
+    "device": "cpu",
+    "sample_rate": 24000,
+    "voice_selected": false,
+    "network_denied": true,
+    "seconds": 12.926381744910032,
+    "speech_generated": false
+  }
+}

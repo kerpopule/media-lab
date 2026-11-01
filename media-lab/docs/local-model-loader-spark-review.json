@@ -1,0 +1,20 @@
+{
+  "runtime": "isolated rebuilt16bk",
+  "fixture": "synthetic Linear(2,1), no model weights downloaded",
+  "output": 24.0,
+  "eval_mode": true,
+  "missing_bias_rejected": true,
+  "changed_checkpoint_rejected": true,
+  "network_denied": true,
+  "model_qualified": false,
+  "schema": 1,
+  "loader_sha256": "a4bb0cb313ec13f520d7b092ffebe0051b87bc146adc0d888714abdca5c93187",
+  "unit_status": "inactive PID0 exit0",
+  "limits": {
+    "memory_gib": 2,
+    "swap_bytes": 0,
+    "cpu_percent": 100,
+    "timeout_seconds": 60
+  },
+  "scope": "Synthetic real Torch/SafeTensors roundtrip and rejection tests, not TRELLIS integration or hardware/creative qualification."
+}

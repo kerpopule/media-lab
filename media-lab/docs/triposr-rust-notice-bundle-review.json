@@ -1,0 +1,18 @@
+{
+  "status": "partial-runtime-third-party-materials",
+  "scope": "Selected Linux ARM64 Rust normal/build dependency graphs plus three Python source archives",
+  "receipt": {
+    "sha256": "ed6b25b93d4312c5b2065f5d20c9e5858b92d45dafac88114c28cd2ac8f9401c",
+    "bytes": 49898837,
+    "files": 984,
+    "license_review_complete": false,
+    "registry_packages": 342,
+    "python_sources": 3,
+    "repeated_build_identical": true
+  },
+  "remaining": [
+    "Python/native non-Rust dependency notices and sources",
+    "Rust standard-library/toolchain and OS linkage review",
+    "Distribution obligation review and installer integration"
+  ]
+}
