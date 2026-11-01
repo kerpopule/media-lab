@@ -192,6 +192,21 @@ def test_failed_health_rolls_back(host):
     assert (host / "app.py").read_text() == "old = 1\n"
 
 
+def test_healthy_new_job_after_restart_is_not_interrupted(host):
+    calls = 0
+    restarts = []
+
+    def queue():
+        nonlocal calls
+        calls += 1
+        return idle() if calls < 3 else {"active_total": 1, "active": [{"id": "new-work"}]}
+
+    result = sr.apply_bundle(bundle(host), host, queue=queue, restart=restarts.append)
+    assert result["status"] == "installed"
+    assert len(restarts) == 1
+    assert (host / "app.py").read_bytes() == b"new = 2\n"
+
+
 def test_rollback_will_not_overwrite_foreign_writer(host):
     def restart(_):
         (host / "app.py").write_text("foreign = 4\n")

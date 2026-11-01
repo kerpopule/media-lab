@@ -166,14 +166,20 @@ def apply_bundle(bundle, root, dry_run=False, queue=None, restart=None):
             with urllib.request.urlopen(req, timeout=5) as response:
                 return json.load(response)
 
-        def idle():
+        def known_queue():
             doc = (queue or actual_queue)()
             if not isinstance(doc, dict) or not (
                 "active_total" in doc or isinstance(doc.get("active"), list)
             ):
                 raise ValueError("queue state unknown")
             active = doc.get("active_total", len(doc.get("active", [])))
-            if type(active) is not int or active != 0 or doc.get("active"):
+            if type(active) is not int or active < 0:
+                raise ValueError("queue state unknown")
+            return doc, active
+
+        def idle():
+            doc, active = known_queue()
+            if active != 0 or doc.get("active"):
                 raise ValueError("queue is active")
 
         def real_restart(unit):
@@ -229,13 +235,14 @@ def apply_bundle(bundle, root, dry_run=False, queue=None, restart=None):
             for entry in rows:
                 if digest((root / entry["path"]).read_bytes()) != entry["after"]:
                     raise ValueError("installed file readback failed: " + entry["path"])
-            # Health must be authenticated JSON with a known, idle queue.
+            # Readiness is known authenticated JSON, not idleness: a healthy
+            # new job after restart must never trigger a rollback/restart.
             import time
 
             deadline = time.monotonic() + (0 if queue else 90)
             while True:
                 try:
-                    idle()
+                    known_queue()
                     break
                 except Exception:
                     if time.monotonic() >= deadline:
