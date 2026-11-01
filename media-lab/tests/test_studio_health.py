@@ -1,6 +1,8 @@
 """GET /api/health: one read-only ok / warn / action answer."""
+import gc
 import json
 import os
+import sqlite3
 import time
 from pathlib import Path
 
@@ -91,7 +93,19 @@ def test_collect_reads_files_and_the_lease_read_only(tmp_path, monkeypatch):
     lease = p.acquire(job_id="idle-restore-h3", engine="h3", task="t2va", owner="old")
     lease._fd.close()
     p.recover_startup()
+    # sqlite3's transaction context does not close its connection. Finalizing
+    # earlier fixture writers can checkpoint WAL at an unrelated GC allocation
+    # (notably Python 3.12/Linux). Finish that setup before measuring the reader.
+    gc.collect()
     before = (pool / "gpu-lease.sqlite3").stat().st_mtime_ns
+    before_bytes = (pool / "gpu-lease.sqlite3").read_bytes()
+    read_lease = sh.lease_row
+
+    def read_during_gc(db):
+        gc.collect()  # reproduce the allocation timing that exposed the failure
+        return read_lease(db)
+
+    monkeypatch.setattr(sh, "lease_row", read_during_gc)
     monkeypatch.setattr(sh, "text_models", lambda url, timeout=2.0: ["media-lab-text"])
     jobs = {"q1": {"status": "queued", "added": NOW - 1200}}
     doc = sh.collect(root=root, now=NOW, boot_id="boot-a", jobs=jobs, queue_ids=["q1"],
@@ -99,6 +113,7 @@ def test_collect_reads_files_and_the_lease_read_only(tmp_path, monkeypatch):
                      sol_state=lambda: {"loaded": True, "task": "t2va", "variant": "fl2va"},
                      restarts=lambda: 0)
     assert (pool / "gpu-lease.sqlite3").stat().st_mtime_ns == before
+    assert (pool / "gpu-lease.sqlite3").read_bytes() == before_bytes
     assert doc["level"] == "action"
     assert doc["gpu"]["lease"]["reason"] == "owner-exited"
     assert doc["gpu"]["hold"]["age_s"] == 1500
@@ -107,6 +122,21 @@ def test_collect_reads_files_and_the_lease_read_only(tmp_path, monkeypatch):
     assert doc["deployed"] == {"tag": "deploy-x", "commit": "abc"}
     assert doc["statesnap_age_s"] == 120
     assert any("recovery hold" in r for r in doc["reasons"])
+
+
+def test_lease_reader_observes_live_wal_without_modifying_database(tmp_path):
+    db = tmp_path / "lease.sqlite3"
+    writer = sqlite3.connect(db, isolation_level=None)
+    try:
+        assert writer.execute("PRAGMA journal_mode=WAL").fetchone()[0] == "wal"
+        writer.execute("CREATE TABLE gpu_lease(singleton INTEGER PRIMARY KEY, reason TEXT)")
+        writer.execute("INSERT INTO gpu_lease VALUES(1, 'live-wal-row')")
+        wal = Path(str(db) + "-wal")
+        before = {p: (p.stat().st_mtime_ns, p.read_bytes()) for p in (db, wal)}
+        assert sh.lease_row(db) == {"singleton": 1, "reason": "live-wal-row"}
+        assert {p: (p.stat().st_mtime_ns, p.read_bytes()) for p in (db, wal)} == before
+    finally:
+        writer.close()
 
 
 def test_the_route_is_behind_the_family_door(tmp_path, monkeypatch):
