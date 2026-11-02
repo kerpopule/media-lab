@@ -65,6 +65,63 @@ SPARK=user@spark media-lab/tools/deploy-spark.sh v1.4.0             # ship it
     "files_list": ["app.py", "…"]}
    ```
 
+## Selective releases for hosts with private code integrations
+
+The whole-tree entrypoint refuses a missing/malformed receipt or any recorded
+`private_overlays` / `scoped_releases`, including during dry-run, before staging.
+Do **not** use the whole-tree path on a host whose actual code differs from its
+base receipt. The additive scoped path preserves all unselected files, model
+runtimes, private integrations and the existing base/overlay receipt:
+
+```sh
+SPARK=user@spark tools/deploy-spark.sh TAG --scoped-plan /private/release-plan.json --dry-run
+SPARK=user@spark tools/deploy-spark.sh TAG --scoped-plan /private/release-plan.json
+```
+
+Run from the repository root (prefix `media-lab/` on the tool path). The plan is
+private operator evidence, never public source. Schema 1 binds `commit` to the
+tag's exact commit and `files` to an explicit nonempty list (maximum 100):
+
+```json
+{"schema":1,"commit":"<tag commit>","files":[
+  {"path":"app.py","before":"<live SHA-256>",
+   "tag_sha256":"<tagged app.py SHA-256>","after":"<composed SHA-256>",
+   "composed":"composition/app.py"}
+]}
+```
+
+Omit `composed` to install the exact tagged file; use `before: null` only for a
+new file. A composed file is a reviewed, tested private integration of that
+selected tagged change with the installed code, not a claim that its bytes are
+identical to the public tag. Preserve the composition recipe, preimages and
+proof privately. The deploy receipt retains both hashes and the composition
+flag. A tag/source hash authenticates provenance only relative to the local git
+repository; it is not a signature or an independent security review.
+
+The shell entrypoint extracts the helper from the **tag**, not the working
+checkout. The helper validates paths, hashes, duplicate entries and Python
+syntax before SSH. The remote side holds an operator deployment lock, rejects
+symlink targets, verifies exact live preimages and an authenticated idle queue,
+stages and backs up only selected files, and checks preimages/ownership again
+immediately before replacement. Unknown/unreachable/refused queues fail closed.
+It does not install dependencies, change GPU models, manipulate leases, delete
+unselected files or overwrite configuration/state. With an existing paired
+reservation it restarts only `media-lab-web.service`; otherwise it restarts the
+normal Media Lab user unit. Installed hashes, authenticated queue readiness and
+the appended `scoped_releases` receipt are read back before success is reported.
+
+Handled install/restart/readiness failures restore this release's files and
+restart only if the original pair ownership is still unchanged. Rollback refuses
+to overwrite intervening foreign bytes; it reports that conflict and keeps its
+backups. The lock coordinates scoped deployments, **not** arbitrary editors or
+the pair controller. Observed ownership changes stop the operation, but these
+checks are not a controller transaction. Coordinate host maintenance normally.
+Per-file replacements are atomic, **not** a multi-file crash transaction: a
+machine/process crash can leave a partial release requiring the retained
+`manifest.json`, `preimage/` and `deployed-source.before.json` in the reported
+backup directory. Do not interpret dry-run as a deployment, source compilation
+as runtime qualification, or JSON readiness as physical-device/HDR acceptance.
+
 ## Rollback
 
 Every deploy leaves its pre-image at the `rollback` path in the receipt:

@@ -19,7 +19,16 @@
 # untouched; an error after it prints the rollback command.
 set -Eeuo pipefail
 
-TAG="${1:?usage: deploy-spark.sh <tag> [--dry-run]}"
+TAG="${1:?usage: deploy-spark.sh <tag> [--dry-run | --scoped-plan PLAN [--dry-run]]}"
+if [[ "${2:-}" == "--scoped-plan" ]]; then
+  [[ -n "${3:-}" && ( $# -eq 3 || ( $# -eq 4 && "$4" == "--dry-run" ) ) ]] || { printf '%s\n' 'invalid scoped release arguments' >&2; exit 2; }
+  [[ "$TAG" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]] || exit 2
+  SCOPED_TOOL="$(mktemp)"; trap 'rm -f "$SCOPED_TOOL"' EXIT
+  git show "refs/tags/$TAG:media-lab/tools/scoped_release.py" > "$SCOPED_TOOL"
+  python3 "$SCOPED_TOOL" "$@"
+  exit $?
+fi
+[[ $# -eq 1 || ( $# -eq 2 && "$2" == "--dry-run" ) ]] || { printf '%s\n' 'unknown deployment option' >&2; exit 2; }
 DRY=0; [[ "${2:-}" == "--dry-run" ]] && DRY=1
 SPARK="${SPARK:-${MEDIA_LAB_SSH:-}}"
 REMOTE_HOME="${REMOTE_HOME:-media-lab-simple}"          # relative to the remote $HOME
@@ -42,6 +51,9 @@ say()  { printf '\033[1m==> %s\033[0m\n' "$*"; }
 die()  { echo "deploy-spark: $*" >&2; exit 1; }
 rssh() { ssh -o BatchMode=yes -o ConnectTimeout=10 "$SPARK" "$@"; }
 REMOTE_ABS_HOME="$(rssh 'printf %s "$HOME"')"
+# A receipt with private/scoped code is not a pristine whole-tree preimage.
+# Refuse before staging, even for dry-run; use an explicit hash-bound plan.
+rssh "python3 -c 'import json,sys; from pathlib import Path; d=json.loads(Path(sys.argv[1]).read_text()); sys.exit(1 if d.get(\"private_overlays\") or d.get(\"scoped_releases\") else 0)' '$REMOTE_HOME/deployed-source.json'" || die "whole-tree deployment refused: missing receipt or private/scoped integrations; use --scoped-plan"
 # The public web origin stays CPU-only while the paired GPU reservation exists.
 if [[ "$SERVICE" == "media-lab-simple.service" ]] && rssh 'test -f "$HOME/.local/state/spark-pair-control/reservation.json"'; then
   rssh 'test -f "$HOME/.config/systemd/user/media-lab-web.service"' || die "pair reserved but web-only service missing; refusing legacy restart"
