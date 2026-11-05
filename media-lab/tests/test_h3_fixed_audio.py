@@ -38,7 +38,10 @@ def test_opt_in_start_anchor_uses_actual_installed_h3_guide_in_both_passes():
         'positive':['56',0],'latent':['56',1],'vae':['65',0],
         'image':['173',0],'frame_idx':0}}
     assert g['57']['inputs']['conditioning']==['214',0]
-    assert g['126']['inputs']['conditioning']==['214',0]
+    assert g['215']=={'class_type':'MiniMaxH3AddGuide','inputs':{
+        'positive':['56',0],'latent':['105',0],'vae':['65',0],
+        'image':['173',0],'frame_idx':0}}
+    assert g['126']['inputs']['conditioning']==['215',0]
     assert g['108']['inputs']['latent_image']==['56',1]
     assert '214' not in graph(image_refs=['fresh.png'])
 

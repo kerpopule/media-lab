@@ -322,8 +322,13 @@ def build_graph(*, prompt: str, frames: int, orientation: str, seed: int, prefix
         g['214'] = {'class_type':'MiniMaxH3AddGuide','inputs':{
             'positive':['56',0],'latent':['56',1],'vae':['65',0],
             'image':[str(170+start_frame_ref_index),0],'frame_idx':0}}
+        # Native keyframes share the target spatial grid. Re-encode against the
+        # upscaled second-pass latent rather than reusing a low-res keyframe.
+        g['215'] = {'class_type':'MiniMaxH3AddGuide','inputs':{
+            'positive':['56',0],'latent':['105',0],'vae':['65',0],
+            'image':[str(170+start_frame_ref_index),0],'frame_idx':0}}
         g['57']['inputs']['conditioning'] = ['214',0]
-        g['126']['inputs']['conditioning'] = ['214',0]
+        g['126']['inputs']['conditioning'] = ['215',0]
     return g
 
 
