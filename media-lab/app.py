@@ -1841,7 +1841,13 @@ def _h3_preserved_audio_error(request):
 def make_video_job(request):
     request = normalize_video_source(dict(request))
     request["v2v_wardrobe"] = str(request.get("v2v_wardrobe") or "").strip()[:300]
-    prompt = str(request.get("prompt", "")).strip()[:2000]
+    prompt = str(request.get("prompt", "")).strip()
+    native_h3_prompt = request.get('model') in ('h3','h3-real') and _h3ref.wants_singularity(request)
+    if native_h3_prompt:
+        if len(prompt)>8000:
+            raise ValueError('H3 Real / Long prompts must be at most 8000 characters; refusing silent truncation.')
+    else:
+        prompt = prompt[:2000]
     style = STYLES.get(request.get("style", "none"), STYLES["none"])
     if request.get("model") == "fal-video" and not fal_ready():
         raise ValueError("fal.ai isn't set up — add your API key in Cloud providers.")

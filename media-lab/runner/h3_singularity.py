@@ -307,15 +307,10 @@ def build_graph(*, prompt: str, frames: int, orientation: str, seed: int, prefix
             "audio_file": str(ref["path"]), "seek_seconds": float(ref.get("start_sec") or 0.0),
             "duration": float(ref.get("duration") or 0.0)}}
         g["56"]["inputs"][f"ref_audios.ref_audio_{i}"] = [nid, 0]
-    if preserve_audio:
-        # References alone can invent different words. These existing, generic
-        # AV nodes also support H3: encode its own audio VAE and preserve the
-        # clean stream via a zero denoise mask. No LTX model is involved.
-        g['210'] = {'class_type': 'VAEEncodeAudio', 'inputs': {'audio': ['190', 0], 'vae': ['66', 0]}}
-        g['211'] = {'class_type': 'SolidMask', 'inputs': {'value': 0.0, 'width': 64, 'height': 64}}
-        g['212'] = {'class_type': 'SetLatentNoiseMask', 'inputs': {'samples': ['210', 0], 'mask': ['211', 0]}}
-        g['213'] = {'class_type': 'LTXVConcatAVLatent', 'inputs': {'video_latent': ['56', 1], 'audio_latent': ['212', 0]}}
-        g['108']['inputs']['latent_image'] = ['213', 0]
+    # Supplied audio is time-anchored below through the model's own native
+    # MiniMaxH3AddGuide audio input. Generic AV zero-noise masking is deliberately
+    # excluded: two real masked takes did not preserve the supplied waveform,
+    # whereas the same installed audio codec independently roundtripped it.
     if start_frame_ref_index is not None:
         # A picture reference only describes a scene. Use the installed native
         # H3 keyframe condition to actually anchor it at frame zero in BOTH passes.
@@ -342,8 +337,9 @@ def build_graph(*, prompt: str, frames: int, orientation: str, seed: int, prefix
                     'audio_vae':['66',0], 'frame_idx':0}}
             g['57']['inputs']['conditioning'] = ['216',0]
             g['126']['inputs']['conditioning'] = ['217',0]
-        # Sampler output 1 is the raw x0 prediction, before output-mask blending.
-        # Only output 0 retains the pinned audio values. Picture routing stays as-is.
+        # Decode the selected sampler result, not the separate raw x0 callback.
+        # A native audio guide is conditioning, not a promise of byte-exact audio;
+        # actual words and the original delivery master remain separate QA gates.
         g['110']['inputs']['samples'] = ['106',0]
     return g
 

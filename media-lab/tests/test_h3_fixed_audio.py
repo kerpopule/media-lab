@@ -14,20 +14,21 @@ def graph(**kwargs):
     return sing.build_graph(prompt='fixture',frames=192,orientation='landscape',seed=1,prefix='fixture',**kwargs)
 
 
-def test_fixed_audio_uses_existing_h3_vae_and_zero_audio_mask_in_both_passes():
+def test_original_audio_uses_native_guides_without_unqualified_generic_masks():
     g=graph(audio_refs=[{'path':'/private/approved.wav'}],preserve_audio=True)
-    assert g['210']=={'class_type':'VAEEncodeAudio','inputs':{'audio':['190',0],'vae':['66',0]}}
-    assert g['211']['class_type']=='SolidMask' and g['211']['inputs']['value']==0.0
-    assert g['212']=={'class_type':'SetLatentNoiseMask','inputs':{'samples':['210',0],'mask':['211',0]}}
-    assert g['213']=={'class_type':'LTXVConcatAVLatent','inputs':{'video_latent':['56',1],'audio_latent':['212',0]}}
-    assert g['108']['inputs']['latent_image']==['213',0]
+    assert not any(n in g for n in ('210','211','212','213'))
+    assert g['216']['class_type']=='MiniMaxH3AddGuide'
+    assert g['217']['class_type']=='MiniMaxH3AddGuide'
+    assert g['216']['inputs']['audio']==g['217']['inputs']['audio']==['190',0]
+    assert g['216']['inputs']['audio_vae']==g['217']['inputs']['audio_vae']==['66',0]
+    assert g['108']['inputs']['latent_image']==['56',1]
     assert g['105']['inputs']['audio_latent']==['102',1]
     assert g['102']['inputs']['av_latent']==['108',0]
     assert g['106']['inputs']['latent_image']==['105',0]
     assert g['69']['inputs']['unet_name']==sing.DEFAULT_MODELS['dit']
 
 
-def test_preserved_audio_final_decode_uses_masked_sampler_result_not_raw_x0():
+def test_guided_audio_final_decode_uses_sampler_result():
     g=graph(audio_refs=[{'path':'/private/approved.wav'}],preserve_audio=True)
     assert g['110']['inputs']['samples']==['106',0]
     assert g['109']['inputs']['samples']==['106',1]  # preserve existing picture recipe
@@ -179,7 +180,9 @@ def test_real_renderer_request_spec_checks_the_full_audio_timeline(tmp_path,dura
         with pytest.raises(sing.SingularityRequestError,match='entire'):pipe.request_spec(request,'fixture')
     else:
         spec=pipe.request_spec(request,'fixture')
-        assert spec['preserve_audio'] is True and sing.build_graph(**spec)['108']['inputs']['latent_image']==['213',0]
+        g=sing.build_graph(**spec)
+        assert spec['preserve_audio'] is True and g['108']['inputs']['latent_image']==['56',1]
+        assert g['216']['inputs']['audio']==['190',0]
     assert pipe.process is None
 
 
