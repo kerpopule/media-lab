@@ -341,6 +341,12 @@ def build_graph(*, prompt: str, frames: int, orientation: str, seed: int, prefix
         # A native audio guide is conditioning, not a promise of byte-exact audio;
         # actual words and the original delivery master remain separate QA gates.
         g['110']['inputs']['samples'] = ['106',0]
+        # Keep byte-bound audio transport/codec witnesses under this SAME native
+        # queue job and GPU lease. They never feed sampling or replace its sound.
+        g['218'] = {'class_type':'VAEEncodeAudio','inputs':{'audio':['190',0],'vae':['66',0]}}
+        g['219'] = {'class_type':'VAEDecodeAudio','inputs':{'samples':['218',0],'vae':['66',0]}}
+        g['220'] = {'class_type':'SaveAudio','inputs':{'audio':['190',0],'filename_prefix':'qa-'+prefix+'-source-audio'}}
+        g['221'] = {'class_type':'SaveAudio','inputs':{'audio':['219',0],'filename_prefix':'qa-'+prefix+'-codec-audio'}}
     return g
 
 

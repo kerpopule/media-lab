@@ -53,6 +53,20 @@ def test_preserved_audio_uses_native_minimax_audio_guide_for_both_passes(anchore
         assert g[second]['inputs']['image']==['170',0]
 
 
+def test_audio_witnesses_are_isolated_from_sampling_and_generated_sound():
+    g=graph(audio_refs=[{'path':'/private/approved.wav'}],preserve_audio=True)
+    assert g['218']=={'class_type':'VAEEncodeAudio','inputs':{'audio':['190',0],'vae':['66',0]}}
+    assert g['219']=={'class_type':'VAEDecodeAudio','inputs':{'samples':['218',0],'vae':['66',0]}}
+    assert g['220']['inputs']['audio']==['190',0]
+    assert g['221']['inputs']['audio']==['219',0]
+    assert g['220']['inputs']['filename_prefix']=='qa-fixture-source-audio'
+    assert g['221']['inputs']['filename_prefix']=='qa-fixture-codec-audio'
+    assert g['108']['inputs']['latent_image']==['56',1]
+    assert g['141']['inputs']['audio']==['110',0]
+    assert not any(v['class_type']=='SetLatentNoiseMask' for v in g.values())
+    assert '218' not in graph(audio_refs=[{'path':'/private/approved.wav'}])
+
+
 def test_default_h3_graph_is_exactly_unchanged():
     assert graph(audio_refs=[{'path':'/private/approved.wav'}])==graph(audio_refs=[{'path':'/private/approved.wav'}],preserve_audio=False)
     assert '210' not in graph()
