@@ -210,7 +210,8 @@ def build_graph(*, prompt: str, frames: int, orientation: str, seed: int, prefix
                 image_refs=(), video_refs=(), audio_refs=(), ref_image_size: str = "max",
                 upscale: float = DEFAULT_UPSCALE, models: dict | None = None,
                 width: int | None = None, height: int | None = None,
-                sampling_steps: int = 6, preserve_audio: bool = False) -> dict:
+                sampling_steps: int = 6, preserve_audio: bool = False,
+                start_frame_ref_index: int | None = None) -> dict:
     """ComfyUI API graph for one dual-sampling render.
 
     image_refs: input-directory filenames (<= 9). video_refs: dicts with an
@@ -219,6 +220,9 @@ def build_graph(*, prompt: str, frames: int, orientation: str, seed: int, prefix
     (<= 3). ``width``/``height`` override the 0.5 MP first-pass canvas (the
     warm-up uses a tiny one)."""
     m = {**DEFAULT_MODELS, **(models or {})}
+    if start_frame_ref_index is not None and (type(start_frame_ref_index) is not int or
+            not 0 <= start_frame_ref_index < len(image_refs)):
+        raise SingularityRequestError('Opening-frame anchor must name one explicit image reference')
     if type(preserve_audio) is not bool:
         raise SingularityRequestError('preserve_audio must be a boolean')
     if preserve_audio and len(audio_refs) != 1:
@@ -312,6 +316,14 @@ def build_graph(*, prompt: str, frames: int, orientation: str, seed: int, prefix
         g['212'] = {'class_type': 'SetLatentNoiseMask', 'inputs': {'samples': ['210', 0], 'mask': ['211', 0]}}
         g['213'] = {'class_type': 'LTXVConcatAVLatent', 'inputs': {'video_latent': ['56', 1], 'audio_latent': ['212', 0]}}
         g['108']['inputs']['latent_image'] = ['213', 0]
+    if start_frame_ref_index is not None:
+        # A picture reference only describes a scene. Use the installed native
+        # H3 keyframe condition to actually anchor it at frame zero in BOTH passes.
+        g['214'] = {'class_type':'MiniMaxH3AddGuide','inputs':{
+            'positive':['56',0],'latent':['56',1],'vae':['65',0],
+            'image':[str(170+start_frame_ref_index),0],'frame_idx':0}}
+        g['57']['inputs']['conditioning'] = ['214',0]
+        g['126']['inputs']['conditioning'] = ['214',0]
     return g
 
 
@@ -562,6 +574,9 @@ class SingularityPipeline:
         if preserve_audio and len(arefs) != 1:
             raise SingularityRequestError('Fixed audio requires exactly one full-timeline audio clip')
         start_b64 = str(req.get("start_image_b64") or "").strip()
+        anchor_start_frame = req.get('anchor_start_frame',False)
+        if type(anchor_start_frame) is not bool or (anchor_start_frame and not start_b64):
+            raise SingularityRequestError('Opening-frame anchor requires a boolean flag and a supplied starting image')
         if len(refs) + (1 if start_b64 else 0) > IMAGE_REF_MAX:
             raise SingularityRequestError(f"Real / Long takes at most {IMAGE_REF_MAX} reference pictures")
         if len(vrefs) > VIDEO_REF_MAX:
@@ -623,7 +638,8 @@ class SingularityPipeline:
                 "seed": int(req.get("seed") or 0), "prefix": rid, "image_refs": image_names,
                 "video_refs": video_specs, "audio_refs": audio_specs,
                 "ref_image_size": detail if detail in ("match", "max") else "max",
-                "upscale": upscale, "models": self.models, "preserve_audio": preserve_audio}
+                "upscale": upscale, "models": self.models, "preserve_audio": preserve_audio,
+                "start_frame_ref_index": start_pic-1 if anchor_start_frame and start_pic is not None else None}
 
     def generate(self, req: dict, rid: str, timeout_s: float = 4 * 3600.0) -> dict:
         spec = self.request_spec(req, rid)

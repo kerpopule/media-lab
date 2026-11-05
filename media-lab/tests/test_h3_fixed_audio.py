@@ -32,6 +32,22 @@ def test_default_h3_graph_is_exactly_unchanged():
     assert '210' not in graph()
 
 
+def test_opt_in_start_anchor_uses_actual_installed_h3_guide_in_both_passes():
+    g=graph(image_refs=['heather.png','steve.png','church.png','fresh.png'],start_frame_ref_index=3)
+    assert g['214']=={'class_type':'MiniMaxH3AddGuide','inputs':{
+        'positive':['56',0],'latent':['56',1],'vae':['65',0],
+        'image':['173',0],'frame_idx':0}}
+    assert g['57']['inputs']['conditioning']==['214',0]
+    assert g['126']['inputs']['conditioning']==['214',0]
+    assert g['108']['inputs']['latent_image']==['56',1]
+    assert '214' not in graph(image_refs=['fresh.png'])
+
+
+@pytest.mark.parametrize('index',[-1,4,True,'3'])
+def test_start_anchor_index_is_explicit_and_in_range(index):
+    with pytest.raises(sing.SingularityRequestError):graph(image_refs=['a','b','c','d'],start_frame_ref_index=index)
+
+
 @pytest.mark.parametrize('refs',[[],[{'path':'a'},{'path':'b'}]])
 def test_fixed_audio_requires_one_unambiguous_master(refs):
     with pytest.raises(sing.SingularityRequestError):graph(audio_refs=refs,preserve_audio=True)
@@ -47,6 +63,31 @@ def test_request_model_keeps_explicit_audio_lock():
     assert r.model_dump()['h3_preserve_audio'] is True
 
 
+@pytest.mark.parametrize('enabled',[False,True])
+def test_parser_maps_only_supplied_start_to_guide_and_preserves_ref_order(tmp_path,enabled):
+    pipe=sing.SingularityPipeline({'H3_SINGULARITY_COMFY_DIR':str(tmp_path),'H3_SINGULARITY_MODELS_ROOT':str(tmp_path)},tmp_path/'runtime',media_dir=tmp_path)
+    pipe.comfy.dirs['in'].mkdir(parents=True)
+    # Parser transport fixture; no inference or identity assertion.
+    b64=base64.b64encode(b'fixture-bytes').decode()
+    req={'frames':192,'prompt':'fixture','references':[{'b64':b64,'role':x} for x in ['Heather','Steve','church']],
+         'start_image_b64':b64,'anchor_start_frame':enabled}
+    spec=pipe.request_spec(req,'fixture')
+    assert spec['image_refs']==['fixture-ref0.png','fixture-ref1.png','fixture-ref2.png','fixture-start.png']
+    assert spec['start_frame_ref_index']==(3 if enabled else None)
+
+
+@pytest.mark.parametrize('value',[True,'true',1])
+def test_anchor_parser_refuses_missing_start_or_nonboolean(tmp_path,value):
+    pipe=sing.SingularityPipeline({'H3_SINGULARITY_COMFY_DIR':str(tmp_path),'H3_SINGULARITY_MODELS_ROOT':str(tmp_path)},tmp_path/'runtime',media_dir=tmp_path)
+    with pytest.raises(sing.SingularityRequestError,match='starting image'):
+        pipe.request_spec({'anchor_start_frame':value},'fixture')
+
+
+@pytest.mark.parametrize('payload',[{'model':'ltx25','source':'/media/a.png'}, {'model':'h3','h3_engine':'singularity'}])
+def test_anchor_api_policy_refuses_wrong_engine_or_missing_image(payload):
+    assert app._h3_preserved_audio_error({**payload,'h3_anchor_first_frame':True})
+
+
 @pytest.mark.parametrize('changes',[{'model':'ltx25'},{'audio_references':[]},{'audio_references':[{'source':'/media/a.wav'},{'source':'/media/b.wav'}]},{'h3_preserve_audio':'true'}])
 def test_audio_lock_policy_fails_closed(changes):
     r={'model':'h3','h3_engine':'singularity','h3_preserve_audio':True,'audio_references':[{'source':'/media/a.wav'}]}
@@ -55,8 +96,11 @@ def test_audio_lock_policy_fails_closed(changes):
 
 
 @pytest.mark.parametrize('enabled',[False,True])
-def test_actual_video_worker_forwards_only_explicit_audio_lock(monkeypatch,enabled):
+@pytest.mark.parametrize('anchor',[False,True])
+def test_actual_video_worker_forwards_only_explicit_audio_lock(monkeypatch,tmp_path,enabled,anchor):
     captured=[]
+    source=tmp_path/'fresh.png';source.write_bytes(b'fixture-image-transport')
+    monkeypatch.setattr(app,'media_path',lambda *a:source)
     monkeypatch.setattr(app,'save_state',lambda:None)
     monkeypatch.setattr(app,'_h3_v2v_stage',lambda j:([],None))
     monkeypatch.setattr(app,'_stage_audio_references',lambda *a:[{'file':'approved.wav','role':'original'}])
@@ -68,10 +112,15 @@ def test_actual_video_worker_forwards_only_explicit_audio_lock(monkeypatch,enabl
         return {'ok':False,'error':'synthetic stop after actual worker body capture'}
     monkeypatch.setattr(app,'engine_generate',render)
     j={'id':'fixture','engine':'h3','frames':192,'w':1216,'h':672,'full_prompt':'fixture',
-       'request':{'model':'h3','h3_engine':'singularity','seed':1,'h3_preserve_audio':enabled,'audio_references':[{'source':'/media/approved.wav'}]}}
+       'request':{'model':'h3','h3_engine':'singularity','seed':1,'h3_preserve_audio':enabled,
+                  'source':'/media/fresh.png' if anchor else '', 'h3_anchor_first_frame':anchor,
+                  'audio_references':[{'source':'/media/approved.wav'}]}}
     app.run_video(j)
     assert len(captured)==1
     assert captured[0].get('preserve_audio',False) is enabled
+    assert captured[0].get('anchor_start_frame',False) is anchor
+    if anchor:
+        assert captured[0]['start_image_b64']==base64.b64encode(source.read_bytes()).decode()
 
 
 def test_short_pinned_audio_fails_before_allocation(tmp_path,monkeypatch):
