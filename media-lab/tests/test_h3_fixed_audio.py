@@ -27,6 +27,31 @@ def test_fixed_audio_uses_existing_h3_vae_and_zero_audio_mask_in_both_passes():
     assert g['69']['inputs']['unet_name']==sing.DEFAULT_MODELS['dit']
 
 
+def test_preserved_audio_final_decode_uses_masked_sampler_result_not_raw_x0():
+    g=graph(audio_refs=[{'path':'/private/approved.wav'}],preserve_audio=True)
+    assert g['110']['inputs']['samples']==['106',0]
+    assert g['109']['inputs']['samples']==['106',1]  # preserve existing picture recipe
+
+
+@pytest.mark.parametrize('anchored',[False,True])
+def test_preserved_audio_uses_native_minimax_audio_guide_for_both_passes(anchored):
+    kw={'image_refs':['fresh.png'],'start_frame_ref_index':0} if anchored else {}
+    g=graph(audio_refs=[{'path':'/private/approved.wav'}],preserve_audio=True,**kw)
+    first,second=('214','215') if anchored else ('216','217')
+    for key,latent in [(first,['56',1]),(second,['105',0])]:
+        assert g[key]['class_type']=='MiniMaxH3AddGuide'
+        assert g[key]['inputs']['audio']==['190',0]
+        assert g[key]['inputs']['audio_vae']==['66',0]
+        assert g[key]['inputs']['positive']==['56',0]
+        assert g[key]['inputs']['latent']==latent
+        assert g[key]['inputs']['frame_idx']==0
+    assert g['57']['inputs']['conditioning']==[first,0]
+    assert g['126']['inputs']['conditioning']==[second,0]
+    if anchored:
+        assert g[first]['inputs']['image']==['170',0]
+        assert g[second]['inputs']['image']==['170',0]
+
+
 def test_default_h3_graph_is_exactly_unchanged():
     assert graph(audio_refs=[{'path':'/private/approved.wav'}])==graph(audio_refs=[{'path':'/private/approved.wav'}],preserve_audio=False)
     assert '210' not in graph()

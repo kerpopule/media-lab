@@ -329,6 +329,22 @@ def build_graph(*, prompt: str, frames: int, orientation: str, seed: int, prefix
             'image':[str(170+start_frame_ref_index),0],'frame_idx':0}}
         g['57']['inputs']['conditioning'] = ['214',0]
         g['126']['inputs']['conditioning'] = ['215',0]
+    if preserve_audio:
+        # Use H3's native time-indexed audio guide, not only a generic AV mask.
+        # Keep the existing references and first-frame guide in each pass.
+        if start_frame_ref_index is not None:
+            for nid in ('214','215'):
+                g[nid]['inputs'].update(audio=['190',0], audio_vae=['66',0])
+        else:
+            for nid, target in (('216',['56',1]),('217',['105',0])):
+                g[nid] = {'class_type':'MiniMaxH3AddGuide','inputs':{
+                    'positive':['56',0], 'latent':target, 'audio':['190',0],
+                    'audio_vae':['66',0], 'frame_idx':0}}
+            g['57']['inputs']['conditioning'] = ['216',0]
+            g['126']['inputs']['conditioning'] = ['217',0]
+        # Sampler output 1 is the raw x0 prediction, before output-mask blending.
+        # Only output 0 retains the pinned audio values. Picture routing stays as-is.
+        g['110']['inputs']['samples'] = ['106',0]
     return g
 
 
