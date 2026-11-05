@@ -210,7 +210,7 @@ def build_graph(*, prompt: str, frames: int, orientation: str, seed: int, prefix
                 image_refs=(), video_refs=(), audio_refs=(), ref_image_size: str = "max",
                 upscale: float = DEFAULT_UPSCALE, models: dict | None = None,
                 width: int | None = None, height: int | None = None,
-                sampling_steps: int = 6) -> dict:
+                sampling_steps: int = 6, preserve_audio: bool = False) -> dict:
     """ComfyUI API graph for one dual-sampling render.
 
     image_refs: input-directory filenames (<= 9). video_refs: dicts with an
@@ -219,6 +219,10 @@ def build_graph(*, prompt: str, frames: int, orientation: str, seed: int, prefix
     (<= 3). ``width``/``height`` override the 0.5 MP first-pass canvas (the
     warm-up uses a tiny one)."""
     m = {**DEFAULT_MODELS, **(models or {})}
+    if type(preserve_audio) is not bool:
+        raise SingularityRequestError('preserve_audio must be a boolean')
+    if preserve_audio and len(audio_refs) != 1:
+        raise SingularityRequestError('Fixed audio requires exactly one full-timeline audio clip')
     if len(image_refs) > IMAGE_REF_MAX:
         raise SingularityRequestError(f"Real / Long takes at most {IMAGE_REF_MAX} reference pictures")
     if len(video_refs) > VIDEO_REF_MAX:
@@ -299,6 +303,15 @@ def build_graph(*, prompt: str, frames: int, orientation: str, seed: int, prefix
             "audio_file": str(ref["path"]), "seek_seconds": float(ref.get("start_sec") or 0.0),
             "duration": float(ref.get("duration") or 0.0)}}
         g["56"]["inputs"][f"ref_audios.ref_audio_{i}"] = [nid, 0]
+    if preserve_audio:
+        # References alone can invent different words. These existing, generic
+        # AV nodes also support H3: encode its own audio VAE and preserve the
+        # clean stream via a zero denoise mask. No LTX model is involved.
+        g['210'] = {'class_type': 'VAEEncodeAudio', 'inputs': {'audio': ['190', 0], 'vae': ['66', 0]}}
+        g['211'] = {'class_type': 'SolidMask', 'inputs': {'value': 0.0, 'width': 64, 'height': 64}}
+        g['212'] = {'class_type': 'SetLatentNoiseMask', 'inputs': {'samples': ['210', 0], 'mask': ['211', 0]}}
+        g['213'] = {'class_type': 'LTXVConcatAVLatent', 'inputs': {'video_latent': ['56', 1], 'audio_latent': ['212', 0]}}
+        g['108']['inputs']['latent_image'] = ['213', 0]
     return g
 
 
@@ -543,6 +556,11 @@ class SingularityPipeline:
         arefs = [a for a in (req.get("audio_references") or []) if isinstance(a, dict)]
         if req.get("audio_wav_b64"):
             arefs.append({"b64": req["audio_wav_b64"], "role": "voice and delivery of the line"})
+        preserve_audio = req.get('preserve_audio', False)
+        if type(preserve_audio) is not bool:
+            raise SingularityRequestError('preserve_audio must be a boolean')
+        if preserve_audio and len(arefs) != 1:
+            raise SingularityRequestError('Fixed audio requires exactly one full-timeline audio clip')
         start_b64 = str(req.get("start_image_b64") or "").strip()
         if len(refs) + (1 if start_b64 else 0) > IMAGE_REF_MAX:
             raise SingularityRequestError(f"Real / Long takes at most {IMAGE_REF_MAX} reference pictures")
@@ -581,6 +599,18 @@ class SingularityPipeline:
                 path = self._staged_path(a, kind="audio clip")
             audio_specs.append({"path": path, "start_sec": a.get("start_sec") or 0.0})
             audio_roles.append(a.get("role") or "")
+        if preserve_audio:
+            # The generic AV fit node intentionally generates an unmasked tail
+            # for a short source. Refuse that case instead of calling it fixed.
+            spec = audio_specs[0]
+            try:
+                duration = float(json.loads(subprocess.check_output([
+                    'ffprobe', '-v', 'error', '-show_format', '-of', 'json', spec['path']], timeout=20))['format']['duration'])
+                start = float(spec['start_sec'])
+            except (OSError, ValueError, KeyError, subprocess.SubprocessError) as exc:
+                raise SingularityRequestError('Fixed audio duration is unreadable') from exc
+            if not math.isfinite(duration) or not math.isfinite(start) or start < 0 or duration-start+1/48000 < frames/FPS:
+                raise SingularityRequestError('Fixed audio must cover the entire generated timeline')
         detail = str(req.get("reference_detail") or "max")
         prompt = compose_prompt(req.get("prompt") or "", image_roles, video_roles, audio_roles,
                                 start_frame_picture=start_pic)
@@ -593,7 +623,7 @@ class SingularityPipeline:
                 "seed": int(req.get("seed") or 0), "prefix": rid, "image_refs": image_names,
                 "video_refs": video_specs, "audio_refs": audio_specs,
                 "ref_image_size": detail if detail in ("match", "max") else "max",
-                "upscale": upscale, "models": self.models}
+                "upscale": upscale, "models": self.models, "preserve_audio": preserve_audio}
 
     def generate(self, req: dict, rid: str, timeout_s: float = 4 * 3600.0) -> dict:
         spec = self.request_spec(req, rid)

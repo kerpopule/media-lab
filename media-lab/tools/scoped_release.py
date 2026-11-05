@@ -33,7 +33,7 @@ def safe_name(name):
         or any(part in {"..", ".", ""} for part in p.parts)
     ):
         raise ValueError("unsafe release path")
-    permitted = name in {"app.py", "web_only_policy.py"} or (
+    permitted = name in {"app.py", "web_only_policy.py", "runner/h3_singularity.py"} or (
         len(p.parts) > 1
         and p.parts[0] in {"media_lab_core", "static", "tests", "docs", "tools"}
         and p.suffix in {".py", ".html", ".js", ".css", ".md", ".json"}
