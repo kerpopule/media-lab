@@ -106,6 +106,7 @@ def make_composite_job(request):
         normalize_video_source=lambda value: value,
         STYLES={"none": {"prefix": ""}},
         fal_ready=lambda: True,
+        _h3_preserved_audio_error=function("_h3_preserved_audio_error", _h3ref=importlib.import_module("runner.h3_reference")),
         _h3ref=SimpleNamespace(
             wants_singularity=lambda value: False, H3_SINGULARITY_VARIANT="singularity",
             required_turbo_preset=lambda value: None,

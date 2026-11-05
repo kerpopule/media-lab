@@ -58,7 +58,7 @@ def test_default_h3_graph_is_exactly_unchanged():
 
 
 def test_opt_in_start_anchor_uses_actual_installed_h3_guide_in_both_passes():
-    g=graph(image_refs=['heather.png','steve.png','church.png','fresh.png'],start_frame_ref_index=3)
+    g=graph(image_refs=['lead-a.png','lead-b.png','setting.png','fresh.png'],start_frame_ref_index=3)
     assert g['214']=={'class_type':'MiniMaxH3AddGuide','inputs':{
         'positive':['56',0],'latent':['56',1],'vae':['65',0],
         'image':['173',0],'frame_idx':0}}
@@ -97,7 +97,7 @@ def test_parser_maps_only_supplied_start_to_guide_and_preserves_ref_order(tmp_pa
     pipe.comfy.dirs['in'].mkdir(parents=True)
     # Parser transport fixture; no inference or identity assertion.
     b64=base64.b64encode(b'fixture-bytes').decode()
-    req={'frames':192,'prompt':'fixture','references':[{'b64':b64,'role':x} for x in ['Heather','Steve','church']],
+    req={'frames':192,'prompt':'fixture','references':[{'b64':b64,'role':x} for x in ['Lead A','Lead B','setting']],
          'start_image_b64':b64,'anchor_start_frame':enabled}
     spec=pipe.request_spec(req,'fixture')
     assert spec['image_refs']==['fixture-ref0.png','fixture-ref1.png','fixture-ref2.png','fixture-start.png']
