@@ -12,6 +12,7 @@ from unittest.mock import Mock
 import pytest
 
 from media_lab_core import engine_licences
+from runner import h3_reference
 from .test_storyboard_retry_recovery import controller_functions, recovery
 
 
@@ -73,7 +74,7 @@ class AllocationBoundary(Exception):
 
 def make_fixture_video(request):
     maker = controller_functions(
-        "make_video_job", normalize_video_source=lambda r: r,
+        "make_video_job", "_h3_preserved_audio_error", normalize_video_source=lambda r: r,
         STYLES={"none": {"prefix": ""}},
         _h3ref=SimpleNamespace(required_turbo_preset=lambda r: None,
                                wants_singularity=lambda r: False,
@@ -135,7 +136,8 @@ def test_probe_budget_and_actual_runner_agree(recovery, tmp_path, kind, payload,
     assert not ns["RESIDENCY"].mock_calls
     # Run the actual consumer until just before any model allocation.
     allocation = Mock(side_effect=AllocationBoundary)
-    runner = controller_functions(runner_name, ensure_engine=allocation, **deps)
+    runner = controller_functions(runner_name, "_h3_preserved_audio_error", ensure_engine=allocation,
+                                  _h3ref=h3_reference, JOBS_DIR=tmp_path / "jobs", **deps)
     with pytest.raises(AllocationBoundary):
         runner[runner_name](job)
     execution_engine = allocation.call_args.args[0]

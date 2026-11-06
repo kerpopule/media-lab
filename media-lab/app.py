@@ -1818,10 +1818,41 @@ def normalize_video_source(request):
     return request
 
 
+def _h3_preserved_audio_error(request):
+    anchor = request.get('h3_anchor_first_frame',False)
+    if type(anchor) is not bool:
+        return 'h3_anchor_first_frame must be a boolean.'
+    if anchor and (request.get('model') not in ('h3','h3-real') or
+                   not _h3ref.wants_singularity(request) or not request.get('source')):
+        return 'Opening-frame anchoring requires H3 Real / Long and a supplied starting image.'
+    scene = request.get('h3_scene_keyframes', False)
+    if type(scene) is not bool:
+        return 'h3_scene_keyframes must be a boolean.'
+    if scene and not anchor:
+        return 'Scene keyframes require explicit opening-frame anchoring and the same supplied scene.'
+    enabled = request.get('h3_preserve_audio', False)
+    if type(enabled) is not bool:
+        return 'h3_preserve_audio must be a boolean.'
+    if not enabled:
+        return None
+    if request.get('model') not in ('h3', 'h3-real') or not _h3ref.wants_singularity(request):
+        return 'Fixed source audio requires H3 Real / Long; no silent engine substitution.'
+    refs = request.get('audio_references') or []
+    if len(refs) != 1 or len(_h3ref.normalize_audio_references(refs)) != 1:
+        return 'Fixed source audio requires exactly one full-timeline original audio reference.'
+    return None
+
+
 def make_video_job(request):
     request = normalize_video_source(dict(request))
     request["v2v_wardrobe"] = str(request.get("v2v_wardrobe") or "").strip()[:300]
-    prompt = str(request.get("prompt", "")).strip()[:2000]
+    prompt = str(request.get("prompt", "")).strip()
+    native_h3_prompt = request.get('model') in ('h3','h3-real') and _h3ref.wants_singularity(request)
+    if native_h3_prompt:
+        if len(prompt)>8000:
+            raise ValueError('H3 Real / Long prompts must be at most 8000 characters; refusing silent truncation.')
+    else:
+        prompt = prompt[:2000]
     style = STYLES.get(request.get("style", "none"), STYLES["none"])
     if request.get("model") == "fal-video" and not fal_ready():
         raise ValueError("fal.ai isn't set up — add your API key in Cloud providers.")
@@ -1861,6 +1892,8 @@ def make_video_job(request):
             raise ValueError("every audio reference must be a supported /media sound file "
                              "with a non-negative start time")
         request["audio_references"] = audio_usable
+    if (audio_error := _h3_preserved_audio_error(request)):
+        raise ValueError(audio_error)
     request["h3_turbo"] = turbo_preset or False
     # H3 Ref2VA actor cloning: references are an explicit list of separate
     # pictures {b64, role}. They FAIL CLOSED here — a silently-dropped reference
@@ -4771,12 +4804,23 @@ def _stage_audio_references(j, refs):
             return None
         name = f"{j['id']}-audio-{i}.wav"
         target = out_dir / name
-        done = _ff(["-ss", f"{float(ref.get('start_sec') or 0.0):.3f}", "-i", str(src),
-                    "-t", f"{max(1.0, seconds):.3f}", "-vn", "-ac", "2", "-ar", "48000",
-                    str(target)], timeout=300)
+        if (j.get('request') or {}).get('h3_preserve_audio'):
+            # Decode before seeking: the pinned master must keep sample-accurate
+            # offsets rather than inherit the ordinary reference's rounded seek.
+            args = ["-i", str(src), "-ss", f"{float(ref.get('start_sec') or 0.0):.9f}",
+                    "-t", f"{seconds:.9f}"]
+        else:
+            args = ["-ss", f"{float(ref.get('start_sec') or 0.0):.3f}", "-i", str(src),
+                    "-t", f"{max(1.0, seconds):.3f}"]
+        done = _ff(args + ["-vn", "-ac", "2", "-ar", "48000", str(target)], timeout=300)
         if done.returncode != 0 or not _nonempty(target):
             fail(j, "A reference sound could not be decoded — refusing to render without it.")
             return None
+        if (j.get('request') or {}).get('h3_preserve_audio'):
+            actual = media_duration(target) or 0.0
+            if not math.isfinite(actual) or actual+1/48000 < seconds:
+                fail(j, 'Fixed audio must cover the entire generated timeline; refusing a synthesized tail.')
+                return None
         staged.append({"file": name, "role": ref.get("role") or "voice and sound"})
     return staged
 
@@ -5195,6 +5239,8 @@ def run_video(j):
         return _run_fal_video(j)
     eng = "ltx" if j["engine"] == "ltx25" else "h3"
     req = j.get("request") or {}
+    if (audio_error := _h3_preserved_audio_error(req)):
+        return fail(j, audio_error)
     requested_video_refs = req.get("video_references") or []
     staged_video_refs, first_frame = _h3_v2v_stage(j)
     if staged_video_refs is None:
@@ -5260,6 +5306,12 @@ def run_video(j):
             body["orientation"] = req.get("orientation") or _h3sing.orientation_of(j["w"], j["h"])
             if staged_audio_refs:
                 body["audio_references"] = staged_audio_refs
+            if req.get('h3_preserve_audio'):
+                body['preserve_audio'] = True
+            if req.get('h3_anchor_first_frame'):
+                body['anchor_start_frame'] = True
+            if req.get('h3_scene_keyframes'):
+                body['scene_keyframes'] = True
         # H3 Ref2VA actor-cloning: references ride the request (validated in
         # make_video_job) and are forwarded to the engine verbatim, with the
         # reference detail. FAIL CLOSED on the resident checkpoint: reference
@@ -10320,6 +10372,9 @@ class GenReq(BaseModel):
     # spelled on an "h3" request (remix keeps it).
     audio_references: list = []
     h3_engine: str = ""
+    h3_preserve_audio: bool = Field(default=False, strict=True)  # opt-in clean audio-latent conditioning, H3 Real / Long only
+    h3_anchor_first_frame: bool = Field(default=False, strict=True)  # opt-in native H3 guide at frame zero
+    h3_scene_keyframes: bool = Field(default=False, strict=True)  # experimental same-scene guides at midpoint and end
 class MusicReq(BaseModel):
     vibe: str
     lyrics: str = ""

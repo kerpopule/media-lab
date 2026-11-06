@@ -210,7 +210,9 @@ def build_graph(*, prompt: str, frames: int, orientation: str, seed: int, prefix
                 image_refs=(), video_refs=(), audio_refs=(), ref_image_size: str = "max",
                 upscale: float = DEFAULT_UPSCALE, models: dict | None = None,
                 width: int | None = None, height: int | None = None,
-                sampling_steps: int = 6) -> dict:
+                sampling_steps: int = 6, preserve_audio: bool = False,
+                start_frame_ref_index: int | None = None,
+                scene_keyframes: bool = False) -> dict:
     """ComfyUI API graph for one dual-sampling render.
 
     image_refs: input-directory filenames (<= 9). video_refs: dicts with an
@@ -219,6 +221,17 @@ def build_graph(*, prompt: str, frames: int, orientation: str, seed: int, prefix
     (<= 3). ``width``/``height`` override the 0.5 MP first-pass canvas (the
     warm-up uses a tiny one)."""
     m = {**DEFAULT_MODELS, **(models or {})}
+    if start_frame_ref_index is not None and (type(start_frame_ref_index) is not int or
+            not 0 <= start_frame_ref_index < len(image_refs)):
+        raise SingularityRequestError('Opening-frame anchor must name one explicit image reference')
+    if type(scene_keyframes) is not bool:
+        raise SingularityRequestError('scene_keyframes must be a boolean')
+    if scene_keyframes and start_frame_ref_index is None:
+        raise SingularityRequestError('Scene keyframes require an explicit opening scene reference')
+    if type(preserve_audio) is not bool:
+        raise SingularityRequestError('preserve_audio must be a boolean')
+    if preserve_audio and len(audio_refs) != 1:
+        raise SingularityRequestError('Fixed audio requires exactly one full-timeline audio clip')
     if len(image_refs) > IMAGE_REF_MAX:
         raise SingularityRequestError(f"Real / Long takes at most {IMAGE_REF_MAX} reference pictures")
     if len(video_refs) > VIDEO_REF_MAX:
@@ -299,6 +312,60 @@ def build_graph(*, prompt: str, frames: int, orientation: str, seed: int, prefix
             "audio_file": str(ref["path"]), "seek_seconds": float(ref.get("start_sec") or 0.0),
             "duration": float(ref.get("duration") or 0.0)}}
         g["56"]["inputs"][f"ref_audios.ref_audio_{i}"] = [nid, 0]
+    # Supplied audio is time-anchored below through the model's own native
+    # MiniMaxH3AddGuide audio input. Generic AV zero-noise masking is deliberately
+    # excluded: two real masked takes did not preserve the supplied waveform,
+    # whereas the same installed audio codec independently roundtripped it.
+    if start_frame_ref_index is not None:
+        # A picture reference only describes a scene. Use the installed native
+        # H3 keyframe condition to actually anchor it at frame zero in BOTH passes.
+        g['214'] = {'class_type':'MiniMaxH3AddGuide','inputs':{
+            'positive':['56',0],'latent':['56',1],'vae':['65',0],
+            'image':[str(170+start_frame_ref_index),0],'frame_idx':0}}
+        # Native keyframes share the target spatial grid. Re-encode against the
+        # upscaled second-pass latent rather than reusing a low-res keyframe.
+        g['215'] = {'class_type':'MiniMaxH3AddGuide','inputs':{
+            'positive':['56',0],'latent':['105',0],'vae':['65',0],
+            'image':[str(170+start_frame_ref_index),0],'frame_idx':0}}
+        g['57']['inputs']['conditioning'] = ['214',0]
+        g['126']['inputs']['conditioning'] = ['215',0]
+    if preserve_audio:
+        # Use H3's native time-indexed audio guide, not only a generic AV mask.
+        # Keep the existing references and first-frame guide in each pass.
+        if start_frame_ref_index is not None:
+            for nid in ('214','215'):
+                g[nid]['inputs'].update(audio=['190',0], audio_vae=['66',0])
+        else:
+            for nid, target in (('216',['56',1]),('217',['105',0])):
+                g[nid] = {'class_type':'MiniMaxH3AddGuide','inputs':{
+                    'positive':['56',0], 'latent':target, 'audio':['190',0],
+                    'audio_vae':['66',0], 'frame_idx':0}}
+            g['57']['inputs']['conditioning'] = ['216',0]
+            g['126']['inputs']['conditioning'] = ['217',0]
+        # Decode the selected sampler result, not the separate raw x0 callback.
+        # A native audio guide is conditioning, not a promise of byte-exact audio;
+        # actual words and the original delivery master remain separate QA gates.
+        g['110']['inputs']['samples'] = ['106',0]
+        # Keep byte-bound audio transport/codec witnesses under this SAME native
+        # queue job and GPU lease. They never feed sampling or replace its sound.
+        g['218'] = {'class_type':'VAEEncodeAudio','inputs':{'audio':['190',0],'vae':['66',0]}}
+        g['219'] = {'class_type':'VAEDecodeAudio','inputs':{'samples':['218',0],'vae':['66',0]}}
+        g['220'] = {'class_type':'SaveAudio','inputs':{'audio':['190',0],'filename_prefix':'qa-'+prefix+'-source-audio'}}
+        g['221'] = {'class_type':'SaveAudio','inputs':{'audio':['219',0],'filename_prefix':'qa-'+prefix+'-codec-audio'}}
+    if scene_keyframes:
+        # Sparse image-only anchors, not a frozen video or restarted audio.
+        # Chain AFTER the opening image/audio guide so every original reference
+        # and full-timeline audio condition survives in BOTH spatial passes.
+        assert start_frame_ref_index is not None  # validated before graph construction
+        source = [str(170 + start_frame_ref_index), 0]
+        for opening, mid, end, latent, guider in (
+                ('214','222','223',['56',1],'57'),
+                ('215','224','225',['105',0],'126')):
+            for node, previous, frame in ((mid,opening,int(frames)//2),(end,mid,-1)):
+                g[node] = {'class_type':'MiniMaxH3AddGuide','inputs':{
+                    'positive':[previous,0], 'latent':latent, 'vae':['65',0],
+                    'image':source, 'frame_idx':frame}}
+            g[guider]['inputs']['conditioning'] = [end,0]
     return g
 
 
@@ -543,7 +610,18 @@ class SingularityPipeline:
         arefs = [a for a in (req.get("audio_references") or []) if isinstance(a, dict)]
         if req.get("audio_wav_b64"):
             arefs.append({"b64": req["audio_wav_b64"], "role": "voice and delivery of the line"})
+        preserve_audio = req.get('preserve_audio', False)
+        if type(preserve_audio) is not bool:
+            raise SingularityRequestError('preserve_audio must be a boolean')
+        if preserve_audio and len(arefs) != 1:
+            raise SingularityRequestError('Fixed audio requires exactly one full-timeline audio clip')
         start_b64 = str(req.get("start_image_b64") or "").strip()
+        anchor_start_frame = req.get('anchor_start_frame',False)
+        if type(anchor_start_frame) is not bool or (anchor_start_frame and not start_b64):
+            raise SingularityRequestError('Opening-frame anchor requires a boolean flag and a supplied starting image')
+        scene_keyframes = req.get('scene_keyframes',False)
+        if type(scene_keyframes) is not bool or (scene_keyframes and not anchor_start_frame):
+            raise SingularityRequestError('Scene keyframes require a boolean flag and explicit opening-frame anchoring')
         if len(refs) + (1 if start_b64 else 0) > IMAGE_REF_MAX:
             raise SingularityRequestError(f"Real / Long takes at most {IMAGE_REF_MAX} reference pictures")
         if len(vrefs) > VIDEO_REF_MAX:
@@ -581,6 +659,18 @@ class SingularityPipeline:
                 path = self._staged_path(a, kind="audio clip")
             audio_specs.append({"path": path, "start_sec": a.get("start_sec") or 0.0})
             audio_roles.append(a.get("role") or "")
+        if preserve_audio:
+            # The generic AV fit node intentionally generates an unmasked tail
+            # for a short source. Refuse that case instead of calling it fixed.
+            spec = audio_specs[0]
+            try:
+                duration = float(json.loads(subprocess.check_output([
+                    'ffprobe', '-v', 'error', '-show_format', '-of', 'json', spec['path']], timeout=20))['format']['duration'])
+                start = float(spec['start_sec'])
+            except (OSError, ValueError, KeyError, subprocess.SubprocessError) as exc:
+                raise SingularityRequestError('Fixed audio duration is unreadable') from exc
+            if not math.isfinite(duration) or not math.isfinite(start) or start < 0 or duration-start+1/48000 < frames/FPS:
+                raise SingularityRequestError('Fixed audio must cover the entire generated timeline')
         detail = str(req.get("reference_detail") or "max")
         prompt = compose_prompt(req.get("prompt") or "", image_roles, video_roles, audio_roles,
                                 start_frame_picture=start_pic)
@@ -593,7 +683,9 @@ class SingularityPipeline:
                 "seed": int(req.get("seed") or 0), "prefix": rid, "image_refs": image_names,
                 "video_refs": video_specs, "audio_refs": audio_specs,
                 "ref_image_size": detail if detail in ("match", "max") else "max",
-                "upscale": upscale, "models": self.models}
+                "upscale": upscale, "models": self.models, "preserve_audio": preserve_audio,
+                "start_frame_ref_index": start_pic-1 if anchor_start_frame and start_pic is not None else None,
+                "scene_keyframes": scene_keyframes}
 
     def generate(self, req: dict, rid: str, timeout_s: float = 4 * 3600.0) -> dict:
         spec = self.request_spec(req, rid)

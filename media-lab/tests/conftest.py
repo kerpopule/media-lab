@@ -8,6 +8,10 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
+# Fence workers before collection imports app from ANY test module. Setting this
+# inside a later test module is too late: the first import starts queue threads
+# that can consume synthetic jobs or write after monkeypatch fixtures unwind.
+os.environ["MEDIA_LAB_DISABLE_BACKGROUND_WORKERS"] = "1"
 # The suite exercises every engine integration, including the ones whose model
 # licence is personal / non-commercial and that a fresh install therefore keeps
 # OFF (media_lab_core/engine_licences.py). Opt the test process in, as a host
