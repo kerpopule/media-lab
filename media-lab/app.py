@@ -1825,6 +1825,11 @@ def _h3_preserved_audio_error(request):
     if anchor and (request.get('model') not in ('h3','h3-real') or
                    not _h3ref.wants_singularity(request) or not request.get('source')):
         return 'Opening-frame anchoring requires H3 Real / Long and a supplied starting image.'
+    scene = request.get('h3_scene_keyframes', False)
+    if type(scene) is not bool:
+        return 'h3_scene_keyframes must be a boolean.'
+    if scene and not anchor:
+        return 'Scene keyframes require explicit opening-frame anchoring and the same supplied scene.'
     enabled = request.get('h3_preserve_audio', False)
     if type(enabled) is not bool:
         return 'h3_preserve_audio must be a boolean.'
@@ -5305,6 +5310,8 @@ def run_video(j):
                 body['preserve_audio'] = True
             if req.get('h3_anchor_first_frame'):
                 body['anchor_start_frame'] = True
+            if req.get('h3_scene_keyframes'):
+                body['scene_keyframes'] = True
         # H3 Ref2VA actor-cloning: references ride the request (validated in
         # make_video_job) and are forwarded to the engine verbatim, with the
         # reference detail. FAIL CLOSED on the resident checkpoint: reference
@@ -10367,6 +10374,7 @@ class GenReq(BaseModel):
     h3_engine: str = ""
     h3_preserve_audio: bool = Field(default=False, strict=True)  # opt-in clean audio-latent conditioning, H3 Real / Long only
     h3_anchor_first_frame: bool = Field(default=False, strict=True)  # opt-in native H3 guide at frame zero
+    h3_scene_keyframes: bool = Field(default=False, strict=True)  # experimental same-scene guides at midpoint and end
 class MusicReq(BaseModel):
     vibe: str
     lyrics: str = ""

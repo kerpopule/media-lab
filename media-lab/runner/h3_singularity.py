@@ -211,7 +211,8 @@ def build_graph(*, prompt: str, frames: int, orientation: str, seed: int, prefix
                 upscale: float = DEFAULT_UPSCALE, models: dict | None = None,
                 width: int | None = None, height: int | None = None,
                 sampling_steps: int = 6, preserve_audio: bool = False,
-                start_frame_ref_index: int | None = None) -> dict:
+                start_frame_ref_index: int | None = None,
+                scene_keyframes: bool = False) -> dict:
     """ComfyUI API graph for one dual-sampling render.
 
     image_refs: input-directory filenames (<= 9). video_refs: dicts with an
@@ -223,6 +224,10 @@ def build_graph(*, prompt: str, frames: int, orientation: str, seed: int, prefix
     if start_frame_ref_index is not None and (type(start_frame_ref_index) is not int or
             not 0 <= start_frame_ref_index < len(image_refs)):
         raise SingularityRequestError('Opening-frame anchor must name one explicit image reference')
+    if type(scene_keyframes) is not bool:
+        raise SingularityRequestError('scene_keyframes must be a boolean')
+    if scene_keyframes and start_frame_ref_index is None:
+        raise SingularityRequestError('Scene keyframes require an explicit opening scene reference')
     if type(preserve_audio) is not bool:
         raise SingularityRequestError('preserve_audio must be a boolean')
     if preserve_audio and len(audio_refs) != 1:
@@ -347,6 +352,20 @@ def build_graph(*, prompt: str, frames: int, orientation: str, seed: int, prefix
         g['219'] = {'class_type':'VAEDecodeAudio','inputs':{'samples':['218',0],'vae':['66',0]}}
         g['220'] = {'class_type':'SaveAudio','inputs':{'audio':['190',0],'filename_prefix':'qa-'+prefix+'-source-audio'}}
         g['221'] = {'class_type':'SaveAudio','inputs':{'audio':['219',0],'filename_prefix':'qa-'+prefix+'-codec-audio'}}
+    if scene_keyframes:
+        # Sparse image-only anchors, not a frozen video or restarted audio.
+        # Chain AFTER the opening image/audio guide so every original reference
+        # and full-timeline audio condition survives in BOTH spatial passes.
+        assert start_frame_ref_index is not None  # validated before graph construction
+        source = [str(170 + start_frame_ref_index), 0]
+        for opening, mid, end, latent, guider in (
+                ('214','222','223',['56',1],'57'),
+                ('215','224','225',['105',0],'126')):
+            for node, previous, frame in ((mid,opening,int(frames)//2),(end,mid,-1)):
+                g[node] = {'class_type':'MiniMaxH3AddGuide','inputs':{
+                    'positive':[previous,0], 'latent':latent, 'vae':['65',0],
+                    'image':source, 'frame_idx':frame}}
+            g[guider]['inputs']['conditioning'] = [end,0]
     return g
 
 
@@ -600,6 +619,9 @@ class SingularityPipeline:
         anchor_start_frame = req.get('anchor_start_frame',False)
         if type(anchor_start_frame) is not bool or (anchor_start_frame and not start_b64):
             raise SingularityRequestError('Opening-frame anchor requires a boolean flag and a supplied starting image')
+        scene_keyframes = req.get('scene_keyframes',False)
+        if type(scene_keyframes) is not bool or (scene_keyframes and not anchor_start_frame):
+            raise SingularityRequestError('Scene keyframes require a boolean flag and explicit opening-frame anchoring')
         if len(refs) + (1 if start_b64 else 0) > IMAGE_REF_MAX:
             raise SingularityRequestError(f"Real / Long takes at most {IMAGE_REF_MAX} reference pictures")
         if len(vrefs) > VIDEO_REF_MAX:
@@ -662,7 +684,8 @@ class SingularityPipeline:
                 "video_refs": video_specs, "audio_refs": audio_specs,
                 "ref_image_size": detail if detail in ("match", "max") else "max",
                 "upscale": upscale, "models": self.models, "preserve_audio": preserve_audio,
-                "start_frame_ref_index": start_pic-1 if anchor_start_frame and start_pic is not None else None}
+                "start_frame_ref_index": start_pic-1 if anchor_start_frame and start_pic is not None else None,
+                "scene_keyframes": scene_keyframes}
 
     def generate(self, req: dict, rid: str, timeout_s: float = 4 * 3600.0) -> dict:
         spec = self.request_spec(req, rid)
